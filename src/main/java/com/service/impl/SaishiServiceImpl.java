@@ -54,7 +54,7 @@ public class SaishiServiceImpl extends BaseService<SaishiDao, SaishiEntity, Sais
     protected void sanitizeFields(SaishiEntity entity) {
         if ("".equals(entity.getSaishiPhoto()) || "null".equals(entity.getSaishiPhoto())) {
             entity.setSaishiPhoto(null);
-        }`n        if ("".equals(entity.getSaishiContent()) || "null".equals(entity.getSaishiContent())) {
+        }       if ("".equals(entity.getSaishiContent()) || "null".equals(entity.getSaishiContent())) {
             entity.setSaishiContent(null);
         }
     }
