@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>教练注册</title>
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <style>
+        :root { --p:#0ea5e9; --p-soft:#38bdf8; --p-light:#f0f9ff; --ink:#1a2e4c; --muted:#5e7189; --border:rgba(14,165,233,.10); --shadow:0 8px 32px rgba(14,165,233,.15); }
+        * { box-sizing:border-box; }
+        body { margin:0; min-height:100vh; font-family:'Microsoft YaHei','PingFang SC',sans-serif; background: #f3f6fb; color:var(--ink); }
+        .page-wrap { width:1500px; max-width:calc(100% - 24px); margin:0 auto; padding:12px 0; }
+        .panel { display:grid; min-height:calc(100vh - 24px); grid-template-columns:minmax(520px,.96fr) minmax(660px,1.08fr); border-radius:22px; overflow:hidden; background:#fff; border:1px solid var(--border); box-shadow:var(--shadow); }
+        .brand-side { position:relative; overflow:hidden; padding:82px 72px; background:linear-gradient(125deg, rgba(8,36,77,.98) 0%, rgba(20,72,138,.95) 46%, rgba(42,123,214,.9) 100%); color:#fff; }
+        .brand-side:before,.brand-side:after { content:''; position:absolute; border-radius:50%; background:rgba(255,255,255,.08); }
+        .brand-side:before { width:320px; height:320px; top:-140px; right:-80px; }
+        .brand-side:after { width:220px; height:220px; left:-60px; bottom:-90px; }
+        .brand-side > * { position:relative; z-index:1; }
+        .brand-tag { display:inline-flex; align-items:center; padding:10px 18px; border-radius:999px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.14); font-size:14px; letter-spacing:1px; }
+        .brand-side h1 { margin:24px 0 18px; font-size:72px; line-height:1.06; }
+        .brand-side p { margin:0; max-width:620px; font-size:20px; line-height:1.85; color:rgba(239,245,255,.88); }
+        .feature-list { display:grid; gap:20px; margin-top:48px; }
+        .feature-item { display:flex; align-items:center; gap:18px; color:rgba(255,255,255,.94); font-size:19px; }
+        .feature-mark { width:48px; height:48px; border-radius:16px; display:inline-flex; align-items:center; justify-content:center; background:rgba(255,255,255,.14); font-weight:700; }
+        .form-side { padding:72px 78px 64px; display:flex; flex-direction:column; justify-content:center; }
+        .form-title { margin:0; font-size:60px; color:var(--ink); }
+        .form-sub { margin:16px 0 38px; color:var(--muted); font-size:21px; line-height:1.75; }
+        .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+        .form-grid .full { grid-column:1 / -1; }
+        .layui-form-item { margin-bottom:0; }
+        .layui-input,.layui-select-title input { height:66px; border-radius:20px; border:1px solid #bdd0ea; background:rgba(244,248,255,.88); font-size:19px; padding:0 24px; }
+        .layui-form-select dl { border-radius:16px; overflow:hidden; }
+        .submit-btn,.link-btn { display:inline-flex; align-items:center; justify-content:center; text-decoration:none; transition:all .22s ease; }
+        .submit-btn { width:100%; height:66px; border:0; border-radius:999px; color:#fff; font-size:25px; font-weight:700; cursor:pointer; background:linear-gradient(135deg,#1987ef 0%,#1a5fc5 100%); box-shadow:0 16px 30px rgba(24,135,239,.22); }
+        .submit-btn:hover,.link-btn:hover { transform:translateY(-2px); }
+        .bottom-links { display:flex; justify-content:space-between; gap:18px; margin-top:24px; flex-wrap:wrap; }
+        .link-btn { min-width:170px; height:54px; padding:0 24px; border-radius:999px; font-size:17px; color:#24539a; background:rgba(29,103,193,.08); border:1px solid rgba(29,103,193,.08); }
+        @media (max-width:980px) { .panel { grid-template-columns:1fr; min-height:auto; } .brand-side,.form-side { padding:34px 26px; } .brand-side h1,.form-title { font-size:38px; } .form-grid { grid-template-columns:1fr; } .bottom-links { justify-content:flex-start; } .link-btn { min-width:0; } }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="page-wrap">
+        <div class="panel">
+            <div class="brand-side">
+                <div class="brand-tag">教练账号注册</div>
+                <h1>创建教练账号</h1>
+                <p>完成注册后即可登录前台，查看赛事信息，并在个人中心维护个人资料和相关前台内容。</p>
+                <div class="feature-list">
+                    <div class="feature-item"><span class="feature-mark">账</span><span>注册后可直接使用账号密码登录</span></div>
+                    <div class="feature-item"><span class="feature-mark">赛</span><span>快速查看赛事安排与公告更新</span></div>
+                    <div class="feature-item"><span class="feature-mark">协</span><span>适合教练身份的日常前台访问入口</span></div>
+                </div>
+            </div>
+            <div class="form-side">
+                <h2 class="form-title">教练注册</h2>
+                <div class="form-sub">请填写完整信息后提交，注册成功后返回登录页。</div>
+                <form id="registerForm" class="layui-form">
+                    <div class="form-grid">
+                        <div class="layui-form-item"><input type="text" name="username" required lay-verify="required" placeholder="请输入账号" autocomplete="off" class="layui-input"></div>
+                        <div class="layui-form-item"><input type="text" name="jiaolianName" required lay-verify="required" placeholder="请输入教练姓名" autocomplete="off" class="layui-input"></div>
+                        <div class="layui-form-item"><input type="password" name="password" id="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input"></div>
+                        <div class="layui-form-item"><input type="password" name="password2" id="password2" required lay-verify="required" placeholder="请再次输入密码" autocomplete="off" class="layui-input"></div>
+                        <div class="layui-form-item"><input type="text" name="jiaolianPhone" required lay-verify="required" placeholder="请输入手机号" autocomplete="off" class="layui-input"></div>
+                        <div class="layui-form-item"><input type="text" name="jiaolianIdNumber" required lay-verify="required" placeholder="请输入身份证号" autocomplete="off" class="layui-input"></div>
+                        <div class="layui-form-item"><select name="sexTypes" lay-verify="required"><option value="">请选择性别</option><option v-for="(item,index) in sexTypesList" :key="index" :value="item.codeIndex">{{ item.indexName }}</option></select></div>
+                        <div class="layui-form-item"><input type="text" name="jiaolianEmail" required lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input"></div>
+                        <div class="layui-form-item full" style="margin-top:10px;"><button class="submit-btn" lay-submit lay-filter="register">注册教练</button></div>
+                    </div>
+                </form>
+                <div class="bottom-links">
+                    <a class="link-btn" href="../login/login.html">返回登录</a>
+                    <a class="link-btn" href="../yonghu/register.html?tablename=yonghu">用户注册</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../layui/layui.js"></script>
+<script src="../../js/vue.js"></script>
+<script src="../../xznstatic/js/element.min.js"></script>
+<link rel="stylesheet" href="../../xznstatic/css/element.min.css">
+<script src="../../js/config.js"></script>
+<script src="../../modules/config.js"></script>
+<script src="../../js/validate.js"></script>
+<script>
+var http = layui.http || { baseurl: (typeof resolveProjectBase === 'function' ? resolveProjectBase() : (window.location.protocol + '//' + window.location.host + '/')) };
+var vue = new Vue({ el:'#app', data: { baseUrl: http.baseurl,  sexTypesList:[] } });
+layui.use(['layer','form','http'], function() {
+    var layer = layui.layer;
+    var form = layui.form;
+    var http = layui.http;
+    var tablename = http.getParam('tablename') || 'jiaolian';
+    http.request('dictionary/page', 'get', { page:1, limit:100, dicCode:'sex_types' }, function(res) {
+        vue.sexTypesList = (res.data && res.data.list) || [];
+        vue.$nextTick(function() { form.render('select'); });
+    });
+    form.on('submit(register)', function(data) {
+        var formData = data.field;
+        if (formData.password !== formData.password2) { layer.msg('两次输入的密码不一致', { time:2000, icon:5 }); return false; }
+        if (!isMobile(formData.jiaolianPhone)) { layer.msg('请输入正确的手机号', { time:2000, icon:5 }); return false; }
+        if (!isIdentity(formData.jiaolianIdNumber)) { layer.msg('请输入正确的身份证号', { time:2000, icon:5 }); return false; }
+        if (!isEmail(formData.jiaolianEmail)) { layer.msg('请输入正确的邮箱', { time:2000, icon:5 }); return false; }
+        delete formData.password2;
+        http.requestJson(tablename + '/register', 'post', formData, function() {
+            layer.msg('注册成功', { time:1500, icon:6 }, function() { window.location.href = '../login/login.html'; });
+        });
+        return false;
+    });
+});
+</script>
+</body>
+</html>
+
+
+
+

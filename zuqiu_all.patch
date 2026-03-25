@@ -1,0 +1,119 @@
+diff --git a/src/main/java/com/controller/GonggaoController.java b/src/main/java/com/controller/GonggaoController.java
+index 8d526d4..471190e 100644
+--- a/src/main/java/com/controller/GonggaoController.java
++++ b/src/main/java/com/controller/GonggaoController.java
+@@ -44,6 +44,12 @@ public class GonggaoController {
+         return R.ok().put("data", page);
+     }
+
++    @GetMapping("/page")
++    public R pageList(@RequestParam Map<String, Object> params, HttpServletRequest request) {
++        PageUtils page = gonggaoService.queryPageWithConvert(params, request);
++        return R.ok().put("data", page);
++    }
++
+     @GetMapping("/{id}")
+     public R info(@PathVariable("id") Long id, HttpServletRequest request) {
+         logger.debug("info方法:,,Controller:{},,id:{}", this.getClass().getName(), id);
+diff --git a/src/main/java/com/controller/HetongController.java b/src/main/java/com/controller/HetongController.java
+index 5d160f0..7e32182 100644
+--- a/src/main/java/com/controller/HetongController.java
++++ b/src/main/java/com/controller/HetongController.java
+@@ -44,6 +44,12 @@ public class HetongController {
+         return R.ok().put("data", page);
+     }
+
++    @GetMapping("/page")
++    public R pageList(@RequestParam Map<String, Object> params, HttpServletRequest request) {
++        PageUtils page = hetongService.queryPageWithConvert(params, request);
++        return R.ok().put("data", page);
++    }
++
+     @GetMapping("/{id}")
+     public R info(@PathVariable("id") Long id, HttpServletRequest request) {
+         logger.debug("info方法:,,Controller:{},,id:{}", this.getClass().getName(), id);
+diff --git a/src/main/java/com/controller/JiaolianController.java b/src/main/java/com/controller/JiaolianController.java
+index 689bd8a..68890fa 100644
+--- a/src/main/java/com/controller/JiaolianController.java
++++ b/src/main/java/com/controller/JiaolianController.java
+@@ -50,6 +50,12 @@ public class JiaolianController {
+         return R.ok().put("data", page);
+     }
+
++    @GetMapping("/page")
++    public R pageList(@RequestParam Map<String, Object> params, HttpServletRequest request) {
++        PageUtils page = jiaolianService.queryPageWithConvert(params, request);
++        return R.ok().put("data", page);
++    }
++
+     @GetMapping("/{id}")
+     public R info(@PathVariable("id") Long id, HttpServletRequest request) {
+         logger.debug("info方法:,,Controller:{},,id:{}", this.getClass().getName(), id);
+diff --git a/src/main/java/com/controller/SaishiController.java b/src/main/java/com/controller/SaishiController.java
+index 78ffb61..ca4772d 100644
+--- a/src/main/java/com/controller/SaishiController.java
++++ b/src/main/java/com/controller/SaishiController.java
+@@ -44,6 +44,12 @@ public class SaishiController {
+         return R.ok().put("data", page);
+     }
+
++    @GetMapping("/page")
++    public R pageList(@RequestParam Map<String, Object> params, HttpServletRequest request) {
++        PageUtils page = saishiService.queryPageWithConvert(params, request);
++        return R.ok().put("data", page);
++    }
++
+     @GetMapping("/{id}")
+     public R info(@PathVariable("id") Long id, HttpServletRequest request) {
+         logger.debug("info方法:,,Controller:{},,id:{}", this.getClass().getName(), id);
+diff --git a/src/main/java/com/controller/ShujuController.java b/src/main/java/com/controller/ShujuController.java
+index d04950b..5e0f297 100644
+--- a/src/main/java/com/controller/ShujuController.java
++++ b/src/main/java/com/controller/ShujuController.java
+@@ -44,6 +44,12 @@ public class ShujuController {
+         return R.ok().put("data", page);
+     }
+
++    @GetMapping("/page")
++    public R pageList(@RequestParam Map<String, Object> params, HttpServletRequest request) {
++        PageUtils page = shujuService.queryPageWithConvert(params, request);
++        return R.ok().put("data", page);
++    }
++
+     @GetMapping("/{id}")
+     public R info(@PathVariable("id") Long id, HttpServletRequest request) {
+         logger.debug("info方法:,,Controller:{},,id:{}", this.getClass().getName(), id);
+diff --git a/src/main/java/com/controller/XunlianController.java b/src/main/java/com/controller/XunlianController.java
+index 6e22e2c..aef7224 100644
+--- a/src/main/java/com/controller/XunlianController.java
++++ b/src/main/java/com/controller/XunlianController.java
+@@ -44,6 +44,12 @@ public class XunlianController {
+         return R.ok().put("data", page);
+     }
+
++    @GetMapping("/page")
++    public R pageList(@RequestParam Map<String, Object> params, HttpServletRequest request) {
++        PageUtils page = xunlianService.queryPageWithConvert(params, request);
++        return R.ok().put("data", page);
++    }
++
+     @GetMapping("/{id}")
+     public R info(@PathVariable("id") Long id, HttpServletRequest request) {
+         logger.debug("info方法:,,Controller:{},,id:{}", this.getClass().getName(), id);
+diff --git a/src/main/java/com/controller/YonghuController.java b/src/main/java/com/controller/YonghuController.java
+index 3a7272f..3a77263 100644
+--- a/src/main/java/com/controller/YonghuController.java
++++ b/src/main/java/com/controller/YonghuController.java
+@@ -50,6 +50,12 @@ public class YonghuController {
+         return R.ok().put("data", page);
+     }
+
++    @GetMapping("/page")
++    public R pageList(@RequestParam Map<String, Object> params, HttpServletRequest request) {
++        PageUtils page = yonghuService.queryPageWithConvert(params, request);
++        return R.ok().put("data", page);
++    }
++
+     @GetMapping("/{id}")
+     public R info(@PathVariable("id") Long id, HttpServletRequest request) {
+         logger.debug("info方法:,,Controller:{},,id:{}", this.getClass().getName(), id);

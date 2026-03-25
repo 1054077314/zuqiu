@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>充值</title>
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <style>
+        :root { --ink: #1a2e4c; --muted: #5e7189; --p: #0ea5e9; --p-soft: #38bdf8; --p-light: #f0f9ff; --border: rgba(14,165,233,.10); --shadow: 0 8px 32px rgba(14,165,233,.15); }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: #f3f6fb; font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif; color: var(--ink); }
+        .page-shell { width: 1080px; max-width: calc(100% - 24px); margin: 0 auto; padding: 22px 0 34px; }
+        .topbar, .panel, .pay-card { background: #fff; border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); }
+        .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; margin-bottom: 18px; }
+        .topbar a, .pay-btn, .ghost-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 0 18px; border-radius: 999px; text-decoration: none; transition: all .2s ease; border: 0; cursor: pointer; }
+        .topbar a, .ghost-btn { color: #24539a; background: rgba(29,103,193,.08); }
+        .pay-btn { color: #fff; background: var(--p-soft); box-shadow: 0 6px 18px rgba(14,165,233,.2); }
+        .topbar a:hover, .pay-btn:hover, .ghost-btn:hover { transform: translateY(-2px); }
+        .panel { overflow: hidden; }
+        .hero { padding: 34px; color: #fff; background: linear-gradient(125deg, rgba(8,36,77,.98) 0%, rgba(20,72,138,.95) 46%, rgba(42,123,214,.9) 100%); position: relative; overflow: hidden; }
+        .hero:before, .hero:after { content: ''; position: absolute; border-radius: 50%; background: rgba(255,255,255,.08); }
+        .hero:before { width: 220px; height: 220px; top: -90px; right: -40px; }
+        .hero:after { width: 140px; height: 140px; left: -30px; bottom: -60px; }
+        .hero > * { position: relative; z-index: 1; }
+        .hero-tag { display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.16); font-size: 12px; margin-bottom: 14px; }
+        .hero h1 { margin: 0 0 12px; font-size: 38px; }
+        .hero p { margin: 0; color: rgba(255,255,255,.88); line-height: 1.9; }
+        .body { padding: 26px; }
+        .amount-card { padding: 22px; border-radius: 24px; background: linear-gradient(135deg, rgba(242,247,255,.95), rgba(255,255,255,.98)); border: 1px solid var(--border); }
+        .amount-card label { display: block; margin-bottom: 10px; color: #406182; font-size: 14px; }
+        .layui-input { height: 52px; border-radius: 16px; border: 1px solid #bdd0ea; background: rgba(244,248,255,.88); padding: 0 16px; font-size: 16px; }
+        .pay-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
+        .pay-card { padding: 18px; text-align: center; cursor: pointer; transition: all .2s ease; }
+        .pay-card.active { border-color: transparent; background: linear-gradient(135deg, rgba(29,103,193,.14), rgba(47,141,242,.18)); box-shadow: 0 16px 28px rgba(31,106,194,.14); }
+        .pay-card img { height: 52px; max-width: 120px; object-fit: contain; margin: 0 auto 14px; display: block; }
+        .pay-card input { display: none; }
+        .pay-card span { color: var(--ink); font-size: 15px; }
+        .actions { margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap; }
+        @media (max-width: 860px) { .pay-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="page-shell">
+        <div class="topbar"><div>账户充值</div><div style="display:flex;gap:10px;flex-wrap:wrap;"><a href="../login/login.html">返回登录</a><a href="../yonghu/center.html">个人中心</a></div></div>
+        <div class="panel">
+            <div class="hero"><div class="hero-tag">账户充值页</div><h1>充值余额</h1><p>选择充值金额和支付方式后提交，系统会将充值金额直接累计到当前登录账号的余额字段中。</p></div>
+            <div class="body">
+                <form class="layui-form">
+                    <div class="amount-card"><label>充值金额</label><input type="number" name="newMoney" v-model="newMoney" class="layui-input" placeholder="请输入充值金额，最多保留两位小数"></div>
+                    <div class="pay-grid">
+                        <div class="pay-card" v-for="(item,index) in payTypes" :key="index" :class="{active: payType === item.value}" @click="payType = item.value"><input type="radio" name="type" :value="item.value"><img :src="img(item.img)" :alt="item.label"><span>{{ item.label }}</span></div>
+                    </div>
+                    <div class="actions"><button type="button" class="ghost-btn" onclick="history.back()">返回</button><button type="button" class="pay-btn" @click="submitRecharge">确认支付</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../layui/layui.js"></script>
+<script src="../../js/vue.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../modules/config.js"></script>
+<script src="../../js/utils.js"></script>
+<script src="../../js/validate.js"></script>
+<script>
+var http = layui.http || { baseurl: (typeof resolveProjectBase === 'function' ? resolveProjectBase() : (window.location.protocol + '//' + window.location.host + '/')) };
+var vue = new Vue({
+    el: '#app',
+    data: { baseUrl: http.baseurl,  newMoney: '', payType: '微信支付', user: {}, table: localStorage.getItem('userTable') || '', payTypes: [
+        { label: '微信支付', value: '微信支付', icon: '../../img/weixin.png' },
+        { label: '支付宝支付', value: '支付宝支付', icon: '../../img/zhifubao.png' },
+        { label: '建设银行', value: '建设银行', icon: '../../img/jianshe.png' },
+        { label: '农业银行', value: '农业银行', icon: '../../img/nongye.png' },
+        { label: '中国银行', value: '中国银行', icon: '../../img/zhongguo.png' },
+        { label: '交通银行', value: '交通银行', icon: '../../img/jiaotong.png' }
+    ] },
+    methods: { img: function(path) { if (!path) return ''; if (path.indexOf('http') === 0) return path; return this.baseUrl.replace(/\/$/, '') + '/upload/' + path.replace(/^.*upload\//, ''); }, 
+        validateAmount: function() { var money = Number(this.newMoney); if (!this.newMoney || isNaN(money) || money <= 0) { layui.layer.msg('请输入正确的充值金额', { time: 2000, icon: 5 }); return false; } if (String(this.newMoney).indexOf('.') !== -1 && String(this.newMoney).split('.')[1].length > 2) { layui.layer.msg('充值金额最多保留两位小数', { time: 2000, icon: 5 }); return false; } return true; },
+        submitRecharge: function() { var _this = this; if (!_this.table || !localStorage.getItem('Token')) { layui.layer.msg('请先登录后再充值', { time: 2000, icon: 5 }, function() { window.location.href = '../login/login.html'; }); return; } if (!_this.validateAmount()) { return; } _this.user.newMoney = Number(_this.user.newMoney || 0) + Number(_this.newMoney); layui.http.requestJson(_this.table + '/update', 'post', _this.user, function() { layui.layer.msg('充值成功', { time: 1800, icon: 6 }, function() { window.location.href = '../' + _this.table + '/center.html'; }); }); }
+    }
+});
+layui.use(['http'], function() { var http = layui.http; if (!vue.table) { return; } http.request(vue.table + '/session', 'get', {}, function(res) { vue.user = res.data || {}; }); });
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+

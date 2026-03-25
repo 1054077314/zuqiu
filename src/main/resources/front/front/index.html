@@ -1,0 +1,1032 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>足球俱乐部管理系统</title>
+    <link rel="stylesheet" href="./layui/css/layui.css">
+    <link rel="stylesheet" href="./xznstatic/css/common.css"/>
+    <link rel="stylesheet" href="./xznstatic/css/style.css"/>
+    <link rel="stylesheet" href="./css/theme.css"/>
+    <style>
+        :root {
+            --p: #1f4f95;
+            --p-deep: #163968;
+            --p-soft: #3b82f6;
+            --p-light: #eaf2ff;
+            --ink: #1a2e4c;
+            --muted: #5e7189;
+            --border: rgba(40, 70, 120, .08);
+            --shadow: 0 8px 32px rgba(25, 60, 120, .07);
+            --shadow-sm: 0 4px 16px rgba(25, 60, 120, .05);
+            --radius: 20px;
+            --radius-sm: 14px;
+            --radius-pill: 999px;
+        }
+        * { box-sizing: border-box; margin: 0; }
+        html, body { min-height: 100%; }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif;
+            color: var(--ink);
+            background: #f3f6fb;
+            overflow-x: hidden;
+        }
+
+        /* ===== 弹性容器 ===== */
+        .page-wrap {
+            width: 95%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 24px 0 38px;
+        }
+
+        /* ===== 顶部 Hero：玻璃拟态 ===== */
+        .masthead {
+            position: relative;
+            overflow: hidden;
+            padding: 32px 36px 28px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #0b2547 0%, #143c6e 45%, #1f4f95 100%);
+            box-shadow: 0 24px 64px rgba(11, 37, 71, .32);
+            backdrop-filter: blur(20px);
+        }
+        .masthead::before,
+        .masthead::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .masthead::before {
+            width: 300px; height: 300px;
+            top: -120px; right: 12%;
+            background: radial-gradient(circle, rgba(59,130,246,.15), transparent 70%);
+        }
+        .masthead::after {
+            width: 200px; height: 200px;
+            bottom: -80px; right: 24px;
+            background: radial-gradient(circle, rgba(59,130,246,.1), transparent 70%);
+        }
+        .masthead-top, .masthead-body, .nav-row, .content-grid,
+        .bottom-grid, .news-section, .footer-bar {
+            position: relative; z-index: 1;
+        }
+        .masthead-top, .nav-row, .section-head, .footer-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand-mark {
+            display: inline-flex;
+            align-items: center;
+            padding: 9px 20px;
+            border-radius: var(--radius-pill);
+            border: 1px solid rgba(255,255,255,.16);
+            background: rgba(255,255,255,.06);
+            color: rgba(255,255,255,.9);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+        .top-actions { display: flex; gap: 10px; }
+        .btn-ghost, .btn-solid, .section-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 110px;
+            padding: 0 20px;
+            height: 44px;
+            border-radius: var(--radius-pill);
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
+        }
+        .btn-ghost {
+            color: rgba(255,255,255,.88);
+            border: 1px solid rgba(255,255,255,.18);
+            background: rgba(255,255,255,.06);
+        }
+        .btn-ghost:hover { background: rgba(255,255,255,.12); }
+        .btn-solid {
+            color: #fff;
+            background: var(--p-soft);
+            box-shadow: 0 8px 24px rgba(59,130,246,.3);
+        }
+        .btn-solid:hover { background: #2563eb; }
+        .section-link {
+            min-width: auto;
+            height: 38px;
+            padding: 0 16px;
+            font-size: 13px;
+            color: var(--p);
+            background: var(--p-light);
+            border: 1px solid rgba(31,79,149,.08);
+        }
+        .section-link:hover { background: #dbeafe; }
+
+        .btn-ghost:hover, .btn-solid:hover, .section-link:hover,
+        .nav-link:hover, .quick-card:hover,
+        .notice-item:hover, .match-card:hover, .news-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .masthead-body {
+            margin-top: 28px;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 28px;
+            align-items: end;
+        }
+        .headline h1 {
+            margin: 14px 0 10px;
+            font-size: 44px;
+            line-height: 1.2;
+            color: #fff;
+            font-weight: 700;
+            text-shadow: 0 2px 12px rgba(0,0,0,.18);
+        }
+        .headline p {
+            margin: 0;
+            max-width: 680px;
+            font-size: 15px;
+            line-height: 1.85;
+            color: rgba(200,215,240,.8);
+            text-shadow: 0 1px 6px rgba(0,0,0,.1);
+        }
+        .headline-tags, .nav-list, .hero-points,
+        .quick-grid, .notice-list, .match-grid, .news-grid {
+            display: grid;
+            gap: 12px;
+        }
+        .headline-tags {
+            margin-top: 20px;
+            grid-template-columns: repeat(3, max-content);
+            gap: 8px;
+        }
+        .headline-tags span {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            background: rgba(59,130,246,.15);
+            border: 1px solid rgba(59,130,246,.18);
+            color: rgba(255,255,255,.92);
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .hero-points { margin-top: 18px; }
+        .hero-point {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(200,218,245,.9);
+            font-size: 14px;
+        }
+        .hero-point-mark {
+            width: 30px; height: 30px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(59,130,246,.2);
+            color: #93bbff;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .summary-panel {
+            padding: 22px;
+            border-radius: 24px;
+            background: rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.1);
+            backdrop-filter: blur(20px);
+        }
+        .summary-panel h3 {
+            margin: 0 0 6px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            text-shadow: 0 1px 6px rgba(0,0,0,.15);
+        }
+        .summary-panel p {
+            margin: 0;
+            color: rgba(200,215,240,.72);
+            font-size: 13px;
+            line-height: 1.75;
+        }
+        .summary-grid {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .summary-item {
+            padding: 14px;
+            border-radius: 16px;
+            background: rgba(255,255,255,.06);
+            border: 1px solid rgba(255,255,255,.08);
+        }
+        .summary-item strong { display: block; color: #fff; font-size: 28px; line-height: 1.1; }
+        .summary-item span { display: block; margin-top: 6px; font-size: 12px; color: rgba(200,218,245,.7); }
+
+        /* ===== 导航：移动端水平滚动 ===== */
+        .nav-row {
+            margin-top: 20px;
+            padding: 10px 14px;
+            border-radius: var(--radius);
+            background: #fff;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(20px);
+        }
+        .nav-list {
+            grid-template-columns: repeat(5, max-content);
+            gap: 4px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .nav-list::-webkit-scrollbar { display: none; }
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: var(--radius-pill);
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all .2s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #fff;
+            background: var(--p);
+            box-shadow: 0 6px 18px rgba(31,79,149,.2);
+        }
+        .nav-summary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            background: var(--p-light);
+            color: var(--muted);
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+        .nav-summary strong { color: var(--p-deep); }
+
+        /* ===== 内容网格：高度对齐 ===== */
+        .content-grid, .bottom-grid, .news-section {
+            margin-top: 20px;
+            display: grid;
+            gap: 20px;
+            align-items: stretch;
+        }
+        .content-grid { grid-template-columns: 1fr 1fr; }
+        .bottom-grid { grid-template-columns: 1fr 1fr; }
+
+        /* ===== 卡片：玻璃拟态 ===== */
+        .section-card {
+            background: rgba(255,255,255,.78);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 22px;
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+        }
+        .section-head { margin-bottom: 16px; }
+        .section-title-wrap {
+            position: relative;
+            padding-left: 14px;
+        }
+        .section-title-wrap::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 4px; bottom: 4px;
+            width: 3px;
+            border-radius: 2px;
+            background: var(--p-soft);
+        }
+        .section-title-wrap h3 { margin: 0; font-size: 20px; font-weight: 700; color: var(--ink); }
+        .section-title-wrap p { margin: 4px 0 0; font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+        /* ===== 轮播 ===== */
+        .spotlight-carousel {
+            height: 400px !important;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #0d2137;
+            flex: 1;
+            min-height: 0;
+        }
+        .spotlight-slide {
+            position: relative; width: 100%; height: 100%;
+            display: flex; align-items: flex-end; overflow: hidden;
+        }
+        .spotlight-bg, .spotlight-mask { position: absolute; inset: 0; }
+        .spotlight-bg { background-position: center; background-size: cover; }
+        .spotlight-mask { background: linear-gradient(180deg, rgba(10,22,40,.1) 0%, rgba(10,22,40,.72) 100%); }
+        .spotlight-content {
+            position: relative; z-index: 1; width: 100%;
+            padding: 28px 28px 26px; color: #fff;
+        }
+        .spotlight-kicker {
+            display: inline-flex; align-items: center;
+            padding: 6px 12px; border-radius: var(--radius-pill);
+            background: rgba(59,130,246,.25); border: 1px solid rgba(59,130,246,.3);
+            font-size: 12px; font-weight: 500; margin-bottom: 12px;
+        }
+        .spotlight-title {
+            margin: 0 0 6px; font-size: 30px; font-weight: 700;
+            line-height: 1.15;
+            text-shadow: 0 2px 12px rgba(0,0,0,.25);
+        }
+        .spotlight-sub {
+            margin: 0; max-width: 520px;
+            color: rgba(190,210,240,.82); font-size: 15px; line-height: 1.7;
+        }
+        .spotlight-carousel .layui-carousel-arrow { font-size: 16px; opacity: .5; }
+        .spotlight-carousel .layui-carousel-arrow:hover { opacity: .9; }
+
+        /* ===== 快捷入口 ===== */
+        .quick-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+        .quick-card {
+            display: flex; align-items: flex-start; gap: 14px;
+            padding: 16px; border-radius: var(--radius-sm);
+            background: var(--p-light); border: 1px solid rgba(31,79,149,.06);
+            cursor: pointer;
+            transition: transform .22s ease, box-shadow .22s ease;
+        }
+        .quick-card:hover {
+            background: #dbeafe;
+            box-shadow: var(--shadow-sm);
+        }
+        .quick-icon {
+            width: 40px; height: 40px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--p); color: #fff; font-size: 18px; flex-shrink: 0;
+        }
+        .quick-body { flex: 1; min-width: 0; }
+        .quick-body strong {
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: 15px; color: var(--ink); font-weight: 600;
+        }
+        .quick-body strong::after {
+            content: '→'; color: var(--p-soft); font-size: 14px;
+            opacity: 0; transition: opacity .2s ease;
+        }
+        .quick-card:hover .quick-body strong::after { opacity: 1; }
+        .quick-body p { margin: 4px 0 0; font-size: 13px; line-height: 1.6; color: var(--muted); }
+
+        /* ===== 公告 ===== */
+        .notice-list { display: grid; gap: 10px; }
+        .notice-item {
+            padding: 14px 16px; border-radius: var(--radius-sm);
+            background: #fff; border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+        }
+        .notice-item:hover {
+            border-color: rgba(31,79,149,.15);
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-2px);
+        }
+        .notice-row {
+            display: flex; align-items: center;
+            justify-content: space-between; gap: 12px;
+        }
+        .notice-badge {
+            display: inline-flex; align-items: center;
+            padding: 4px 10px; border-radius: var(--radius-pill);
+            background: var(--p-light); color: var(--p);
+            font-size: 12px; font-weight: 600;
+        }
+        .notice-badge.external { background: rgba(189,153,67,.12); color: #8b5f00; }
+        .notice-item-time { color: var(--muted); font-size: 12px; }
+        .notice-item-title {
+            margin: 10px 0 6px; font-size: 16px; color: var(--ink);
+            font-weight: 700; line-height: 1.4;
+        }
+        .notice-item-desc { color: var(--muted); font-size: 13px; line-height: 1.7; }
+        .notice-item-source { margin-top: 6px; color: var(--p); font-size: 12px; font-weight: 600; }
+
+        /* ===== 外链图标 ===== */
+        .ext-icon { font-size: 14px; margin-right: 4px; color: #c0922e; }
+
+        /* ===== 赛事：固定宽高比 + 柔和悬停 ===== */
+        .match-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+        .match-card {
+            overflow: hidden; border-radius: var(--radius);
+            background: #fff; border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform .22s ease, box-shadow .22s ease;
+            box-shadow: var(--shadow-sm);
+        }
+        .match-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 36px rgba(23,72,145,.12);
+        }
+        .match-cover-wrap {
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+        }
+        .match-cover {
+            width: 100%; height: 100%;
+            object-fit: cover; display: block;
+            background: linear-gradient(135deg, #c7dbf7, #a8c8f0);
+            transition: transform .3s ease;
+        }
+        .match-card:hover .match-cover { transform: scale(1.04); }
+        .match-info { padding: 14px 16px 16px; }
+        .match-name { margin: 0 0 10px; font-size: 17px; color: var(--ink); font-weight: 700; }
+        .match-meta { font-size: 13px; color: var(--muted); line-height: 1.75; }
+
+        /* ===== 空状态 ===== */
+        .empty-box { padding: 48px 0; text-align: center; color: #98a8be; font-size: 14px; }
+        .empty-icon { font-size: 48px; color: #c8d5e3; margin-bottom: 12px; }
+        .empty-box p { margin: 0; line-height: 1.8; }
+
+        /* ===== 足球资讯 ===== */
+        .news-section { grid-template-columns: 1fr; }
+        .news-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .news-card {
+            overflow: hidden; border-radius: var(--radius-sm);
+            background: #fff; border: 1px solid rgba(180,150,70,.08);
+            cursor: pointer;
+            transition: transform .22s ease, box-shadow .22s ease;
+            box-shadow: var(--shadow-sm);
+        }
+        .news-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+        .news-thumb {
+            width: 100%; height: 140px;
+            object-fit: cover; display: block;
+            background: linear-gradient(135deg, #f5ecd0, #e8dcc0);
+        }
+        .news-body { padding: 12px 14px 14px; }
+        .news-label {
+            display: inline-flex; align-items: center;
+            padding: 3px 8px; border-radius: var(--radius-pill);
+            background: rgba(180,150,70,.08); color: #8b6a00;
+            font-size: 11px; font-weight: 600; margin-bottom: 6px;
+        }
+        .news-title {
+            margin: 0; font-size: 14px; color: var(--ink); font-weight: 600;
+            line-height: 1.45; display: -webkit-box;
+            -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .news-time { margin-top: 6px; font-size: 12px; color: var(--muted); }
+
+        .footer-bar {
+            margin-top: 24px; padding: 16px 20px; border-radius: var(--radius);
+            background: rgba(255,255,255,.74); border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm); color: var(--muted); font-size: 13px;
+            backdrop-filter: blur(16px);
+        }
+
+        @media (max-width: 1100px) {
+            .masthead-body, .content-grid, .bottom-grid, .nav-row {
+                grid-template-columns: 1fr;
+            }
+            .nav-row { display: grid; }
+            .nav-list { grid-template-columns: repeat(3, max-content); }
+            .quick-grid { grid-template-columns: 1fr 1fr; }
+            .news-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .page-wrap { width: 96%; padding: 14px 0 24px; }
+            .masthead { padding: 22px 16px 20px; border-radius: 20px; }
+            .masthead-top, .section-head, .footer-bar {
+                flex-direction: column; align-items: flex-start;
+            }
+            .headline h1 { font-size: 30px; }
+            .headline-tags { grid-template-columns: repeat(3, max-content); }
+            .nav-list {
+                display: flex; gap: 6px; grid-template-columns: unset;
+                overflow-x: auto; -webkit-overflow-scrolling: touch;
+                scrollbar-width: none; padding-bottom: 4px;
+            }
+            .nav-list::-webkit-scrollbar { display: none; }
+            .nav-row { display: block; }
+            .nav-summary { margin-top: 8px; }
+            .summary-grid, .quick-grid, .match-grid, .news-grid {
+                grid-template-columns: 1fr;
+            }
+            .spotlight-carousel { height: 280px !important; }
+            .spotlight-title { font-size: 24px; }
+        }
+    </style>
+    <style>
+        :root {
+            --p: #0ea5e9;
+            --p-deep: #075985;
+            --p-soft: #38bdf8;
+            --p-light: #f0f9ff;
+            --leaf-green: #34d399;
+            --ink: #1e293b;
+            --muted: #64748b;
+            --border: rgba(14, 165, 233, 0.1);
+            --shadow: 0 15px 40px rgba(14, 165, 233, 0.15);
+            --radius: 28px;
+            --radius-sm: 16px;
+            --glass: rgba(255, 255, 255, 0.8);
+        }
+
+        * { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        body {
+            background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+            position: relative;
+        }
+
+        body::before {
+            content: "🌿";
+            position: fixed;
+            top: 10%;
+            left: -20px;
+            font-size: 100px;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+            animation: sway 6s ease-in-out infinite alternate;
+        }
+        body::after {
+            content: "🌴";
+            position: fixed;
+            bottom: 5%;
+            right: -20px;
+            font-size: 180px;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+            animation: sway 5s ease-in-out infinite alternate-reverse;
+        }
+        @keyframes sway {
+            0% { transform: rotate(-5deg) translateY(0); }
+            100% { transform: rotate(12deg) translateY(-10px); }
+        }
+
+        .section-card, .layui-card, .box {
+            background: var(--glass) !important;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.6) !important;
+            border-radius: var(--radius) !important;
+            box-shadow: var(--shadow) !important;
+        }
+
+        .nav-link.active, .layui-this, .btn-primary {
+            background-color: var(--p) !important;
+            border-radius: 50px !important;
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3) !important;
+        }
+
+        .section-title::before,
+        .section-title-wrap::before {
+            background: var(--leaf-green) !important;
+        }
+
+        .page-wrap { padding: 14px 0 26px !important; }
+        .masthead {
+            padding: 20px 24px 18px !important;
+            border-radius: 24px !important;
+        }
+        .masthead-top { gap: 12px; }
+        .top-actions { gap: 8px; }
+        .btn-ghost, .btn-solid {
+            height: 40px !important;
+            min-width: 102px !important;
+            padding: 0 16px !important;
+        }
+        .masthead-body {
+            margin-top: 16px !important;
+            gap: 18px !important;
+            align-items: center !important;
+        }
+        .headline h1 {
+            margin: 8px 0 8px !important;
+            font-size: 36px !important;
+            line-height: 1.18 !important;
+        }
+        .headline p {
+            font-size: 14px !important;
+            line-height: 1.7 !important;
+            max-width: 620px !important;
+        }
+        .headline-tags { margin-top: 12px !important; gap: 6px !important; }
+        .headline-tags span { padding: 7px 14px !important; font-size: 12px !important; }
+        .hero-points { margin-top: 10px !important; }
+        .summary-panel {
+            padding: 16px !important;
+            border-radius: 18px !important;
+        }
+        .summary-panel h3 { font-size: 16px !important; }
+        .summary-grid {
+            margin-top: 10px !important;
+            gap: 8px !important;
+        }
+        .summary-item { padding: 10px !important; border-radius: 12px !important; }
+        .summary-item strong { font-size: 24px !important; }
+        .nav-row { margin-top: 12px !important; }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="page-wrap">
+        <section class="masthead">
+            <div class="masthead-top">
+                <div class="top-actions">
+                    <a class="btn-ghost" :href="adminurl">后台登录</a>
+                    <a class="btn-solid" href="javascript:void(0)" @click="goAccount">{{ accountButtonText }}</a>
+                </div>
+            </div>
+            <div class="masthead-body">
+                <div class="headline">
+                    <h1>{{ projectName }}</h1>
+                    <p>查看俱乐部赛事、公告、教练与训练等公开信息，一站直达前台业务入口。</p>
+                    <div class="headline-tags">
+                        <span>赛事信息</span>
+                        <span>公告动态</span>
+                        <span>教练信息</span>
+                    </div>
+                    <div class="hero-points">
+                        <div class="hero-point"><span class="hero-point-mark">赛</span><span>最新赛事与公告优先展示，方便快速查看。</span></div>
+                    </div>
+                </div>
+                <aside class="summary-panel">
+                    <h3>首页概览</h3>
+                    <p>{{ statusSummary }}</p>
+                    <div class="summary-grid">
+                        <div class="summary-item"><strong>{{ bannerTotal }}</strong><span>轮播数量</span></div>
+                        <div class="summary-item"><strong>{{ noticeTotal }}</strong><span>公告数量</span></div>
+                        <div class="summary-item"><strong>{{ matchTotal }}</strong><span>赛事数量</span></div>
+                        <div class="summary-item"><strong>{{ accountLabel }}</strong><span>当前身份</span></div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="nav-row">
+            <div class="nav-list">
+                <a class="nav-link active" href="./index.html">首页</a>
+                <a class="nav-link" href="./pages/gonggao/list.html">公告信息</a>
+                <a class="nav-link" href="./pages/saishi/list.html">赛事信息</a>
+                <a class="nav-link" href="./pages/jiaolian/list.html">教练信息</a>
+                <a class="nav-link" :href="centerHref">个人中心</a>
+            </div>
+            <div class="nav-summary">
+                <span>当前访问身份</span>
+                <strong>{{ accountLabel }}</strong>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <div class="section-card">
+                <div class="section-head">
+                    <div class="section-title-wrap">
+                        <h3>轮播焦点</h3>
+                        <p>首页重点内容直接在大图区域展示。</p>
+                    </div>
+                    <a class="section-link" href="./pages/gonggao/list.html">查看公告</a>
+                </div>
+                <div class="layui-carousel spotlight-carousel" id="home-swiper">
+                    <div carousel-item>
+                        <div v-for="(item,index) in displaySwiperList" :key="index" class="spotlight-slide">
+                            <div class="spotlight-bg" :style="{ backgroundImage: 'url(' + img(item.img) + ')' }"></div>
+                            <div class="spotlight-mask"></div>
+                            <div class="spotlight-content">
+                                <div class="spotlight-kicker">{{ item.kicker || '首页焦点内容' }}</div>
+                                <h4 class="spotlight-title">{{ item.title }}</h4>
+                                <p class="spotlight-sub">{{ item.desc }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-card">
+                <div class="section-head">
+                    <div class="section-title-wrap">
+                        <h3>快捷入口</h3>
+                        <p>常用前台入口集中在此。</p>
+                    </div>
+                </div>
+                <div class="quick-grid">
+                    <div class="quick-card" v-for="item in quickLinks" :key="item.url" @click="go(item.url)">
+                        <div class="quick-icon">{{ item.icon }}</div>
+                        <div class="quick-body">
+                            <strong>{{ item.name }}</strong>
+                            <p>{{ item.desc }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bottom-grid">
+            <div class="section-card">
+                <div class="section-head">
+                    <div class="section-title-wrap">
+                        <h3>最新公告</h3>
+                        <p>最近发布的公告信息。</p>
+                    </div>
+                    <a class="section-link" href="./pages/gonggao/list.html">全部公告</a>
+                </div>
+                <div class="notice-list" v-if="mergedNoticeList.length">
+                    <div class="notice-item" v-for="(item,index) in mergedNoticeList" :key="index" @click="openNotice(item)">
+                        <div class="notice-row">
+                            <span class="notice-badge">公告信息</span>
+                            <span class="notice-item-time">{{ formatDate(item.insertTime) }}</span>
+                        </div>
+                        <div class="notice-item-title">{{ item.gonggaoName }}</div>
+                        <div class="notice-item-desc">{{ noticeDesc(item) }}</div>
+                    </div>
+                </div>
+                <div class="empty-box" v-else>
+                    <div class="empty-icon"><i class="layui-icon layui-icon-face-surprised"></i></div>
+                    <p>暂无公告数据</p>
+                    <p style="font-size:12px;margin-top:4px;color:#b0bdd0;">公告发布后将自动展示在这里</p>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-head">
+                    <div class="section-title-wrap">
+                        <h3>最新赛事</h3>
+                        <p>优先展示最新录入的赛事。</p>
+                    </div>
+                    <a class="section-link" href="./pages/saishi/list.html">全部赛事</a>
+                </div>
+                <div class="match-grid" v-if="mergedMatchList.length">
+                    <div class="match-card" v-for="(item,index) in mergedMatchList" :key="index" @click="openMatch(item)">
+                        <div class="match-cover-wrap">
+                            <img class="match-cover" :src="img(item.img)" alt="赛事图片">
+                        </div>
+                        <div class="match-info">
+                            <div class="match-name">{{ item.saishiName }}</div>
+                            <div class="match-meta">赛事地点：{{ item.saishiAddress || '待定' }}</div>
+                            <div class="match-meta">赛事类型：{{ item.saishiValue || '未分类' }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="empty-box" v-else>
+                    <div class="empty-icon"><i class="layui-icon layui-icon-face-surprised"></i></div>
+                    <p>暂无赛事数据</p>
+                    <p style="font-size:12px;margin-top:4px;color:#b0bdd0;">赛事录入后将自动展示在这里</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="news-section" v-if="realmadridNews.length">
+            <div class="section-card">
+                <div class="section-head">
+                    <div class="section-title-wrap">
+                        <h3>足球资讯</h3>
+                        <p>来自足球世界最新动态，仅供参考。</p>
+                    </div>
+                </div>
+                <div class="news-grid">
+                    <div class="news-card" v-for="(item,index) in realmadridNews.slice(0, 4)" :key="'news-' + index" @click="openExternal(item.link)">
+                        <img class="news-thumb" :src="img(item.imgage)" alt="资讯图片">
+                        <div class="news-body">
+                            <div class="news-label">{{ item.category || '足球资讯' }}</div>
+                            <div class="news-title">{{ item.title }}</div>
+                            <div class="news-time">{{ formatExternalDate(item.time) }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="footer-bar">
+            <div>足球俱乐部管理系统前台首页</div>
+            <div>为用户提供赛事、公告、训练计划等公开信息服务</div>
+        </section>
+    </div>
+</div>
+
+<script src="./layui/layui.js"></script>
+<script src="./js/vue.js"></script>
+<script src="./xznstatic/js/element.min.js"></script>
+<link rel="stylesheet" href="./xznstatic/css/element.min.css">
+<script src="./js/config.js"></script>
+<script src="./modules/config.js"></script>
+<script>
+    var placeholderBanner = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#0b2547"/><stop offset="1" stop-color="#1f4f95"/></linearGradient></defs><rect width="1200" height="720" fill="url(#g)"/><circle cx="970" cy="110" r="150" fill="rgba(59,130,246,0.12)"/><circle cx="1080" cy="590" r="190" fill="rgba(59,130,246,0.08)"/><text x="86" y="340" font-size="64" font-weight="bold" font-family="Microsoft YaHei" fill="#ffffff">足球俱乐部管理系统</text><text x="92" y="400" font-size="28" font-family="Microsoft YaHei" fill="rgba(255,255,255,0.7)">查看赛事、公告与公开信息</text></svg>');
+
+    var placeholderMatch = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a2d68"/><stop offset="1" stop-color="#1a5fc8"/></linearGradient></defs><rect width="800" height="500" fill="url(#bg)"/><circle cx="660" cy="80" r="90" fill="rgba(255,255,255,0.07)"/><circle cx="120" cy="430" r="110" fill="rgba(255,255,255,0.05)"/><circle cx="400" cy="210" r="100" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="5"/><circle cx="400" cy="210" r="60" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.3)" stroke-width="3"/><line x1="0" y1="210" x2="800" y2="210" stroke="rgba(255,255,255,0.18)" stroke-width="2"/><rect x="160" y="120" width="100" height="180" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="3"/><rect x="540" y="120" width="100" height="180" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="3"/><text x="400" y="390" font-size="38" text-anchor="middle" font-family="Microsoft YaHei" fill="rgba(255,255,255,0.9)">赛事图片</text></svg>');
+
+    var placeholderThumb = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#f5f0e0"/><circle cx="200" cy="130" r="40" fill="none" stroke="#c9b86a" stroke-width="2"/><text x="160" y="140" font-size="20" font-family="Microsoft YaHei" fill="#8b6a00">资讯</text><text x="130" y="210" font-size="14" font-family="Microsoft YaHei" fill="#a09060">足球新闻动态</text></svg>');
+
+    var runtimeBaseUrl = (typeof resolveProjectBase === 'function') ? resolveProjectBase() : (window.location.protocol + '//' + window.location.host);
+
+    var http = layui.http || { baseurl: (typeof resolveProjectBase === 'function' ? resolveProjectBase() : (window.location.protocol + '//' + window.location.host + '/')) };
+var vue = new Vue({
+        el: '#app',
+        data: {
+            adminurl: adminurl,
+            projectName: projectName,
+            baseUrl: http.baseurl,
+            swiperList: [],
+            gonggaoList: [],
+            saishiList: [],
+            realmadridNews: [],
+            placeholderThumb: placeholderThumb,
+            bannerTotal: 0,
+            noticeTotal: 0,
+            matchTotal: 0,
+            quickLinks: [
+                { name: '赛事信息', url: './pages/saishi/list.html', desc: '查看赛事名称、地点与详情。', icon: '⚽' },
+                { name: '公告信息', url: './pages/gonggao/list.html', desc: '最新公告与通知内容。', icon: '📢' },
+                { name: '训练计划', url: './pages/xunlian/list.html', desc: '训练安排，按类型筛选。', icon: '🏃' },
+                { name: '个人中心', url: 'center', desc: '登录后进入个人业务页面。', icon: '👤' }
+            ]
+        },
+        computed: {
+            displaySwiperList: function() {
+                if (this.swiperList.length) return this.swiperList;
+                if (this.realmadridBannerList.length) return this.realmadridBannerList;
+                return [{ title: '前台焦点内容', desc: '当前还没有配置轮播图，可在后台轮播图管理中补充首页展示内容。', img: '' }];
+            },
+            realmadridBannerList: function() {
+                return this.realmadridNews.filter(function(i) { return !!i.image; }).slice(0, 4).map(function(item, index) {
+                    return {
+                        img: item.image, title: item.title,
+                        desc: '摘自皇家马德里官网动态，作为首页轮播图预览展示内容。',
+                        isExternal: true, link: item.link,
+                        kicker: index === 0 ? '皇家马德里焦点' : '皇家马德里动态'
+                    };
+                });
+            },
+            mergedNoticeList: function() {
+                return this.gonggaoList.slice().sort(function(a, b) {
+                    return (b.insertTime || '').localeCompare(a.insertTime || '');
+                });
+            },
+            mergedMatchList: function() {
+                return this.saishiList.slice().sort(function(a, b) {
+                    return (b.insertTime || '').localeCompare(a.insertTime || '');
+                });
+            },
+            accountLabel: function() {
+                var role = localStorage.getItem('userTable');
+                var map = { yonghu: '用户', jiaolian: '教练', users: '管理员' };
+                return map[role] || '访客';
+            },
+            accountButtonText: function() { return localStorage.getItem('Token') ? '进入个人中心' : '前台登录'; },
+            statusSummary: function() {
+                return localStorage.getItem('Token')
+                    ? ('当前以' + this.accountLabel + '身份访问，可直接进入个人中心继续操作。')
+                    : '当前未登录，可先浏览公开信息，或进入登录页切换到个人业务视角。';
+            },
+            centerHref: function() {
+                var t = localStorage.getItem('userTable');
+                return t ? ('./pages/' + t + '/center.html') : './pages/login/login.html';
+            }
+        },
+        methods: { img: function(path){ if(!path)return ''; if(path.indexOf('http')===0)return path; return this.baseUrl + '/' + path.replace(/^\/+/, ''); }, 
+            go: function(url) {
+                if (url === 'center') {
+                    var t = localStorage.getItem('userTable');
+                    window.location.href = t ? ('./pages/' + t + '/center.html') : './pages/login/login.html';
+                    return;
+                }
+                window.location.href = url;
+            },
+            goAccount: function() { window.location.href = this.centerHref; },
+            openExternal: function(url) { if (url) window.open(url, '_blank'); },
+            formatDate: function(v) { return v ? v.split(' ')[0] : '最近更新'; },
+            formatExternalDate: function(v) { return v ? v.replace('T', ' ').split('.')[0] : '官网动态'; },
+            noticeDesc: function(item) {
+                return item.gonggaoContent ? this.stripHtml(item.gonggaoContent) : '进入详情查看完整公告内容。';
+            },
+            stripHtml: function(v) { return String(v).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 44) || '进入详情查看完整公告内容。'; },
+            openNotice: function(item) { this.go('./pages/gonggao/detail.html?id=' + item.id); },
+            openMatch: function(item) { this.go('./pages/saishi/detail.html?id=' + item.id); },
+            safeImage: function(url, fallback) {
+                var value = url;
+                var base = this.baseUrl || runtimeBaseUrl;
+
+                if (Array.isArray(value)) {
+                    value = value.length ? value[0] : '';
+                }
+                if (typeof value === 'string') {
+                    value = value.trim();
+                    if (value.charAt(0) === '[') {
+                        try {
+                            var arr = JSON.parse(value);
+                            if (Array.isArray(arr)) {
+                                value = arr.length ? arr[0] : '';
+                            }
+                        } catch (e) {}
+                    }
+                    if (value.indexOf(',') > -1 && value.indexOf('data:') !== 0) {
+                        value = value.split(',')[0];
+                    }
+                }
+
+                if (!value) {
+                    return fallback || placeholderThumb;
+                }
+                value = String(value).trim();
+
+                if (/^(https?:|data:|blob:)/i.test(value)) {
+                    return value;
+                }
+                if (value.indexOf('//') === 0) {
+                    return (window.location.protocol || 'http:') + value;
+                }
+                if (typeof resolveImage === 'function') {
+                    return img(item.img);
+                }
+
+                base = String(base || '').replace(/\/+$/, '');
+                value = value.replace(/^\.?\//, '');
+                return base + '/' + value;
+            },
+            coverUrl: function(item) { return this.img(item.img); },
+            resolveBanner: function(item) {
+                return item && item.img ? item.img : '';
+            },
+            renderSwiper: function(carousel) {
+                this.$nextTick(function() {
+                    carousel.render({
+                        elem: '#home-swiper', width: '100%', height: '100%',
+                        arrow: swiper.arrow || 'hover', anim: swiper.anim || 'default',
+                        autoplay: true, interval: swiper.interval || 3000,
+                        indicator: swiper.indicator || 'inside'
+                    });
+                });
+            }
+        }
+    });
+
+    /* ===== 全局 loading：layer.load + Promise.all ===== */
+    layui.use(['carousel', 'layer', 'http'], function() {
+        var carousel = layui.carousel;
+        var layer = layui.layer;
+        var http = layui.http;
+        vue.baseUrl = (http && http.baseurl) ? http.baseUrl: http.baseurl;
+        var loadingIndex = layer.load(2, { shade: [0.3, '#eef5ff'] });
+
+        var p1 = new Promise(function(resolve) {
+            http.request('config/page', 'get', { page: 1, limit: 10 }, function(res) {
+                var records = (res.data && res.data.list) || [];
+                vue.bannerTotal = res.data && res.data.total ? res.data.total : records.length;
+                vue.swiperList = records.filter(function(i) { return i.value; }).map(function(item, index) {
+                    return { img: item.value, title: item.name || ('首页轮播图 ' + (index + 1)), desc: '用于展示首页的重点视觉内容和俱乐部公开信息。' };
+                });
+                resolve();
+            });
+        });
+        var p2 = new Promise(function(resolve) {
+            http.request('gonggao/page', 'get', { page: 1, limit: 4, order: 'desc' }, function(res) {
+                vue.gonggaoList = (res.data && res.data.list) || [];
+                vue.noticeTotal = res.data && res.data.total ? res.data.total : vue.gonggaoList.length;
+                resolve();
+            });
+        });
+        var p3 = new Promise(function(resolve) {
+            http.request('saishi/page', 'get', { page: 1, limit: 4, saishiDeleteStart: 1, saishiDeleteEnd: 1, order: 'desc' }, function(res) {
+                vue.saishiList = (res.data && res.data.list) || [];
+                vue.matchTotal = res.data && res.data.total ? res.data.total : vue.saishiList.length;
+                resolve();
+            });
+        });
+        var p4 = new Promise(function(resolve) {
+            http.request('external/realmadrid/news', 'get', { limit: 4 }, function(res) {
+                vue.realmadridNews = (res.data || []).filter(function(item) {
+                    var cat = item && item.category != null ? String(item.category) : '';
+                    return /(football|soccer)/i.test(cat);
+                }).slice(0, 4).map(function(item) { item.isExternal = true; return item; });
+                resolve();
+            });
+        });
+
+        Promise.all([p1, p2, p3]).then(function() {
+            layer.close(loadingIndex);
+            vue.renderSwiper(carousel);
+        });
+
+        // p4 外部资讯单独跑，加载到了再显示，失败不影响主页面
+        p4.catch(function() { vue.realmadridNews = []; });
+    });
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+

@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>球员数据详情</title>
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <style>
+        :root { --ink: #1a2e4c; --muted: #5e7189; --border: rgba(14,165,233,.10); --shadow: 0 8px 32px rgba(14,165,233,.15); }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: #f3f6fb; font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif; color: var(--ink); }
+        .page-shell { width: 1180px; max-width: calc(100% - 24px); margin: 0 auto; padding: 22px 0 34px; }
+        .breadcrumb, .detail-shell, .content-card, .info-card { background: #fff; border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); }
+        .breadcrumb { padding: 16px 22px; color: var(--muted); margin-bottom: 18px; }
+        .breadcrumb a { color: #2d6fc5; text-decoration: none; }
+        .hero { padding: 34px; color: #fff; background: linear-gradient(125deg, rgba(8,36,77,.98) 0%, rgba(20,72,138,.95) 46%, rgba(42,123,214,.9) 100%); border-radius: 28px 28px 0 0; position: relative; overflow: hidden; }
+        .hero:before, .hero:after { content: ''; position: absolute; border-radius: 50%; background: rgba(255,255,255,.08); }
+        .hero:before { width: 220px; height: 220px; top: -90px; right: -40px; }
+        .hero:after { width: 140px; height: 140px; left: -30px; bottom: -60px; }
+        .hero > * { position: relative; z-index: 1; }
+        .hero-label { display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.16); font-size: 12px; margin-bottom: 14px; }
+        .hero h1 { margin: 0 0 14px; font-size: 38px; line-height: 1.2; }
+        .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; }
+        .hero-chip { padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,.14); font-size: 13px; color: rgba(255,255,255,.88); }
+        .detail-body { padding: 26px; }
+        .media-grid { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 22px; }
+        .cover { width: 100%; min-height: 320px; max-height: 460px; object-fit: cover; border-radius: 24px; display: block; background: linear-gradient(135deg, #d9ebff, #b8d8ff); }
+        .info-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+        .info-card { padding: 20px; }
+        .info-card .label { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+        .info-card .value { color: var(--ink); font-size: 18px; line-height: 1.7; word-break: break-word; }
+        .content-card { margin-top: 22px; padding: 24px; }
+        .content-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+        .content-head h3 { margin: 0; font-size: 24px; }
+        .content-head span { font-size: 14px; color: var(--muted); }
+        .content { color: #48627f; line-height: 1.95; font-size: 15px; }
+        .action-row { margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; }
+        .back-btn, .list-btn { height: 44px; padding: 0 20px; border: 0; border-radius: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+        .back-btn { color: #fff; background: var(--p-soft); }
+        .list-btn { color: #24539a; background: rgba(29,103,193,.08); }
+        @media (max-width: 900px) { .media-grid, .info-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="page-shell">
+        <div class="breadcrumb"><a href="../../index.html">首页</a><span style="margin: 0 8px;">/</span><a href="./list.html">球员数据</a><span style="margin: 0 8px;">/</span><span>{{ detail.shujuName || '数据详情' }}</span></div>
+        <div class="detail-shell">
+            <div class="hero">
+                <div class="hero-label">球员数据详情页</div>
+                <h1>{{ detail.shujuName || '球员数据详情' }}</h1>
+                <div class="hero-meta">
+                    <span class="hero-chip">数据编号：{{ detail.shujuUuidNumber || '暂无' }}</span>
+                    <span class="hero-chip">数据类型：{{ detail.shujuValue || '未分类' }}</span>
+                    <span class="hero-chip">数据日期：{{ detail.shujuTime || '暂无' }}</span>
+                </div>
+            </div>
+            <div class="detail-body">
+                <div class="media-grid">
+                    <img class="cover" :src="img(item.img)" alt="球员数据图片">
+                    <div class="info-grid">
+                        <div class="info-card"><div class="label">数据名称</div><div class="value">{{ detail.shujuName || '暂无' }}</div></div>
+                        <div class="info-card"><div class="label">数据类型</div><div class="value">{{ detail.shujuValue || '未分类' }}</div></div>
+                        <div class="info-card"><div class="label">数据日期</div><div class="value">{{ detail.shujuTime || '暂无' }}</div></div>
+                        <div class="info-card"><div class="label">录入时间</div><div class="value">{{ detail.insertTime || '暂无' }}</div></div>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <div class="content-head"><h3>数据说明</h3><span>查看球员数据的补充说明内容</span></div>
+                    <div class="content" v-html="renderContent(detail.shujuContent)"></div>
+                </div>
+                <div class="action-row">
+                    <a class="list-btn" href="./list.html">返回数据列表</a>
+                    <button type="button" class="back-btn" onclick="history.back()">返回上一页</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../layui/layui.js"></script>
+<script src="../../js/vue.js"></script>
+<script src="../../xznstatic/js/element.min.js"></script>
+<link rel="stylesheet" href="../../xznstatic/css/element.min.css">
+<script src="../../js/config.js"></script>
+<script src="../../modules/config.js"></script>
+<script src="../../js/utils.js"></script>
+<script>
+var http = layui.http || { baseurl: (typeof resolveProjectBase === 'function' ? resolveProjectBase() : (window.location.protocol + '//' + window.location.host + '/')) };
+var vue = new Vue({
+    el: '#app',
+    data: { baseUrl: http.baseurl, detail: {} },
+    computed: { coverImage: function() { return img(item.img); } },
+    methods: { img: function(path) { if (!path) return ''; if (path.indexOf('http') === 0) return path; return this.baseUrl.replace(/\/$/, '') + '/upload/' + path.replace(/^.*upload\//, ''); },  renderContent: function(content) { if (!content) { return '暂无内容'; } return layui.http.fixRichTextImages(content, this.baseUrl).replace(/<img/g, '<img style="max-width:100%;height:auto;border-radius:16px;display:block;margin:18px auto;"'); } }
+});
+layui.use(['http'], function() { var http = layui.http; var id = http.getParam('id'); vue.baseUrl = http.baseurl; http.request('shuju/info/' + id, 'get', {}, function(res) { vue.detail = res.data || {}; }); });
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+

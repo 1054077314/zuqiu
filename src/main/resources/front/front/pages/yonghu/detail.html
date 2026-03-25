@@ -1,0 +1,263 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>鐢ㄦ埛璇︽儏</title>
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <style>
+        :root {
+            --ink: #1a2e4c;
+            --muted: #5e7189;
+            --border: rgba(14,165,233,.10);
+            --shadow: 0 8px 32px rgba(14,165,233,.15);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background:
+                #f3f6fb;
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            color: var(--ink);
+        }
+        .page-shell { width: 1180px; max-width: calc(100% - 24px); margin: 0 auto; padding: 22px 0 34px; }
+        .breadcrumb, .detail-shell, .info-card, .empty-shell {
+            background: rgba(255,255,255,.82);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+
+        }
+        .breadcrumb { padding: 16px 22px; color: var(--muted); margin-bottom: 18px; }
+        .breadcrumb a { color: #2d6fc5; text-decoration: none; }
+        .detail-shell { overflow: hidden; }
+        .hero {
+            padding: 34px;
+            color: #fff;
+            background: linear-gradient(125deg, rgba(8,36,77,.98) 0%, rgba(20,72,138,.95) 46%, rgba(42,123,214,.9) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero:before, .hero:after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,.08);
+        }
+        .hero:before { width: 220px; height: 220px; top: -90px; right: -40px; }
+        .hero:after { width: 140px; height: 140px; left: -30px; bottom: -60px; }
+        .hero > * { position: relative; z-index: 1; }
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255,255,255,.12);
+            border: 1px solid rgba(255,255,255,.16);
+            font-size: 12px;
+            margin-bottom: 14px;
+        }
+        .hero h1 { margin: 0 0 14px; font-size: 38px; line-height: 1.2; }
+        .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; }
+        .hero-chip {
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255,255,255,.14);
+            font-size: 13px;
+            color: rgba(255,255,255,.88);
+        }
+        .detail-body { padding: 26px; }
+        .layout { display: grid; grid-template-columns: minmax(320px, .8fr) minmax(0, 1.2fr); gap: 22px; }
+        .cover {
+            width: 100%;
+            min-height: 320px;
+            max-height: 420px;
+            object-fit: cover;
+            border-radius: 24px;
+            display: block;
+            background: linear-gradient(135deg, #d9ebff, #b8d8ff);
+        }
+        .info-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+        .info-card { padding: 20px; }
+        .info-card .label { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+        .info-card .value { color: var(--ink); font-size: 18px; line-height: 1.7; word-break: break-word; }
+        .tips-card {
+            margin-top: 18px;
+            padding: 18px 20px;
+            border-radius: 22px;
+            background: rgba(241,247,255,.9);
+            color: var(--muted);
+            line-height: 1.85;
+        }
+        .empty-shell { padding: 80px 22px; text-align: center; color: var(--muted); }
+        .empty-shell h2 { margin: 0 0 12px; color: var(--ink); }
+        .action-row { margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; }
+        .back-btn, .list-btn {
+            height: 44px;
+            padding: 0 20px;
+            border: 0;
+            border-radius: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .back-btn { color: #fff; background: var(--p-soft); }
+        .list-btn { color: #24539a; background: rgba(29,103,193,.08); }
+        @media (max-width: 960px) {
+            .layout, .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="page-shell">
+        <div class="breadcrumb">
+            <a href="../../index.html">棣栭〉</a>
+            <span style="margin: 0 8px;">/</span>
+            <a href="./list.html">鐢ㄦ埛淇℃伅</a>
+            <span style="margin: 0 8px;">/</span>
+            <span>{{ detail.yonghuName || '鐢ㄦ埛璇︽儏' }}</span>
+        </div>
+
+        <div class="detail-shell" v-if="ready">
+            <div class="hero">
+                <div class="hero-label">鐢ㄦ埛璇︽儏椤?/div>
+                <h1>{{ detail.yonghuName || '鐢ㄦ埛璇︽儏' }}</h1>
+                <div class="hero-meta">
+                    <span class="hero-chip">鐢ㄦ埛缂栧彿锛歿{ detail.yonghuUuidNumber || '鏆傛棤' }}</span>
+                    <span class="hero-chip">鎵嬫満鍙凤細{{ detail.yonghuPhone || '鏆傛棤' }}</span>
+                    <span class="hero-chip">鎬у埆锛歿{ detail.sexValue || '鏈缃? }}</span>
+                </div>
+            </div>
+            <div class="detail-body">
+                <div class="layout">
+                    <div>
+                        <img class="cover" :src="img(item.img)" alt="鐢ㄦ埛澶村儚">
+                        <div class="tips-card">
+                            褰撳墠椤电敤浜庢煡鐪嬬敤鎴峰叕寮€璧勬枡鍜屽熀纭€鑱旂郴淇℃伅銆傝嫢浣犳鍦ㄦ煡鐪嬭嚜宸辩殑璐﹀彿锛屽彲鐩存帴鍓嶅線涓汉涓績缁存姢璧勬枡涓庡瘑鐮併€?                        </div>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <div class="label">鐢ㄦ埛濮撳悕</div>
+                            <div class="value">{{ detail.yonghuName || '鏆傛棤' }}</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="label">璐﹀彿</div>
+                            <div class="value">{{ detail.username || '鏆傛棤' }}</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="label">鐢ㄦ埛缂栧彿</div>
+                            <div class="value">{{ detail.yonghuUuidNumber || '鏆傛棤' }}</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="label">鎵嬫満鍙?/div>
+                            <div class="value">{{ detail.yonghuPhone || '鏆傛棤' }}</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="label">閭</div>
+                            <div class="value">{{ detail.yonghuEmail || '鏆傛棤' }}</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="label">鎬у埆</div>
+                            <div class="value">{{ detail.sexValue || '鏈缃? }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-row">
+                    <a class="list-btn" href="./list.html">杩斿洖鐢ㄦ埛鍒楄〃</a>
+                    <a v-if="canOpenCenter" class="list-btn" href="./center.html">杩涘叆涓汉涓績</a>
+                    <button type="button" class="back-btn" onclick="history.back()">杩斿洖涓婁竴椤?/button>
+                </div>
+            </div>
+        </div>
+
+        <div class="empty-shell" v-else>
+            <h2>{{ emptyTitle }}</h2>
+            <p>{{ emptyText }}</p>
+            <div class="action-row" style="justify-content:center;">
+                <a class="list-btn" href="./list.html">杩斿洖鐢ㄦ埛鍒楄〃</a>
+                <a v-if="needLogin" class="back-btn" href="../login/login.html">鍓嶅線鐧诲綍</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../layui/layui.js"></script>
+<script src="../../js/vue.js"></script>
+<script src="../../xznstatic/js/element.min.js"></script>
+<link rel="stylesheet" href="../../xznstatic/css/element.min.css">
+<script src="../../js/config.js"></script>
+<script src="../../modules/config.js"></script>
+<script src="../../js/utils.js"></script>
+<script>
+var http = layui.http || { baseurl: (typeof resolveProjectBase === 'function' ? resolveProjectBase() : (window.location.protocol + '//' + window.location.host + '/')) };
+var vue = new Vue({
+    el: '#app',
+    data: {
+        baseUrl: http.baseurl,
+        detail: {},
+        ready: false,
+        needLogin: false,
+        emptyTitle: '姝ｅ湪鍔犺浇鐢ㄦ埛璇︽儏',
+        emptyText: '璇风◢鍊欙紝绯荤粺姝ｅ湪璇诲彇褰撳墠鐢ㄦ埛璧勬枡銆?
+    },
+    computed: {
+        coverImage: function() {
+            return img(item.img);
+        },
+        canOpenCenter: function() {
+            return localStorage.getItem('Token') && localStorage.getItem('userTable') === 'yonghu';
+        }
+    }
+});
+
+layui.use(['http'], function() {
+    var http = layui.http;
+    var id = http.getParam('id');
+    var currentId = localStorage.getItem('userid');
+    var currentTable = localStorage.getItem('userTable');
+    vue.baseUrl = http.baseurl;
+    localStorage.setItem('goUtl', './pages/yonghu/detail.html?id=' + id);
+
+    function renderDetail(data) {
+        vue.detail = data || {};
+        vue.ready = true;
+        vue.needLogin = false;
+        vue.emptyTitle = '鏈壘鍒扮敤鎴蜂俊鎭?;
+        vue.emptyText = '褰撳墠鐢ㄦ埛鏁版嵁涓嶅瓨鍦紝鍙兘宸茶鍒犻櫎銆?;
+    }
+
+    if (!id) {
+        vue.emptyTitle = '缂哄皯鐢ㄦ埛缂栧彿';
+        vue.emptyText = '褰撳墠椤甸潰缂哄皯鐢ㄦ埛缂栧彿鍙傛暟锛岃浠庡垪琛ㄩ〉閲嶆柊杩涘叆銆?;
+        return;
+    }
+
+    if (currentTable === 'yonghu' && String(currentId) === String(id)) {
+        http.request('yonghu/session', 'get', {}, function(res) {
+            renderDetail(res.data || {});
+        });
+        return;
+    }
+
+    if (!localStorage.getItem('Token')) {
+        vue.emptyTitle = '褰撳墠璇︽儏闇€瑕佺櫥褰曞悗鏌ョ湅';
+        vue.emptyText = '璇峰厛鐧诲綍鍓嶅彴鐢ㄦ埛璐﹀彿锛岀劧鍚庡啀杩涘叆鐢ㄦ埛璇︽儏椤垫煡鐪嬪畬鏁翠俊鎭€?;
+        vue.needLogin = true;
+        return;
+    }
+
+    http.request('yonghu/info/' + id, 'get', {}, function(res) {
+        renderDetail(res.data || {});
+    });
+});
+</script>
+</body>
+</html>
+
+
+
+
+
+

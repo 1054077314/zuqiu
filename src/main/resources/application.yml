@@ -1,0 +1,62 @@
+﻿# Tomcat
+server:
+    tomcat:
+        uri-encoding: UTF-8
+    port: 8080
+    servlet:
+        context-path: /zuqiujulebguanli
+
+spring:
+    main:
+        banner-mode: "off"
+        log-startup-info: true
+    datasource:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/zuqiujulebguanli?useUnicode=true&characterEncoding=utf-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&useSSL=false
+        username: root
+        password: 123456
+
+
+    servlet:
+      multipart:
+        max-file-size: 1000MB
+        max-request-size: 1000MB
+    resources:
+      static-locations: classpath:front/,classpath:static/,file:static/,file:upload/
+#mybatis
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  #瀹炰綋鎵弿锛屽涓猵ackage鐢ㄩ€楀彿鎴栬€呭垎鍙峰垎闅?  typeAliasesPackage: com.entity
+  global-config:
+    #涓婚敭绫诲瀷  0:"鏁版嵁搴揑D鑷", 1:"鐢ㄦ埛杈撳叆ID",2:"鍏ㄥ眬鍞竴ID (鏁板瓧绫诲瀷鍞竴ID)", 3:"鍏ㄥ眬鍞竴ID UUID";
+    id-type: 1
+    #瀛楁绛栫暐 0:"蹇界暐鍒ゆ柇",1:"闈?NULL 鍒ゆ柇"),2:"闈炵┖鍒ゆ柇"
+    field-strategy: 2
+    #椹煎嘲涓嬪垝绾胯浆鎹?    db-column-underline: true
+    #鍒锋柊mapper 璋冭瘯绁炲櫒
+    refresh-mapper: false
+    #閫昏緫鍒犻櫎閰嶇疆
+    logic-delete-value: -1
+    logic-not-delete-value: 0
+    #鑷畾涔塖QL娉ㄥ叆鍣?    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    #springboot 椤圭洰mybatis plus 璁剧疆 jdbcTypeForNull (oracle鏁版嵁搴撻渶閰嶇疆JdbcType.NULL, 榛樿鏄疧ther)
+    jdbc-type-for-null: 'null'
+
+#鎵撳嵃sql璇彞
+logging:
+  level:
+    root: info
+    com.dao: warn
+    com.zuqiujulebguanli.listener: warn
+    com.zaxxer.hikari: warn
+    org.apache.catalina.core.StandardService: warn
+    org.apache.catalina.core.StandardEngine: warn
+    org.apache.catalina.core.ContainerBase: warn
+    org.springframework.web.context.ContextLoader: warn
+    org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener: warn
+
+

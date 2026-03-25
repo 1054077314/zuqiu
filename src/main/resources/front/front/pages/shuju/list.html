@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>球员数据</title>
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <style>
+        :root {
+            --ink: #1a2e4c;
+            --muted: #5e7189;
+            --p: #0ea5e9;
+            --p-soft: #38bdf8;
+            --p-light: #f0f9ff;
+            --border: rgba(14,165,233,.10);
+            --shadow: 0 8px 32px rgba(14,165,233,.15);
+            --shadow-sm: 0 4px 16px rgba(14,165,233,.12);
+            --radius: 20px;
+            --radius-sm: 14px;
+            --pill: 999px;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: #f3f6fb;
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            color: var(--ink);
+        }
+        .page-shell { width: 1200px; max-width: calc(100% - 24px); margin: 0 auto; padding: 22px 0 34px; }
+        .topbar, .banner, .menu-bar, .toolbar, .content-shell { background: #fff; border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); }
+        .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; margin-bottom: 18px; }
+        .topbar-title { font-size: 16px; font-weight: 700; }
+        .topbar-links { display: flex; flex-wrap: wrap; gap: 10px; }
+        .topbar-links a, .menu-link, .type-chip { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 0 18px; border-radius: 999px; text-decoration: none; transition: all .2s ease; }
+        .topbar-links a, .menu-link, .type-chip { color: #24539a; background: rgba(29,103,193,.08); }
+        .topbar-links a:hover, .menu-link:hover, .type-chip:hover { transform: translateY(-2px); }
+        .banner { overflow: hidden; position: relative; margin-bottom: 20px; padding: 32px 34px; color: #fff; background: linear-gradient(135deg, #075985, #0c7fbb 45%, #0ea5e9); }
+        .banner::before, .banner::after { content: ''; position: absolute; border-radius: 50%; pointer-events: none; }
+        .banner::before { width: 240px; height: 240px; top: -110px; right: -40px; background: radial-gradient(circle, rgba(14,165,233,.15), transparent 70%); }
+        .banner::after { width: 150px; height: 150px; left: -30px; bottom: -60px; background: radial-gradient(circle, rgba(14,165,233,.1), transparent 70%); }
+        .banner > * { position: relative; z-index: 1; }
+        .banner-tag { display: inline-flex; align-items: center; padding: 6px 14px; border-radius: var(--pill); background: rgba(14,165,233,.2); border: 1px solid rgba(14,165,233,.25); font-size: 12px; font-weight: 500; }
+        .banner h1 { margin: 16px 0 10px; font-size: 38px; }
+        .banner p { margin: 0; max-width: 760px; color: rgba(255,255,255,.88); line-height: 1.9; }
+        .menu-bar, .toolbar { margin-bottom: 20px; padding: 18px 20px; display: flex; flex-wrap: wrap; gap: 10px; }
+        .menu-link.active, .type-chip.active { color: #fff; background: var(--p-soft); box-shadow: 0 6px 18px rgba(14,165,233,.2); }
+        .content-shell { padding: 24px; }
+        .section-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+        .section-head h2 { margin: 0; font-size: 22px; font-weight: 700; }
+        .section-head span { color: var(--muted); font-size: 14px; }
+        .card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+        .data-card { display: grid; grid-template-columns: 220px 1fr; gap: 18px; overflow: hidden; border-radius: 24px; background: linear-gradient(135deg, rgba(242,247,255,.95), rgba(255,255,255,.98)); border: 1px solid var(--border); box-shadow: 0 12px 28px rgba(32,85,161,.08); }
+        .data-cover { width: 100%; height: 100%; min-height: 220px; object-fit: cover; display: block; }
+        .data-body { padding: 20px 20px 20px 0; }
+        .data-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+        .data-title { margin: 0; font-size: 22px; color: var(--ink); }
+        .data-chip { padding: 8px 12px; border-radius: 999px; background: rgba(220,233,249,.82); color: #547091; font-size: 13px; }
+        .data-meta { color: var(--muted); line-height: 1.9; font-size: 14px; }
+        .data-summary { margin-top: 10px; color: #48627f; line-height: 1.9; font-size: 14px; }
+        .pager { margin-top: 24px; text-align: center; }
+        .empty-box { padding: 36px 0; color: #98a8be; text-align: center; font-size: 14px; }
+        @media (max-width: 900px) { .card-grid { grid-template-columns: 1fr; } .data-card { grid-template-columns: 1fr; } .data-body { padding: 0 18px 20px; } }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="page-shell">
+        <div class="topbar">
+            <div class="topbar-title">足球俱乐部管理系统</div>
+            <div class="topbar-links">
+                <a href="../../index.html">首页</a>
+                <a href="../gonggao/list.html">公告信息</a>
+                <a href="../saishi/list.html">赛事信息</a>
+                <a href="../jiaolian/list.html">教练信息</a>
+                <a href="../login/login.html">个人中心</a>
+            </div>
+        </div>
+        <div class="banner"><div class="banner-tag">球员数据</div><h1>球员数据</h1><p>查看当前账号可访问的球员数据记录，并支持按数据类型筛选。</p></div>
+        <div class="menu-bar"><a v-for="(item,index) in centerMenu" :key="index" :href="'javascript:jump(\'' + item.url + '\')'" class="menu-link" :class="{active: item.url === '../shuju/list.html'}">{{ item.name }}</a></div>
+        <div class="toolbar"><div class="type-chip" :class="{active: !searchForm.shujuTypes}" @click="setType('')">全部类型</div><div class="type-chip" v-for="(item,index) in shujuTypesList" :key="index" :class="{active: String(searchForm.shujuTypes) === String(item.codeIndex)}" @click="setType(item.codeIndex)">{{ item.indexName }}</div></div>
+        <div class="content-shell"><div class="section-head"><h2>数据列表</h2><span>共 {{ total }} 条记录</span></div><div class="card-grid" v-if="dataList.length"><div class="data-card" v-for="(item,index) in dataList" :key="index"><img class="data-cover" :src="img(item.img)" alt="球员数据"><div class="data-body"><div class="data-head"><h3 class="data-title">{{ item.shujuName }}</h3><span class="data-chip">{{ item.shujuValue || '未分类' }}</span></div><div class="data-meta">数据编号：{{ item.shujuUuidNumber || '暂无' }}</div><div class="data-meta">日期：{{ item.shujuTime || '暂无' }}</div><div class="data-meta">录入时间：{{ item.insertTime || '暂无' }}</div><div class="data-summary">{{ summary(item.shujuContent) }}</div></div></div></div><div class="empty-box" v-else>暂无球员数据</div><div class="pager" id="pager"></div></div>
+    </div>
+</div>
+<script src="../../layui/layui.js"></script>
+<script src="../../js/vue.js"></script>
+<script src="../../xznstatic/js/element.min.js"></script>
+<link rel="stylesheet" href="../../xznstatic/css/element.min.css">
+<script src="../../js/config.js"></script>
+<script src="../../modules/config.js"></script>
+<script src="../../js/utils.js"></script>
+<script>
+var http = layui.http || { baseurl: (typeof resolveProjectBase === 'function' ? resolveProjectBase() : (window.location.protocol + '//' + window.location.host + '/')) };
+var vue = new Vue({ el: '#app', data: { baseUrl: http.baseurl, centerMenu: centerMenu, shujuTypesList: [], dataList: [], total: 0, searchForm: { page: 1, limit: 6, sort: 'id', order: 'desc', shujuDeleteStart: 1, shujuDeleteEnd: 1, shujuTypes: '' } }, methods: { img: function(path) { if (!path) return ''; if (path.indexOf('http') === 0) return path; return this.baseUrl.replace(/\/$/, '') + '/upload/' + path.replace(/^.*upload\//, ''); },  jump: function(url) { jump(url); }, setType: function(type) { this.searchForm.shujuTypes = type; this.searchForm.page = 1; this.fetchList(); }, summary: function(content) { if (!content) { return '暂无说明'; } var text = content.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim(); return text.length > 88 ? text.substring(0, 88) + '...' : text; }, fetchList: function() {} } });
+layui.use(['http', 'laypage'], function() { var http = layui.http; var laypage = layui.laypage; vue.baseUrl = http.baseurl; localStorage.setItem('goUtl', './pages/shuju/list.html'); http.request('dictionary/page', 'get', { page: 1, limit: 100, dicCode: 'shuju_types' }, function(res) { vue.shujuTypesList = (res.data && res.data.list) || []; }); vue.fetchList = function() { http.request('shuju/page', 'get', vue.searchForm, function(res) { var data = res.data || {}; vue.dataList = data.list || []; vue.total = data.total || 0; laypage.render({ elem: 'pager', count: vue.total, limit: vue.searchForm.limit, curr: vue.searchForm.page, groups: 3, layout: ['prev', 'page', 'next'], jump: function(obj, first) { if (!first) { vue.searchForm.page = obj.curr; vue.fetchList(); } } }); }); }; vue.fetchList(); });
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+

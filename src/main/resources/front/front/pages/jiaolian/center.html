@@ -1,0 +1,465 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>教练个人中心</title>
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="../../xznstatic/css/element.min.css">
+    <style>
+        :root {
+            --ink: #1a2e4c;
+            --muted: #5e7189;
+            --p: #0ea5e9;
+            --p-soft: #38bdf8;
+            --p-light: #f0f9ff;
+            --line: rgba(14,165,233,.10);
+            --card: #fff;
+            --shadow: 0 8px 32px rgba(14,165,233,.15);
+            --shadow-sm: 0 4px 16px rgba(14,165,233,.12);
+            --radius: 20px;
+            --radius-sm: 14px;
+            --pill: 999px;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            color: var(--ink);
+            background: #f3f6fb;
+        }
+        .page-shell { width: 1280px; max-width: calc(100% - 24px); margin: 0 auto; padding: 22px 0 34px; }
+        .topbar, .hero, .card, .workspace {
+            background: var(--card);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            
+        }
+        .topbar {
+            border-radius: 28px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .brand strong { display: block; font-size: 17px; }
+        .brand span { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; }
+        .top-links { display: flex; flex-wrap: wrap; gap: 10px; }
+        .top-links a, .ghost-btn, .primary-btn, .danger-btn, .tab-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+            padding: 0 16px;
+            border-radius: 999px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: .22s ease;
+            border: 0;
+            font-size: 14px;
+        }
+        .top-links a, .ghost-btn, .tab-btn {
+            color: #28518a;
+            background: rgba(29,103,193,.08);
+        }
+        .primary-btn {
+            color: #fff;
+            background: var(--p-soft);
+            box-shadow: 0 12px 28px rgba(29,103,193,.22);
+        }
+        .danger-btn { color: #fff; background: linear-gradient(135deg, #ee6470, #d74957); }
+        .top-links a:hover, .ghost-btn:hover, .primary-btn:hover, .danger-btn:hover, .tab-btn:hover { transform: translateY(-2px); }
+        .hero {
+            margin-top: 18px;
+            border-radius: 32px;
+            overflow: hidden;
+            position: relative;
+            padding: 26px 30px;
+            color: #fff;
+            background: linear-gradient(125deg, rgba(9,36,78,.98), rgba(16,76,151,.94) 52%, rgba(64,158,255,.88));
+        }
+        .hero:before, .hero:after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,.08);
+        }
+        .hero:before { width: 260px; height: 260px; right: -40px; top: -120px; }
+        .hero:after { width: 180px; height: 180px; left: -30px; bottom: -70px; }
+        .hero > * { position: relative; z-index: 1; }
+        .hero-layout { display: block; }
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,.16);
+            background: rgba(255,255,255,.12);
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+        .hero h1 { margin: 14px 0 10px; font-size: 36px; line-height: 1.15; }
+        .hero p { margin: 0; max-width: 720px; line-height: 1.85; color: rgba(236,244,255,.88); font-size: 15px; }
+        .hero-points { display: grid; gap: 8px; margin-top: 16px; }
+        .hero-point { display: flex; align-items: center; gap: 10px; color: rgba(244,248,255,.9); font-size: 14px; }
+        .hero-point b {
+            width: 30px; height: 30px; border-radius: 10px;
+            display: inline-flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,.12);
+        }
+        .workspace { margin-top: 20px; border-radius: 20px; padding: 22px; }
+        .workspace-layout { display: grid; grid-template-columns: 280px minmax(0,1fr); gap: 20px; }
+        .sidebar-stack, .content-stack { display: grid; gap: 18px; }
+        .card { border-radius: 28px; padding: 20px; }
+        .identity-card {
+            background: linear-gradient(180deg, rgba(10,48,100,.98), rgba(22,89,172,.92));
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .identity-card:after { content: ''; position: absolute; right: -36px; bottom: -50px; width: 160px; height: 160px; border-radius: 50%; background: rgba(255,255,255,.08); }
+        .identity-card > * { position: relative; z-index: 1; }
+        .avatar-wrap { width: 100px; height: 100px; padding: 4px; border-radius: 30px; margin-bottom: 16px; background: rgba(255,255,255,.14); }
+        .avatar { width: 100%; height: 100%; display: block; object-fit: cover; border-radius: 30px; background: rgba(255,255,255,.12); }
+        .identity-card h2 { margin: 0; font-size: 26px; }
+        .identity-card p { margin: 10px 0 0; color: rgba(236,244,255,.84); line-height: 1.75; font-size: 14px; }
+        .identity-meta { margin-top: 18px; display: grid; gap: 10px; }
+        .identity-meta div { padding: 11px 13px; border-radius: 16px; background: rgba(255,255,255,.1); color: rgba(244,248,255,.94); font-size: 13px; }
+        .identity-meta span { color: rgba(226,239,255,.74); margin-right: 6px; }
+        .shortcut-list { display: grid; gap: 8px; }
+        .shortcut-list a, .shortcut-list button {
+            width: 100%; min-height: 44px; border-radius: 16px; border: 0;
+            display: inline-flex; align-items: center; justify-content: space-between;
+            padding: 0 14px 0 16px; text-decoration: none; color: #48688f;
+            background: rgba(246,249,255,.86); cursor: pointer; transition: .22s ease;
+            box-shadow: inset 0 0 0 1px rgba(29,103,193,.04);
+        }
+        .shortcut-list a:hover, .shortcut-list button:hover, .shortcut-list .active { color: #fff; background: var(--p-soft); box-shadow: 0 6px 18px rgba(14,165,233,.2); }
+        .shortcut-list em { font-style: normal; opacity: .66; font-size: 12px; }
+        .panel-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+        .panel-top h3 { margin: 0; font-size: 26px; }
+        .panel-top p { margin: 8px 0 0; color: var(--muted); }
+        .tab-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .tab-btn.active { color: #fff; background: var(--p-soft); box-shadow: 0 12px 24px rgba(29,103,193,.2); }
+        .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; }
+        .field.full { grid-column: 1 / -1; }
+        .field label { display: block; margin-bottom: 8px; font-size: 14px; color: #476789; }
+        .layui-input, .layui-select-title input {
+            height: 48px; border-radius: 16px; border: 1px solid #c3d8f2;
+            background: rgba(245,249,255,.92); padding: 0 16px; font-size: 15px;
+        }
+        .upload-box { display: grid; grid-template-columns: 82px minmax(0,1fr); gap: 14px; align-items: center; }
+        .upload-preview { width: 82px; height: 82px; border-radius: 20px; object-fit: cover; border: 1px solid #c8dcf5; background: #dbeafe; }
+        .upload-tools { display: grid; gap: 8px; }
+        .hint { color: var(--muted); line-height: 1.7; font-size: 12px; }
+        .action-row { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
+        .action-row .primary-btn, .action-row .ghost-btn { min-width: 118px; }
+        .security-grid { display: grid; grid-template-columns: 1fr; gap: 14px; max-width: 560px; }
+        .security-note { margin-top: 16px; padding: 14px 16px; border-radius: 18px; background: rgba(241,247,255,.92); color: var(--muted); line-height: 1.75; font-size: 13px; max-width: 560px; }
+        .content-stack .card {
+            background: rgba(255,255,255,.92);
+            border: 1px solid rgba(26,103,199,.08);
+            box-shadow: 0 18px 42px rgba(18,63,128,.08);
+        }
+        .content-stack .field input:focus,
+        .content-stack .layui-select-title input:focus {
+            border-color: #7fb4f6;
+            box-shadow: 0 0 0 4px rgba(74,143,233,.12);
+        }
+        .empty-token { margin-top: 20px; text-align: center; padding: 84px 0; border-radius: 28px; }
+        @media (max-width: 1080px) { .workspace-layout { grid-template-columns: 1fr; } }
+        @media (max-width: 780px) { .form-grid, .security-grid { grid-template-columns: 1fr; } .upload-box { grid-template-columns: 1fr; } .panel-top, .topbar { flex-direction: column; align-items: flex-start; } }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="page-shell">
+        <div class="topbar">
+            <div class="brand">
+                <strong>足球俱乐部管理系统</strong>
+                <span>教练资料驾驶舱</span>
+            </div>
+            <div class="top-links">
+                <a href="../../index.html">返回首页</a>
+                <a href="../gonggao/list.html">公告信息</a>
+                <a href="../saishi/list.html">赛事信息</a>
+                <a href="../jiaolian/list.html">教练信息</a>
+                <a href="../login/login.html">个人中心</a>
+            </div>
+        </div>
+
+        <div class="hero">
+            <div class="hero-layout">
+                <div>
+                    <div class="hero-tag">教练个人中心</div>
+                    <h1>教练资料驾驶舱</h1>
+                    <p>这里集中维护教练基本资料、头像与密码，页面重点保留资料维护和密码安全两个核心动作，避免信息重复堆叠。</p>
+                    <div class="hero-points">
+                        <div class="hero-point"><b>资</b><span>集中维护教练资料、头像与联系信息</span></div>
+                        <div class="hero-point"><b>安</b><span>支持独立修改登录密码，修改后需重新登录</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="workspace" v-if="ready">
+            <div class="workspace-layout">
+                <div class="sidebar-stack">
+                    <div class="card identity-card">
+                        <div class="avatar-wrap"><img class="avatar" :src="img(item.img)" alt="教练头像"></div>
+                        <h2>{{ summaryName }}</h2>
+                        <p>当前账号的关键身份信息保留在这里，右侧区域专注处理资料编辑和密码更新。</p>
+                        <div class="identity-meta">
+                            <div><span>账号</span>{{ detail.username || '未设置' }}</div>
+                            <div><span>教练编号</span>{{ summaryCode }}</div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="panel-top" style="margin-bottom:14px;">
+                            <div><h3 style="font-size:20px;">快捷入口</h3><p>保留常用页面入口。</p></div>
+                        </div>
+                        <div class="shortcut-list">
+                            <button type="button" :class="['tab-btn', activePane === 'profile' ? 'active' : '']" @click="activePane = 'profile'"><span>资料维护</span><em>></em></button>
+                            <button type="button" :class="['tab-btn', activePane === 'password' ? 'active' : '']" @click="activePane = 'password'"><span>密码安全</span><em>></em></button>
+                            <a v-for="(item,index) in quickLinks" :key="index" :href="item.url"><span>{{ item.name }}</span><em>></em></a>
+                            <button type="button" class="danger-btn" @click="logout"><span>退出登录</span><em>></em></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-stack">
+                    <div class="card" v-if="activePane === 'profile'">
+                        <div class="panel-top">
+                            <div>
+                                <h3>资料维护</h3>
+                                <p>当前页面保存的是教练主资料，保存成功后会立即覆盖原信息。</p>
+                            </div>
+                            <div class="tab-row">
+                                <button type="button" class="tab-btn active">资料维护</button>
+                                <button type="button" class="tab-btn" @click="activePane = 'password'">密码安全</button>
+                            </div>
+                        </div>
+                        <form class="layui-form">
+                            <div class="form-grid">
+                                <div class="field"><label>账号</label><input type="text" v-model="detail.username" class="layui-input" placeholder="请输入账号"></div>
+                                <div class="field"><label>教练编号</label><input type="text" v-model="detail.jiaolianUuidNumber" class="layui-input" placeholder="请输入教练编号"></div>
+                                <div class="field"><label>教练姓名</label><input type="text" v-model="detail.jiaolianName" class="layui-input" placeholder="请输入教练姓名"></div>
+                                <div class="field"><label>手机号</label><input type="text" v-model="detail.jiaolianPhone" class="layui-input" placeholder="请输入手机号"></div>
+                                <div class="field"><label>身份证号</label><input type="text" v-model="detail.jiaolianIdNumber" class="layui-input" placeholder="请输入身份证号"></div>
+                                <div class="field"><label>邮箱</label><input type="text" v-model="detail.jiaolianEmail" class="layui-input" placeholder="请输入邮箱"></div>
+                                <div class="field">
+                                    <label>性别</label>
+                                    <select name="sexTypes" id="sexTypes" lay-filter="sexTypes">
+                                        <option value="">请选择性别</option>
+                                        <option v-for="(item,index) in sexTypesList" :key="index" :value="item.codeIndex">{{ item.indexName }}</option>
+                                    </select>
+                                </div>
+                                <div class="field full">
+                                    <label>教练头像</label>
+                                    <div class="upload-box">
+                                        <img class="upload-preview" :src="img(item.img)" alt="教练头像预览">
+                                        <div class="upload-tools">
+                                            <div><button type="button" class="ghost-btn" id="jiaolianPhotoUpload">上传教练头像</button></div>
+                                            <div class="hint">建议上传清晰的正方形头像图片。上传成功后先在页面中预览，再点击保存资料完成更新。</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="action-row">
+                                <button type="button" class="primary-btn" @click="saveProfile">保存资料</button>
+                                <button type="button" class="ghost-btn" @click="reloadProfile">重新加载</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card" v-if="activePane === 'password'">
+                        <div class="panel-top">
+                            <div>
+                                <h3>密码安全</h3>
+                                <p>修改完成后，系统会要求重新登录，确保当前账号安全。</p>
+                            </div>
+                            <div class="tab-row">
+                                <button type="button" class="tab-btn" @click="activePane = 'profile'">资料维护</button>
+                                <button type="button" class="tab-btn active">密码安全</button>
+                            </div>
+                        </div>
+                        <div class="security-grid">
+                            <div class="field"><label>原密码</label><input type="password" v-model="passwordForm.oldPassword" class="layui-input" placeholder="请输入原密码"></div>
+                            <div class="field"><label>新密码</label><input type="password" v-model="passwordForm.newPassword" class="layui-input" placeholder="请输入新密码"></div>
+                            <div class="field full"><label>确认新密码</label><input type="password" v-model="passwordForm.confirmPassword" class="layui-input" placeholder="请再次输入新密码"></div>
+                        </div>
+                        <div class="security-note">为保证账号安全，建议新密码与原密码保持明显差异，并避免使用手机号、姓名拼音等容易被猜中的组合。</div>
+                        <div class="action-row">
+                            <button type="button" class="primary-btn" @click="updatePassword">保存密码</button>
+                            <button type="button" class="ghost-btn" @click="resetPasswordForm">清空内容</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card empty-token" v-else>正在加载教练个人信息...</div>
+    </div>
+</div>
+<script src="../../layui/layui.js"></script>
+<script src="../../js/vue.js"></script>
+<script src="../../xznstatic/js/element.min.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../modules/config.js"></script>
+<script src="../../js/utils.js"></script>
+<script src="../../js/validate.js"></script>
+<script>
+var http = layui.http || { baseurl: (typeof resolveProjectBase === 'function' ? resolveProjectBase() : (window.location.protocol + '//' + window.location.host + '/')) };
+var vue = new Vue({
+    el: '#app',
+    data: {
+        baseUrl: http.baseurl,
+        ready: false,
+        activePane: 'profile',
+        tableName: 'jiaolian',
+        quickLinks: centerMenu.filter(function(item) { return item.name !== '个人中心'; }),
+        sexTypesList: [],
+        detail: { id: '', username: '', password: '', jiaolianUuidNumber: '', jiaolianName: '', jiaolianPhone: '', jiaolianIdNumber: '', jiaolianPhoto: '', sexTypes: '', jiaolianEmail: '', createTime: '' },
+        passwordForm: { oldPassword: '', newPassword: '', confirmPassword: '' }
+    },
+    computed: {
+        avatarUrl: function() {
+            return img(item.img);
+        },
+        summaryName: function() {
+            return this.detail.jiaolianName || '未设置姓名';
+        },
+        summaryCode: function() {
+            return this.detail.jiaolianUuidNumber || '暂无编号';
+        },
+        sexLabel: function() {
+            var current = this.detail.sexTypes;
+            var item = (this.sexTypesList || []).find(function(option) { return String(option.codeIndex) === String(current); });
+            return item ? item.indexName : '未设置';
+        }
+    },
+    methods: { img: function(path) { if (!path) return ''; if (path.indexOf('http') === 0) return path; return this.baseUrl.replace(/\/$/, '') + '/upload/' + path.replace(/^.*upload\//, ''); }, 
+        ensureLogin: function() {
+            if (!localStorage.getItem('Token') || localStorage.getItem('userTable') !== 'jiaolian') {
+                window.location.href = '../login/login.html';
+                return false;
+            }
+            return true;
+        },
+        renderSelect: function() {
+            this.$nextTick(function() {
+                var select = document.getElementById('sexTypes');
+                if (select) { select.value = this.detail.sexTypes || ''; }
+                layui.form.render('select');
+            }.bind(this));
+        },
+        loadProfile: function() {
+            var _this = this;
+            if (!_this.ensureLogin()) { return; }
+            layui.http.request('jiaolian/session', 'get', { id: localStorage.getItem('userid') }, function(res) {
+                _this.detail = res.data || _this.detail;
+                _this.ready = true;
+                _this.renderSelect();
+            });
+        },
+        reloadProfile: function() { this.loadProfile(); },
+        validateProfile: function() {
+            if (!this.detail.username || !this.detail.jiaolianName) {
+                this.$message.error('请填写完整的账号和姓名');
+                return false;
+            }
+            if (!isMobile(this.detail.jiaolianPhone)) {
+                this.$message.error('请输入正确的手机号');
+                return false;
+            }
+            if (!isIdentity(this.detail.jiaolianIdNumber)) {
+                this.$message.error('请输入正确的身份证号');
+                return false;
+            }
+            if (!isEmail(this.detail.jiaolianEmail)) {
+                this.$message.error('请输入正确的邮箱');
+                return false;
+            }
+            return true;
+        },
+        saveProfile: function() {
+            if (!this.validateProfile()) { return; }
+            var payload = Object.assign({}, this.detail);
+            layui.http.requestJson(this.tableName + '/update', 'post', payload, function() {
+                layui.layer.msg('资料保存成功', { time: 1500, icon: 6 }, function() { window.location.reload(); });
+            });
+        },
+        resetPasswordForm: function() { this.passwordForm = { oldPassword: '', newPassword: '', confirmPassword: '' }; },
+        updatePassword: function() {
+            var form = this.passwordForm;
+            if (!form.oldPassword || !form.newPassword || !form.confirmPassword) {
+                this.$message.error('请完整填写密码信息');
+                return;
+            }
+            if (form.newPassword !== form.confirmPassword) {
+                this.$message.error('两次输入的新密码不一致');
+                return;
+            }
+            layui.http.request('jiaolian/updatePassword', 'get', { oldPassword: form.oldPassword, newPassword: form.newPassword }, function() {
+                layui.layer.msg('密码修改成功，请使用新密码重新登录', { time: 1800, icon: 6 }, function() {
+                    localStorage.clear();
+                    window.location.href = '../login/login.html';
+                });
+            });
+        },
+        logout: function() {
+            localStorage.removeItem('Token');
+            localStorage.removeItem('role');
+            localStorage.removeItem('sessionTable');
+            localStorage.removeItem('adminName');
+            localStorage.removeItem('userid');
+            localStorage.removeItem('userTable');
+            localStorage.removeItem('iframeUrl');
+            window.location.href = '../login/login.html';
+        }
+    }
+});
+layui.use(['http', 'form', 'upload'], function() {
+    var http = layui.http;
+    var form = layui.form;
+    var upload = layui.upload;
+    vue.baseUrl = http.baseurl;
+    http.request('dictionary/page', 'get', { page: 1, limit: 100, dicCode: 'sex_types' }, function(res) {
+        vue.sexTypesList = (res.data && res.data.list) || [];
+        vue.renderSelect();
+    });
+    form.on('select(sexTypes)', function(data) { vue.detail.sexTypes = data.value; });
+    upload.render({
+        elem: '#jiaolianPhotoUpload',
+        url: http.baseurl + 'file/upload',
+        headers: { Token: localStorage.getItem('Token') },
+        accept: 'images',
+        before: function() { layui.layer.load(1, { shade: [0.1, '#fff'] }); },
+        done: function(res) {
+            layui.layer.closeAll('loading');
+            if (res.code === 0) {
+                vue.detail.jiaolianPhoto = 'upload/' + res.file;
+                layui.layer.msg('头像上传成功', { time: 1500, icon: 6 });
+            } else {
+                layui.layer.msg(res.msg || '上传失败', { time: 2000, icon: 5 });
+            }
+        },
+        error: function() {
+            layui.layer.closeAll('loading');
+            layui.layer.msg('请求接口失败', { time: 2000, icon: 5 });
+        }
+    });
+    vue.loadProfile();
+});
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
