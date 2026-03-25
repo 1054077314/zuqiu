@@ -130,7 +130,7 @@
         .section-link:hover { background: #dbeafe; }
 
         .btn-ghost:hover, .btn-solid:hover, .section-link:hover,
-        .nav-link:hover, .quick-card:hover,
+        .nav-link:hover,
         .notice-item:hover, .match-card:hover, .news-card:hover {
             transform: translateY(-2px);
         }
@@ -159,7 +159,7 @@
             text-shadow: 0 1px 6px rgba(0,0,0,.1);
         }
         .headline-tags, .nav-list, .hero-points,
-        .quick-grid, .notice-list, .match-grid, .news-grid {
+        .notice-list, .match-grid, .news-grid {
             display: grid;
             gap: 12px;
         }
@@ -321,74 +321,6 @@
         .section-title-wrap h3 { margin: 0; font-size: 20px; font-weight: 700; color: var(--ink); }
         .section-title-wrap p { margin: 4px 0 0; font-size: 13px; color: var(--muted); line-height: 1.6; }
 
-        /* ===== 轮播 ===== */
-        .spotlight-carousel {
-            height: 400px !important;
-            border-radius: 16px;
-            overflow: hidden;
-            background: #0d2137;
-            flex: 1;
-            min-height: 0;
-        }
-        .spotlight-slide {
-            position: relative; width: 100%; height: 100%;
-            display: flex; align-items: flex-end; overflow: hidden;
-        }
-        .spotlight-bg, .spotlight-mask { position: absolute; inset: 0; }
-        .spotlight-bg { background-position: center; background-size: cover; }
-        .spotlight-mask { background: linear-gradient(180deg, rgba(10,22,40,.1) 0%, rgba(10,22,40,.72) 100%); }
-        .spotlight-content {
-            position: relative; z-index: 1; width: 100%;
-            padding: 28px 28px 26px; color: #fff;
-        }
-        .spotlight-kicker {
-            display: inline-flex; align-items: center;
-            padding: 6px 12px; border-radius: var(--radius-pill);
-            background: rgba(59,130,246,.25); border: 1px solid rgba(59,130,246,.3);
-            font-size: 12px; font-weight: 500; margin-bottom: 12px;
-        }
-        .spotlight-title {
-            margin: 0 0 6px; font-size: 30px; font-weight: 700;
-            line-height: 1.15;
-            text-shadow: 0 2px 12px rgba(0,0,0,.25);
-        }
-        .spotlight-sub {
-            margin: 0; max-width: 520px;
-            color: rgba(190,210,240,.82); font-size: 15px; line-height: 1.7;
-        }
-        .spotlight-carousel .layui-carousel-arrow { font-size: 16px; opacity: .5; }
-        .spotlight-carousel .layui-carousel-arrow:hover { opacity: .9; }
-
-        /* ===== 快捷入口 ===== */
-        .quick-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-        .quick-card {
-            display: flex; align-items: flex-start; gap: 14px;
-            padding: 16px; border-radius: var(--radius-sm);
-            background: var(--p-light); border: 1px solid rgba(31,79,149,.06);
-            cursor: pointer;
-            transition: transform .22s ease, box-shadow .22s ease;
-        }
-        .quick-card:hover {
-            background: #dbeafe;
-            box-shadow: var(--shadow-sm);
-        }
-        .quick-icon {
-            width: 40px; height: 40px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            background: var(--p); color: #fff; font-size: 18px; flex-shrink: 0;
-        }
-        .quick-body { flex: 1; min-width: 0; }
-        .quick-body strong {
-            display: flex; align-items: center; justify-content: space-between;
-            font-size: 15px; color: var(--ink); font-weight: 600;
-        }
-        .quick-body strong::after {
-            content: '→'; color: var(--p-soft); font-size: 14px;
-            opacity: 0; transition: opacity .2s ease;
-        }
-        .quick-card:hover .quick-body strong::after { opacity: 1; }
-        .quick-body p { margin: 4px 0 0; font-size: 13px; line-height: 1.6; color: var(--muted); }
-
         /* ===== 公告 ===== */
         .notice-list { display: grid; gap: 10px; }
         .notice-item {
@@ -500,7 +432,6 @@
             }
             .nav-row { display: grid; }
             .nav-list { grid-template-columns: repeat(3, max-content); }
-            .quick-grid { grid-template-columns: 1fr 1fr; }
             .news-grid { grid-template-columns: 1fr 1fr; }
         }
         @media (max-width: 768px) {
@@ -519,11 +450,9 @@
             .nav-list::-webkit-scrollbar { display: none; }
             .nav-row { display: block; }
             .nav-summary { margin-top: 8px; }
-            .summary-grid, .quick-grid, .match-grid, .news-grid {
+            .summary-grid, .match-grid, .news-grid {
                 grid-template-columns: 1fr;
             }
-            .spotlight-carousel { height: 280px !important; }
-            .spotlight-title { font-size: 24px; }
         }
     </style>
     <style>
@@ -642,38 +571,7 @@
 <body>
 <div id="app">
     <div class="page-wrap">
-        <section class="masthead">
-            <div class="masthead-top">
-                <div class="top-actions">
-                    <a class="btn-ghost" :href="adminurl">后台登录</a>
-                    <a class="btn-solid" href="javascript:void(0)" @click="goAccount">{{ accountButtonText }}</a>
-                </div>
-            </div>
-            <div class="masthead-body">
-                <div class="headline">
-                    <h1>{{ projectName }}</h1>
-                    <p>查看俱乐部赛事、公告、教练与训练等公开信息，一站直达前台业务入口。</p>
-                    <div class="headline-tags">
-                        <span>赛事信息</span>
-                        <span>公告动态</span>
-                        <span>教练信息</span>
-                    </div>
-                    <div class="hero-points">
-                        <div class="hero-point"><span class="hero-point-mark">赛</span><span>最新赛事与公告优先展示，方便快速查看。</span></div>
-                    </div>
-                </div>
-                <aside class="summary-panel">
-                    <h3>首页概览</h3>
-                    <p>{{ statusSummary }}</p>
-                    <div class="summary-grid">
-                        <div class="summary-item"><strong>{{ bannerTotal }}</strong><span>轮播数量</span></div>
-                        <div class="summary-item"><strong>{{ noticeTotal }}</strong><span>公告数量</span></div>
-                        <div class="summary-item"><strong>{{ matchTotal }}</strong><span>赛事数量</span></div>
-                        <div class="summary-item"><strong>{{ accountLabel }}</strong><span>当前身份</span></div>
-                    </div>
-                </aside>
-            </div>
-        </section>
+      
 
         <section class="nav-row">
             <div class="nav-list">
@@ -689,47 +587,7 @@
             </div>
         </section>
 
-        <section class="content-grid">
-            <div class="section-card">
-                <div class="section-head">
-                    <div class="section-title-wrap">
-                        <h3>轮播焦点</h3>
-                        <p>首页重点内容直接在大图区域展示。</p>
-                    </div>
-                    <a class="section-link" href="./pages/gonggao/list.html">查看公告</a>
-                </div>
-                <div class="layui-carousel spotlight-carousel" id="home-swiper">
-                    <div carousel-item>
-                        <div v-for="(item,index) in displaySwiperList" :key="index" class="spotlight-slide">
-                            <div class="spotlight-bg" :style="{ backgroundImage: 'url(' + img(item.img) + ')' }"></div>
-                            <div class="spotlight-mask"></div>
-                            <div class="spotlight-content">
-                                <div class="spotlight-kicker">{{ item.kicker || '首页焦点内容' }}</div>
-                                <h4 class="spotlight-title">{{ item.title }}</h4>
-                                <p class="spotlight-sub">{{ item.desc }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="section-card">
-                <div class="section-head">
-                    <div class="section-title-wrap">
-                        <h3>快捷入口</h3>
-                        <p>常用前台入口集中在此。</p>
-                    </div>
-                </div>
-                <div class="quick-grid">
-                    <div class="quick-card" v-for="item in quickLinks" :key="item.url" @click="go(item.url)">
-                        <div class="quick-icon">{{ item.icon }}</div>
-                        <div class="quick-body">
-                            <strong>{{ item.name }}</strong>
-                            <p>{{ item.desc }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+       
 
         <section class="bottom-grid">
             <div class="section-card">
@@ -795,7 +653,7 @@
                 </div>
                 <div class="news-grid">
                     <div class="news-card" v-for="(item,index) in realmadridNews.slice(0, 4)" :key="'news-' + index" @click="openExternal(item.link)">
-                        <img class="news-thumb" :src="img(item.imgage)" alt="资讯图片">
+                        <img class="news-thumb" :src="img(item.image)" alt="资讯图片">
                         <div class="news-body">
                             <div class="news-label">{{ item.category || '足球资讯' }}</div>
                             <div class="news-title">{{ item.title }}</div>
@@ -820,8 +678,6 @@
 <script src="./js/config.js"></script>
 <script src="./modules/config.js"></script>
 <script>
-    var placeholderBanner = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#0b2547"/><stop offset="1" stop-color="#1f4f95"/></linearGradient></defs><rect width="1200" height="720" fill="url(#g)"/><circle cx="970" cy="110" r="150" fill="rgba(59,130,246,0.12)"/><circle cx="1080" cy="590" r="190" fill="rgba(59,130,246,0.08)"/><text x="86" y="340" font-size="64" font-weight="bold" font-family="Microsoft YaHei" fill="#ffffff">足球俱乐部管理系统</text><text x="92" y="400" font-size="28" font-family="Microsoft YaHei" fill="rgba(255,255,255,0.7)">查看赛事、公告与公开信息</text></svg>');
-
     var placeholderMatch = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a2d68"/><stop offset="1" stop-color="#1a5fc8"/></linearGradient></defs><rect width="800" height="500" fill="url(#bg)"/><circle cx="660" cy="80" r="90" fill="rgba(255,255,255,0.07)"/><circle cx="120" cy="430" r="110" fill="rgba(255,255,255,0.05)"/><circle cx="400" cy="210" r="100" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="5"/><circle cx="400" cy="210" r="60" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.3)" stroke-width="3"/><line x1="0" y1="210" x2="800" y2="210" stroke="rgba(255,255,255,0.18)" stroke-width="2"/><rect x="160" y="120" width="100" height="180" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="3"/><rect x="540" y="120" width="100" height="180" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="3"/><text x="400" y="390" font-size="38" text-anchor="middle" font-family="Microsoft YaHei" fill="rgba(255,255,255,0.9)">赛事图片</text></svg>');
 
     var placeholderThumb = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#f5f0e0"/><circle cx="200" cy="130" r="40" fill="none" stroke="#c9b86a" stroke-width="2"/><text x="160" y="140" font-size="20" font-family="Microsoft YaHei" fill="#8b6a00">资讯</text><text x="130" y="210" font-size="14" font-family="Microsoft YaHei" fill="#a09060">足球新闻动态</text></svg>');
@@ -835,37 +691,14 @@ var vue = new Vue({
             adminurl: adminurl,
             projectName: projectName,
             baseUrl: http.baseurl,
-            swiperList: [],
             gonggaoList: [],
             saishiList: [],
             realmadridNews: [],
             placeholderThumb: placeholderThumb,
-            bannerTotal: 0,
             noticeTotal: 0,
-            matchTotal: 0,
-            quickLinks: [
-                { name: '赛事信息', url: './pages/saishi/list.html', desc: '查看赛事名称、地点与详情。', icon: '⚽' },
-                { name: '公告信息', url: './pages/gonggao/list.html', desc: '最新公告与通知内容。', icon: '📢' },
-                { name: '训练计划', url: './pages/xunlian/list.html', desc: '训练安排，按类型筛选。', icon: '🏃' },
-                { name: '个人中心', url: 'center', desc: '登录后进入个人业务页面。', icon: '👤' }
-            ]
+            matchTotal: 0
         },
         computed: {
-            displaySwiperList: function() {
-                if (this.swiperList.length) return this.swiperList;
-                if (this.realmadridBannerList.length) return this.realmadridBannerList;
-                return [{ title: '前台焦点内容', desc: '当前还没有配置轮播图，可在后台轮播图管理中补充首页展示内容。', img: '' }];
-            },
-            realmadridBannerList: function() {
-                return this.realmadridNews.filter(function(i) { return !!i.image; }).slice(0, 4).map(function(item, index) {
-                    return {
-                        img: item.image, title: item.title,
-                        desc: '摘自皇家马德里官网动态，作为首页轮播图预览展示内容。',
-                        isExternal: true, link: item.link,
-                        kicker: index === 0 ? '皇家马德里焦点' : '皇家马德里动态'
-                    };
-                });
-            },
             mergedNoticeList: function() {
                 return this.gonggaoList.slice().sort(function(a, b) {
                     return (b.insertTime || '').localeCompare(a.insertTime || '');
@@ -951,42 +784,16 @@ var vue = new Vue({
                 base = String(base || '').replace(/\/+$/, '');
                 value = value.replace(/^\.?\//, '');
                 return base + '/' + value;
-            },
-            coverUrl: function(item) { return this.img(item.img); },
-            resolveBanner: function(item) {
-                return item && item.img ? item.img : '';
-            },
-            renderSwiper: function(carousel) {
-                this.$nextTick(function() {
-                    carousel.render({
-                        elem: '#home-swiper', width: '100%', height: '100%',
-                        arrow: swiper.arrow || 'hover', anim: swiper.anim || 'default',
-                        autoplay: true, interval: swiper.interval || 3000,
-                        indicator: swiper.indicator || 'inside'
-                    });
-                });
             }
         }
     });
 
     /* ===== 全局 loading：layer.load + Promise.all ===== */
-    layui.use(['carousel', 'layer', 'http'], function() {
-        var carousel = layui.carousel;
+    layui.use(['layer', 'http'], function() {
         var layer = layui.layer;
         var http = layui.http;
         vue.baseUrl = (http && http.baseurl) ? http.baseUrl: http.baseurl;
         var loadingIndex = layer.load(2, { shade: [0.3, '#eef5ff'] });
-
-        var p1 = new Promise(function(resolve) {
-            http.request('config/page', 'get', { page: 1, limit: 10 }, function(res) {
-                var records = (res.data && res.data.list) || [];
-                vue.bannerTotal = res.data && res.data.total ? res.data.total : records.length;
-                vue.swiperList = records.filter(function(i) { return i.value; }).map(function(item, index) {
-                    return { img: item.value, title: item.name || ('首页轮播图 ' + (index + 1)), desc: '用于展示首页的重点视觉内容和俱乐部公开信息。' };
-                });
-                resolve();
-            });
-        });
         var p2 = new Promise(function(resolve) {
             http.request('gonggao/page', 'get', { page: 1, limit: 4, order: 'desc' }, function(res) {
                 vue.gonggaoList = (res.data && res.data.list) || [];
@@ -1003,17 +810,29 @@ var vue = new Vue({
         });
         var p4 = new Promise(function(resolve) {
             http.request('external/realmadrid/news', 'get', { limit: 4 }, function(res) {
-                vue.realmadridNews = (res.data || []).filter(function(item) {
-                    var cat = item && item.category != null ? String(item.category) : '';
-                    return /(football|soccer)/i.test(cat);
-                }).slice(0, 4).map(function(item) { item.isExternal = true; return item; });
+                var raw = res && res.data;
+                var newsList = [];
+                if (Array.isArray(raw)) {
+                    newsList = raw;
+                } else if (raw && Array.isArray(raw.list)) {
+                    newsList = raw.list;
+                } else if (raw && Array.isArray(raw.records)) {
+                    newsList = raw.records;
+                } else if (raw && raw.data && Array.isArray(raw.data)) {
+                    newsList = raw.data;
+                }
+                vue.realmadridNews = newsList.filter(function(item) {
+                    return item && typeof item.category === 'string' && item.category.toLowerCase() === 'football';
+                }).slice(0, 4).map(function(item) {
+                    item.isExternal = true;
+                    return item;
+                });
                 resolve();
             });
         });
 
-        Promise.all([p1, p2, p3]).then(function() {
+        Promise.all([p2, p3]).then(function() {
             layer.close(loadingIndex);
-            vue.renderSwiper(carousel);
         });
 
         // p4 外部资讯单独跑，加载到了再显示，失败不影响主页面

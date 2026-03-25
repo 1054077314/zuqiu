@@ -75,7 +75,7 @@
                 <a href="../login/login.html">个人中心</a>
             </div>
         </div>
-        <div class="banner"><div class="banner-tag">训练计划</div><h1>训练计划</h1><p>查看当前账号可访问的训练计划记录，并支持按训练类型筛选。</p></div>
+       
         <div class="menu-bar"><a v-for="(item,index) in centerMenu" :key="index" :href="'javascript:jump(\'' + item.url + '\')'" class="menu-link" :class="{active: item.url === '../xunlian/list.html'}">{{ item.name }}</a></div>
         <div class="toolbar"><div class="type-chip" :class="{active: !searchForm.xunlianTypes}" @click="setType('')">全部类型</div><div class="type-chip" v-for="(item,index) in xunlianTypesList" :key="index" :class="{active: String(searchForm.xunlianTypes) === String(item.codeIndex)}" @click="setType(item.codeIndex)">{{ item.indexName }}</div></div>
         <div class="content-shell"><div class="section-head"><h2>训练列表</h2><span>共 {{ total }} 条训练计划</span></div><div class="card-grid" v-if="dataList.length"><div class="data-card" v-for="(item,index) in dataList" :key="index"><img class="data-cover" :src="img(item.img)" alt="训练计划"><div class="data-body"><div class="data-head"><h3 class="data-title">{{ item.xunlianName }}</h3><span class="data-chip">{{ item.xunlianValue || '未分类' }}</span></div><div class="data-meta">计划编号：{{ item.xunlianUuidNumber || '暂无' }}</div><div class="data-meta">训练科目：{{ item.xunlianKemu || '暂无' }}</div><div class="data-meta">训练日期：{{ item.xunlianTime || '暂无' }}</div><div class="data-summary">{{ summary(item.xunlianContent) }}</div></div></div></div><div class="empty-box" v-else>暂无训练计划数据</div><div class="pager" id="pager"></div></div>

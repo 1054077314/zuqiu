@@ -50,14 +50,7 @@
             </div>
         </div>
         <div class="detail-shell">
-            <div class="hero">
-                <div class="hero-label">公告详情页</div>
-                <h1>{{ detail.gonggaoName || '公告详情' }}</h1>
-                <div class="hero-meta">
-                    <span class="hero-chip">公告类型：{{ detail.gonggaoValue || '未分类' }}</span>
-                    <span class="hero-chip">发布时间：{{ detail.insertTime || '暂无时间' }}</span>
-                </div>
-            </div>
+           
             <div class="detail-body">
                 <img v-if="detail.gonggaoPhoto" class="cover" :src="img(detail.gonggaoPhoto)" alt="公告图片">
                 <div class="content-card">

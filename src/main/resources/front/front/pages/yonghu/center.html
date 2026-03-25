@@ -189,32 +189,12 @@
             </div>
         </div>
 
-        <div class="hero">
-            <div class="hero-layout">
-                <div>
-                    <div class="hero-tag">用户个人中心</div>
-                    <h1>用户资料驾驶舱</h1>
-                    <p>这里集中维护用户基本资料、头像与密码，页面重点保留资料维护和密码安全两个核心动作，避免信息重复堆叠。</p>
-                    <div class="hero-points">
-                        <div class="hero-point"><b>资</b><span>集中维护用户资料、头像与联系信息</span></div>
-                        <div class="hero-point"><b>安</b><span>支持独立修改登录密码，修改后需重新登录</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+   
 
         <div class="workspace" v-if="ready">
             <div class="workspace-layout">
                 <div class="sidebar-stack">
-                    <div class="card identity-card">
-                        <div class="avatar-wrap"><img class="avatar" :src="avatarUrl" alt="用户头像"></div>
-                        <h2>{{ summaryName }}</h2>
-                        <p>当前账号的关键身份信息保留在这里，右侧区域专注处理资料编辑和密码更新。</p>
-                        <div class="identity-meta">
-                            <div><span>账号</span>{{ detail.username || '未设置' }}</div>
-                            <div><span>用户编号</span>{{ summaryCode }}</div>
-                        </div>
-                    </div>
+                    
                     <div class="card">
                         <div class="panel-top" style="margin-bottom:14px;">
                             <div><h3 style="font-size:20px;">快捷入口</h3><p>保留常用页面入口。</p></div>
@@ -235,10 +215,7 @@
                                 <h3>资料维护</h3>
                                 <p>当前页面保存的是用户主资料，保存成功后会立即覆盖原信息。</p>
                             </div>
-                            <div class="tab-row">
-                                <button type="button" class="tab-btn active">资料维护</button>
-                                <button type="button" class="tab-btn" @click="activePane = 'password'">密码安全</button>
-                            </div>
+                           
                         </div>
                         <form class="layui-form">
                             <div class="form-grid">
@@ -279,10 +256,7 @@
                                 <h3>密码安全</h3>
                                 <p>修改完成后，系统会要求重新登录，确保当前账号安全。</p>
                             </div>
-                            <div class="tab-row">
-                                <button type="button" class="tab-btn" @click="activePane = 'profile'">资料维护</button>
-                                <button type="button" class="tab-btn active">密码安全</button>
-                            </div>
+                           
                         </div>
                         <div class="security-grid">
                             <div class="field"><label>原密码</label><input type="password" v-model="passwordForm.oldPassword" class="layui-input" placeholder="请输入原密码"></div>
