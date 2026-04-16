@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>合同详情</title>
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <style>
+        :root { --ink: #1a2e4c; --muted: #5e7189; --border: rgba(14,165,233,.10); --shadow: 0 8px 32px rgba(14,165,233,.15); }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: #f3f6fb; font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif; color: var(--ink); }
+        .page-shell { width: 1180px; max-width: calc(100% - 24px); margin: 0 auto; padding: 22px 0 34px; }
+        .breadcrumb, .detail-shell, .info-card, .content-card { background: #fff; border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); }
+        .breadcrumb { padding: 16px 22px; color: var(--muted); margin-bottom: 18px; }
+        .breadcrumb a { color: #2d6fc5; text-decoration: none; }
+        .hero { padding: 34px; color: #fff; background: linear-gradient(125deg, rgba(8,36,77,.98) 0%, rgba(20,72,138,.95) 46%, rgba(42,123,214,.9) 100%); border-radius: 28px 28px 0 0; position: relative; overflow: hidden; }
+        .hero:before, .hero:after { content: ''; position: absolute; border-radius: 50%; background: rgba(255,255,255,.08); }
+        .hero:before { width: 220px; height: 220px; top: -90px; right: -40px; }
+        .hero:after { width: 140px; height: 140px; left: -30px; bottom: -60px; }
+        .hero > * { position: relative; z-index: 1; }
+        .hero-label { display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.16); font-size: 12px; margin-bottom: 14px; }
+        .hero h1 { margin: 0 0 14px; font-size: 38px; line-height: 1.2; }
+        .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; }
+        .hero-chip { padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,.14); font-size: 13px; color: rgba(255,255,255,.88); }
+        .detail-body { padding: 26px; }
+        .info-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+        .info-card { padding: 20px; }
+        .info-card .label { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+        .info-card .value { color: var(--ink); font-size: 18px; line-height: 1.7; word-break: break-word; }
+        .content-card { margin-top: 22px; padding: 24px; }
+        .content-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+        .content-head h3 { margin: 0; font-size: 24px; }
+        .content-head span { font-size: 14px; color: var(--muted); }
+        .content { color: #48627f; line-height: 1.95; font-size: 15px; }
+        .action-row { margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; }
+        .back-btn, .list-btn, .download-btn { height: 44px; padding: 0 20px; border: 0; border-radius: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+        .back-btn, .download-btn { color: #fff; background: var(--p-soft); }
+        .list-btn { color: #24539a; background: rgba(29,103,193,.08); }
+        @media (max-width: 860px) { .info-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="page-shell">
+        <div class="breadcrumb"><a href="../../index.html">首页</a><span style="margin: 0 8px;">/</span><a href="./list.html">合同信息</a><span style="margin: 0 8px;">/</span><span>{{ detail.hetongName || '合同详情' }}</span></div>
+        <div class="detail-shell">
+            <div class="hero">
+                <div class="hero-label">合同详情页</div>
+                <h1>{{ detail.hetongName || '合同详情' }}</h1>
+                <div class="hero-meta">
+                    <span class="hero-chip">合同编号：{{ detail.id || '暂无' }}</span>
+                    <span class="hero-chip">附件状态：{{ detail.hetongFile ? '已上传附件' : '暂无附件' }}</span>
+                    <span class="hero-chip">当前角色：{{ roleName }}</span>
+                </div>
+            </div>
+            <div class="detail-body">
+                <div class="info-grid">
+                    <div class="info-card"><div class="label">合同名称</div><div class="value">{{ detail.hetongName || '暂无' }}</div></div>
+                    <div class="info-card"><div class="label">所属账号</div><div class="value">{{ detail.username || detail.yonghuName || '暂无' }}</div></div>
+                    <div class="info-card"><div class="label">附件</div><div class="value">{{ detail.hetongFile ? '可下载' : '未上传' }}</div></div>
+                </div>
+                <div class="content-card">
+                    <div class="content-head"><h3>合同说明</h3><span>查看合同备注与补充内容</span></div>
+                    <div class="content">{{ detail.hetongText || '暂无备注说明' }}</div>
+                </div>
+                <div class="action-row">
+                    <a class="list-btn" href="./list.html">返回合同列表</a>
+                    <button type="button" class="download-btn" v-if="detail.hetongFile" @click="downloadFile">下载合同附件</button>
+                    <button type="button" class="back-btn" onclick="history.back()">返回上一页</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../layui/layui.js"></script>
+<script src="../../js/vue.js"></script>
+<script src="../../xznstatic/js/element.min.js"></script>
+<link rel="stylesheet" href="../../xznstatic/css/element.min.css">
+<script src="../../js/config.js"></script>
+<script src="../../modules/config.js"></script>
+<script src="../../js/utils.js"></script>
+<script>
+var http = layui.http || { baseurl: (typeof resolveProjectBase === 'function' ? resolveProjectBase() : (window.location.protocol + '//' + window.location.host + '/')) };
+var vue = new Vue({
+    el: '#app',
+    data: { baseUrl: http.baseurl, detail: {}, roleName: localStorage.getItem('role') || '游客' },
+    methods: { img: function(path) { if (!path) return ''; if (path.indexOf('http') === 0) return path; return this.baseUrl.replace(/\/$/, '') + '/upload/' + path.replace(/^.*upload\//, ''); },  downloadFile: function() { if (this.detail.hetongFile) { window.open(this.baseUrl + this.detail.hetongFile, '_blank'); } } }
+});
+layui.use(['http'], function() {
+    var http = layui.http; var id = http.getParam('id'); vue.baseUrl = http.baseurl;
+    http.request('hetong/info/' + id, 'get', {}, function(res) { vue.detail = res.data || {}; });
+});
+</script>
+</body>
+</html>
+
+
+
+
+
+
