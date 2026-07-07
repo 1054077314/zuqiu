@@ -39,13 +39,13 @@ export default {
 <style lang="scss" scoped>
 .breadcrumb-wrap {
   width: 100%;
-  margin-top: 8px;
-  margin-bottom: 12px;
-  padding: 12px 16px;
-  border-radius: 14px;
-  border: 1px solid #d9e8fb;
-  background: linear-gradient(180deg, #ffffff 0%, #f6fbff 100%);
-  box-shadow: 0 8px 20px rgba(13, 66, 122, 0.08);
+  max-width: 1440px;
+  margin: 14px auto 18px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #dce5f2;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
   box-sizing: border-box;
 }
 

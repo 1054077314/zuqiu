@@ -1,6 +1,14 @@
 ﻿<template>
   <div class="main-content">
     <div v-if="showFlag">
+      <div class="module-head">
+        <div>
+          <h1>合同管理</h1>
+          <p>统一维护球员及用户合同资料、附件与备注信息</p>
+        </div>
+        <span>Contract Center</span>
+      </div>
+
       <el-form :inline="true" :model="searchForm" class="form-content">
         <el-form-item label="用户编号">
           <el-input
@@ -42,6 +50,12 @@
       </el-form>
 
       <div class="table-content">
+        <div class="table-head">
+          <div>
+            <h2>合同列表</h2>
+            <p>共 {{ totalPage }} 条合同记录</p>
+          </div>
+        </div>
         <el-table
           class="tables"
           :data="dataList"
@@ -220,14 +234,141 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.main-content {
+  max-width: 1440px;
+  margin: 0 auto;
+  color: #111827;
+}
+
+.module-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+.module-head h1 {
+  margin: 0 0 6px;
+  color: #0f172a;
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.module-head p {
+  margin: 0;
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.module-head span {
+  color: #8aa0bc;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 .form-content,
 .toolbar-content {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  padding: 18px 20px 4px;
+  border: 1px solid #d8e1ee;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+  box-sizing: border-box;
+}
+
+.toolbar-content {
+  padding: 14px 20px 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.form-content ::v-deep .el-form-item,
+.toolbar-content ::v-deep .el-form-item {
+  margin-right: 14px;
+  margin-bottom: 14px;
+}
+
+.form-content ::v-deep .el-form-item__label {
+  color: #344054;
+  font-weight: 600;
+}
+
+.form-content ::v-deep .el-input__inner {
+  height: 36px;
+  line-height: 36px;
+  border-color: #d8e1ee;
+  border-radius: 7px;
+}
+
+.form-content ::v-deep .el-input__inner:focus {
+  border-color: #2563eb;
+}
+
+.form-content ::v-deep .el-button,
+.toolbar-content ::v-deep .el-button {
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 7px;
+  font-weight: 600;
+}
+
+.table-content {
+  padding: 18px 20px 20px;
+  border: 1px solid #d8e1ee;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+}
+
+.table-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.table-head h2 {
+  margin: 0 0 4px;
+  color: #0f172a;
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 800;
+}
+
+.table-head p {
+  margin: 0;
+  color: #667085;
+  font-size: 13px;
+}
+
+.tables {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tables ::v-deep .el-table__header th {
+  background: #f6f8fb;
+  color: #344054;
+  font-weight: 700;
+}
+
+.tables ::v-deep .el-table__cell {
+  padding: 10px 0;
+}
+
+.tables ::v-deep .el-table__body tr:hover > td {
+  background: #f8fbff;
 }
 
 .link-btn {
-  color: #409eff;
+  color: #0b57d0;
   text-decoration: none;
+  font-weight: 700;
 }
 
 .danger-text {
@@ -235,7 +376,25 @@ export default {
 }
 
 .pagination-content {
-  margin-top: 16px;
+  margin-top: 18px;
   text-align: right;
+}
+
+@media (max-width: 768px) {
+  .module-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .module-head h1 {
+    font-size: 24px;
+  }
+
+  .form-content,
+  .toolbar-content,
+  .table-content {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
 }
 </style>

@@ -23,8 +23,7 @@
         .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; }
         .hero-chip { padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,.14); font-size: 13px; color: rgba(255,255,255,.88); }
         .detail-body { padding: 26px; }
-        .media-grid { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 22px; }
-        .cover { width: 100%; min-height: 320px; max-height: 460px; object-fit: cover; border-radius: 24px; display: block; background: linear-gradient(135deg, #d9ebff, #b8d8ff); }
+        .media-grid { display: block; }
         .info-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
         .info-card { padding: 20px; }
         .info-card .label { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
@@ -38,7 +37,7 @@
         .back-btn, .list-btn { height: 44px; padding: 0 20px; border: 0; border-radius: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
         .back-btn { color: #fff; background: var(--p-soft); }
         .list-btn { color: #24539a; background: rgba(29,103,193,.08); }
-        @media (max-width: 900px) { .media-grid, .info-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 900px) { .info-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -57,7 +56,6 @@
             </div>
             <div class="detail-body">
                 <div class="media-grid">
-                    <img class="cover" :src="img(item.img)" alt="训练计划图片">
                     <div class="info-grid">
                         <div class="info-card"><div class="label">计划名称</div><div class="value">{{ detail.xunlianName || '暂无' }}</div></div>
                         <div class="info-card"><div class="label">训练类型</div><div class="value">{{ detail.xunlianValue || '未分类' }}</div></div>
@@ -89,8 +87,7 @@ var http = layui.http || { baseurl: (typeof resolveProjectBase === 'function' ? 
 var vue = new Vue({
     el: '#app',
     data: { baseUrl: http.baseurl, detail: {} },
-    computed: { coverImage: function() { return img(item.img); } },
-    methods: { img: function(path) { if (!path) return ''; if (path.indexOf('http') === 0) return path; return this.baseUrl.replace(/\/$/, '') + '/upload/' + path.replace(/^.*upload\//, ''); },  renderContent: function(content) { if (!content) { return '暂无内容'; } return layui.http.fixRichTextImages(content, this.baseUrl).replace(/<img/g, '<img style="max-width:100%;height:auto;border-radius:16px;display:block;margin:18px auto;"'); } }
+    methods: { renderContent: function(content) { if (!content) { return '暂无内容'; } return layui.http.fixRichTextImages(content, this.baseUrl).replace(/<img/g, '<img style="max-width:100%;height:auto;border-radius:16px;display:block;margin:18px auto;"'); } }
 });
 layui.use(['http'], function() { var http = layui.http; var id = http.getParam('id'); vue.baseUrl = http.baseurl; http.request('xunlian/info/' + id, 'get', {}, function(res) { vue.detail = res.data || {}; }); });
 </script>

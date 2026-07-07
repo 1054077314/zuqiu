@@ -7,19 +7,6 @@
           <span class="detail-type-tag">{{ ruleForm.gonggaoValue || '未分类' }}</span>
         </div>
 
-        <div class="detail-image-section">
-          <div class="detail-image-box" :class="{ 'is-empty': !ruleForm.gonggaoPhoto }">
-            <img
-              v-if="ruleForm.gonggaoPhoto"
-              :src="$base.url + (ruleForm.gonggaoPhoto || '').split(',')[0]"
-              class="detail-image"
-              alt="公告图片"
-              @error="$event.target.style.display='none'; $event.target.parentNode.classList.add('is-empty')"
-            >
-            <div class="image-placeholder">暂无公告图片</div>
-          </div>
-        </div>
-
         <div class="detail-content-section">
           <h3 class="content-title">公告详情</h3>
           <div
@@ -69,19 +56,6 @@
         </el-col>
 
         <el-col :span="24">
-          <el-form-item label="公告图片" prop="gonggaoPhoto">
-            <file-upload
-              tip="上传公告图片"
-              action="file/upload"
-              :limit="1"
-              :multiple="false"
-              :fileUrls="ruleForm.gonggaoPhoto ? $base.url + ruleForm.gonggaoPhoto : ''"
-              @change="gonggaoPhotoUploadChange"
-            />
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="24">
           <el-form-item label="公告详情" prop="gonggaoContent">
             <editor
               v-model="ruleForm.gonggaoContent"
@@ -118,7 +92,6 @@ export default {
       gonggaoTypesOptions: [],
       rules: {
         gonggaoName: [{ required: true, message: '请输入公告名称', trigger: 'blur' }],
-        gonggaoPhoto: [{ required: true, message: '请上传公告图片', trigger: 'change' }],
         gonggaoTypes: [{ required: true, message: '请选择公告类型', trigger: 'change' }],
         gonggaoContent: [{ required: true, message: '请输入公告详情', trigger: 'blur' }]
       }
@@ -186,12 +159,6 @@ export default {
           this.$message.error(data.msg || '加载失败')
         }
       })
-    },
-    gonggaoPhotoUploadChange(fileUrls) {
-      this.ruleForm.gonggaoPhoto = fileUrls
-      if (this.$refs.ruleForm) {
-        this.$refs.ruleForm.validateField('gonggaoPhoto')
-      }
     },
     onSubmit() {
       this.$refs.ruleForm.validate(valid => {
@@ -271,49 +238,6 @@ export default {
   color: #1d4ed8;
   font-size: 13px;
   font-weight: 600;
-}
-
-.detail-image-section {
-  margin-bottom: 26px;
-}
-
-.detail-image-box {
-  position: relative;
-  width: 100%;
-  min-height: 220px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #f8fbff;
-}
-
-.detail-image-box .image-placeholder {
-  display: none;
-}
-
-.detail-image-box.is-empty .image-placeholder {
-  display: flex;
-}
-
-.detail-image {
-  display: block;
-  width: 100%;
-  height: 320px;
-  object-fit: cover;
-  border-radius: 12px;
-  background: #f8fbff;
-}
-
-.image-placeholder {
-  width: 100%;
-  min-height: 220px;
-  border-radius: 12px;
-  border: 1px dashed #c7dcff;
-  background: #f8fbff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #6b7280;
-  font-size: 15px;
 }
 
 .detail-content-section {
@@ -440,14 +364,6 @@ export default {
 
   .detail-title {
     font-size: 28px;
-  }
-
-  .detail-image {
-    height: 220px;
-  }
-
-  .image-placeholder {
-    min-height: 170px;
   }
 
   .detail-form-content {

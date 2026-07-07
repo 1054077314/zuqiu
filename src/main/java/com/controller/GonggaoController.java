@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.alibaba.fastjson.JSONObject;
+import com.annotation.IgnoreAuth;
 import com.entity.GonggaoEntity;
 import com.entity.view.GonggaoView;
 import com.service.GonggaoService;
@@ -37,6 +38,7 @@ public class GonggaoController {
     @Autowired
     private GonggaoService gonggaoService;
 
+	@IgnoreAuth
     @GetMapping("/page")
     public R page(@RequestParam Map<String, Object> params, HttpServletRequest request) {
         logger.debug("page方法:,,Controller:{},,params:{}", this.getClass().getName(), JSONObject.toJSONString(params));
@@ -45,6 +47,7 @@ public class GonggaoController {
     }
 
 
+	@IgnoreAuth
     @GetMapping("/info/{id}")
     public R info(@PathVariable("id") Long id, HttpServletRequest request) {
         logger.debug("info方法:,,Controller:{},,id:{}", this.getClass().getName(), id);

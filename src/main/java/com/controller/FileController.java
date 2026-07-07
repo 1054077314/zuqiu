@@ -110,9 +110,6 @@ public class FileController{
 				return new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
 			}
 			if(file.exists() && file.isFile()){
-				/*if(!fileService.canRead(file, SessionManager.getSessionUser())){
-					getResponse().sendError(403);
-				}*/
 				HttpHeaders headers = new HttpHeaders();
 			    headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);    
 			    headers.setContentDispositionFormData("attachment", file.getName());    

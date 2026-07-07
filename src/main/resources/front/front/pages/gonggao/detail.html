@@ -27,7 +27,6 @@
         .hero-meta { display:flex; flex-wrap:wrap; gap:10px; }
         .hero-chip { padding:8px 14px; border-radius:999px; background:rgba(255,255,255,.14); font-size:13px; color:rgba(255,255,255,.88); }
         .detail-body { padding:30px; }
-        .cover { width:100%; max-height:560px; object-fit:cover; border-radius:24px; display:block; }
         .content-card { margin-top:24px; padding:28px; }
         .content-head { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px; }
         .content-head h3 { margin:0; font-size:28px; color:var(--ink); }
@@ -52,7 +51,6 @@
         <div class="detail-shell">
            
             <div class="detail-body">
-                <img v-if="detail.gonggaoPhoto" class="cover" :src="img(detail.gonggaoPhoto)" alt="公告图片">
                 <div class="content-card">
                     <div class="content-head">
                         <h3>公告内容</h3>
@@ -62,7 +60,7 @@
                 </div>
                 <div class="action-row">
                     <a class="list-btn" href="./list.html">查看公告列表</a>
-                    <button type="button" class="back-btn" onclick="history.back()">返回上一页</button>
+                    <button type="button" class="back-btn" onclick="history.back()">&#36820;&#22238;&#19978;&#19968;&#39029;</button>
                 </div>
             </div>
         </div>

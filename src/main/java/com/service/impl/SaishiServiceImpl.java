@@ -1,4 +1,4 @@
-﻿package com.service.impl;
+package com.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
@@ -39,7 +39,8 @@ public class SaishiServiceImpl extends BaseService<SaishiDao, SaishiEntity, Sais
     protected SaishiEntity checkUniqueness(SaishiEntity entity) {
         Wrapper<SaishiEntity> queryWrapper = new EntityWrapper<SaishiEntity>()
                 .eq("saishi_name", entity.getSaishiName())
-                .eq("saishi_address", entity.getSaishiAddress())                .eq("saishi_types", entity.getSaishiTypes())
+                .eq("saishi_address", entity.getSaishiAddress())
+                .eq("saishi_types", entity.getSaishiTypes())
                 .eq("saishi_delete", 1);
         return selectOne(queryWrapper);
     }
@@ -54,7 +55,8 @@ public class SaishiServiceImpl extends BaseService<SaishiDao, SaishiEntity, Sais
     protected void sanitizeFields(SaishiEntity entity) {
         if ("".equals(entity.getSaishiPhoto()) || "null".equals(entity.getSaishiPhoto())) {
             entity.setSaishiPhoto(null);
-        }       if ("".equals(entity.getSaishiContent()) || "null".equals(entity.getSaishiContent())) {
+        }
+       if ("".equals(entity.getSaishiContent()) || "null".equals(entity.getSaishiContent())) {
             entity.setSaishiContent(null);
         }
     }

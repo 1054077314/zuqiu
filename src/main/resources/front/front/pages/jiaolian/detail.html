@@ -42,7 +42,7 @@
         <div class="breadcrumb"><a href="../../index.html">首页</a><span style="margin: 0 8px;">/</span><a href="./list.html">教练信息</a><span style="margin: 0 8px;">/</span><span>{{ detail.jiaolianName || '教练详情' }}</span></div>
         <div class="detail-shell">
             <div class="hero"><div class="hero-label">教练详情页</div><h1>{{ detail.jiaolianName || '教练详情' }}</h1><div class="hero-meta"><span class="hero-chip">教练编号：{{ detail.jiaolianUuidNumber || '暂无' }}</span><span class="hero-chip">手机号：{{ detail.jiaolianPhone || '暂无' }}</span><span class="hero-chip">性别：{{ detail.sexValue || '未设置' }}</span></div></div>
-            <div class="detail-body"><div class="media-grid"><img class="cover" :src="img(item.img)" alt="教练图片"><div class="info-grid"><div class="info-card"><div class="label">教练姓名</div><div class="value">{{ detail.jiaolianName || '暂无' }}</div></div><div class="info-card"><div class="label">账号</div><div class="value">{{ detail.username || '暂无' }}</div></div><div class="info-card"><div class="label">手机号</div><div class="value">{{ detail.jiaolianPhone || '暂无' }}</div></div><div class="info-card"><div class="label">邮箱</div><div class="value">{{ detail.jiaolianEmail || '暂无' }}</div></div><div class="info-card"><div class="label">身份证号</div><div class="value">{{ detail.jiaolianIdNumber || '暂无' }}</div></div><div class="info-card"><div class="label">性别</div><div class="value">{{ detail.sexValue || '未设置' }}</div></div></div></div><div class="action-row"><a class="list-btn" href="./list.html">返回教练列表</a><button type="button" class="back-btn" onclick="history.back()">返回上一页</button></div></div>
+            <div class="detail-body"><div class="media-grid"><img class="cover" :src="img(detail.jiaolianPhoto || detail.img)" alt="教练图片"><div class="info-grid"><div class="info-card"><div class="label">教练姓名</div><div class="value">{{ detail.jiaolianName || '暂无' }}</div></div><div class="info-card"><div class="label">账号</div><div class="value">{{ detail.username || '暂无' }}</div></div><div class="info-card"><div class="label">手机号</div><div class="value">{{ detail.jiaolianPhone || '暂无' }}</div></div><div class="info-card"><div class="label">邮箱</div><div class="value">{{ detail.jiaolianEmail || '暂无' }}</div></div><div class="info-card"><div class="label">身份证号</div><div class="value">{{ detail.jiaolianIdNumber || '暂无' }}</div></div><div class="info-card"><div class="label">性别</div><div class="value">{{ detail.sexValue || '未设置' }}</div></div></div></div><div class="action-row"><a class="list-btn" href="./list.html">返回教练列表</a><button type="button" class="back-btn" onclick="history.back()">返回上一页</button></div></div>
         </div>
     </div>
 </div>
@@ -55,7 +55,7 @@
 <script src="../../js/utils.js"></script>
 <script>
 var http = layui.http || { baseurl: (typeof resolveProjectBase === 'function' ? resolveProjectBase() : (window.location.protocol + '//' + window.location.host + '/')) };
-var vue = new Vue({ el: '#app', data: { baseUrl: http.baseurl, detail: {} }, computed: { coverImage: function() { return img(item.img); } } });
+var vue = new Vue({ el: '#app', data: { baseUrl: http.baseurl, detail: {} }, methods: { img: function(path) { if (!path) return ''; if (path.indexOf('http') === 0) return path; return this.baseUrl.replace(/\/$/, '') + '/upload/' + path.replace(/^.*upload\//, ''); } } });
 layui.use(['http'], function() { var http = layui.http; var id = http.getParam('id'); vue.baseUrl = http.baseurl; http.request('jiaolian/info/' + id, 'get', {}, function(res) { vue.detail = res.data || {}; }); });
 </script>
 </body>

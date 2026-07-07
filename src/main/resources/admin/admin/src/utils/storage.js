@@ -1,18 +1,27 @@
+const PREFIX = 'admin:'
+
 const storage = {
+    key(key) {
+        return `${PREFIX}${key}`
+    },
     set(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+        localStorage.setItem(this.key(key), JSON.stringify(value));
     },
     get(key) {
-        return localStorage.getItem(key)?localStorage.getItem(key).replace('"','').replace('"',''):"";
+        const value = localStorage.getItem(this.key(key));
+        return value ? value.replace(/"/g, '') : "";
     },
     getObj(key) {
-        return localStorage.getItem(key)?JSON.parse(localStorage.getItem(key)):null;
+        const value = localStorage.getItem(this.key(key));
+        return value ? JSON.parse(value) : null;
     },
     remove(key) {
-        localStorage.removeItem(key);
+        localStorage.removeItem(this.key(key));
     },
     clear() {
-	localStorage.clear();
+        Object.keys(localStorage)
+            .filter(key => key.indexOf(PREFIX) === 0)
+            .forEach(key => localStorage.removeItem(key));
     }
 }
 export default storage;

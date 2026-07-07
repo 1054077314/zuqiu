@@ -1,5 +1,12 @@
 ﻿<template>
   <div class="addEdit-block">
+    <div class="form-head">
+      <div>
+        <h1>{{ type === 'info' ? '合同详情' : (id ? '编辑合同' : '新增合同') }}</h1>
+        <p>维护合同归属用户、附件文件与合同备注信息</p>
+      </div>
+    </div>
+
     <el-form
       ref="ruleForm"
       :model="ruleForm"
@@ -257,16 +264,102 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.addEdit-block {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.form-head {
+  margin-bottom: 16px;
+}
+
+.form-head h1 {
+  margin: 0 0 6px;
+  color: #0f172a;
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.form-head p {
+  margin: 0;
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 .detail-form-content {
-  padding: 8px 4px;
+  padding: 24px 24px 12px;
+  border: 1px solid #d8e1ee;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+  box-sizing: border-box;
+}
+
+.detail-form-content ::v-deep .el-form-item__label {
+  color: #344054;
+  font-weight: 700;
+}
+
+.detail-form-content ::v-deep .el-input__inner,
+.detail-form-content ::v-deep .el-textarea__inner {
+  border-color: #d8e1ee;
+  border-radius: 7px;
+}
+
+.detail-form-content ::v-deep .el-input__inner {
+  height: 36px;
+  line-height: 36px;
+}
+
+.detail-form-content ::v-deep .el-input__inner:focus,
+.detail-form-content ::v-deep .el-textarea__inner:focus {
+  border-color: #2563eb;
+}
+
+.detail-form-content ::v-deep .el-input.is-disabled .el-input__inner,
+.detail-form-content ::v-deep .el-input__inner[readonly],
+.detail-form-content ::v-deep .el-textarea__inner[readonly] {
+  background: #f8fafc;
+  color: #475467;
+}
+
+.detail-form-content ::v-deep .el-select {
+  width: 100%;
 }
 
 .link-btn {
-  color: #409eff;
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 7px;
+  background: #eef4ff;
+  color: #0b57d0;
   text-decoration: none;
+  font-weight: 700;
 }
 
 .btn {
-  margin-top: 8px;
+  margin-top: 10px;
+  text-align: right;
+}
+
+.btn ::v-deep .el-button {
+  height: 36px;
+  padding: 0 18px;
+  border-radius: 7px;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .form-head h1 {
+    font-size: 24px;
+  }
+
+  .detail-form-content {
+    padding: 20px 14px 8px;
+  }
 }
 </style>

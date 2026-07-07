@@ -5,7 +5,6 @@ import ElementUI from 'element-ui'
 import '@/assets/css/element-variables.scss'
 import '@/assets/css/style.scss'
 // 加载路由
-// import router from '@/router/router-static.js';
 import router from '@/router/router-static.js'
 // 面包屑导航，注册为全局组件
 import BreadCrumbs from '@/components/common/BreadCrumbs'
@@ -29,6 +28,15 @@ Vue.prototype.$storage = storage
 
 Vue.use(ElementUI, { size: 'medium', zIndex: 3000 })
 Vue.config.productionTip = false
+
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/login', '/register']
+  if (!publicPages.includes(to.path) && !storage.get('Token')) {
+    next('/login')
+    return
+  }
+  next()
+})
 
 // 全局组件
 Vue.component('bread-crumbs', BreadCrumbs)

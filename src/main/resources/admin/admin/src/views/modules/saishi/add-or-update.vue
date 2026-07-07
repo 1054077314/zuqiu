@@ -1,40 +1,43 @@
-﻿<template>
+<template>
   <div class="addEdit-block">
     <div v-if="type === 'info'" class="saishi-detail-page">
       <div class="saishi-detail-card">
-        <h1 class="detail-title">{{ ruleForm.saishiName || '未命名赛事' }}</h1>
+        <div class="detail-header">
+          <div>
+            <h1 class="detail-title">{{ ruleForm.saishiName || '未命名赛事' }}</h1>
 
-        <div class="detail-meta">
-          <span>{{ ruleForm.saishiValue || '未分类' }}</span>
-          <span class="meta-divider">｜</span>
-          <span>{{ ruleForm.saishiAddress || '未填写地点' }}</span>
-        </div>
-
-        <div class="detail-image-section">
-          <div class="detail-image-box" :class="{ 'is-empty': !ruleForm.saishiPhoto }">
-            <img
-              v-if="ruleForm.saishiPhoto"
-              :src="$base.url + (ruleForm.saishiPhoto || '').split(',')[0]"
-              class="detail-image"
-              alt="赛事图片"
-              @error="$event.target.style.display='none'; $event.target.parentNode.classList.add('is-empty')"
-            >
-            <div class="image-placeholder">暂无赛事图片</div>
+            <div class="detail-meta">
+              <span>{{ ruleForm.saishiValue || '未分类' }}</span>
+              <span class="meta-divider">｜</span>
+              <span>{{ ruleForm.saishiAddress || '未填写地点' }}</span>
+            </div>
           </div>
+          <el-button type="primary" class="detail-back-btn top-back" @click="back">返回</el-button>
         </div>
 
-        <div class="detail-content-section">
-          <h3 class="content-title">赛事介绍</h3>
-          <div
-            v-if="ruleForm.saishiContent"
-            class="detail-content"
-            v-html="ruleForm.saishiContent"
-          />
-          <div v-else class="content-empty">暂无赛事介绍</div>
-        </div>
+        <div class="detail-body">
+          <div class="detail-image-section">
+            <div class="detail-image-box" :class="{ 'is-empty': !ruleForm.saishiPhoto }">
+              <img
+                v-if="ruleForm.saishiPhoto"
+                :src="$base.url + (ruleForm.saishiPhoto || '').split(',')[0]"
+                class="detail-image"
+                alt="赛事图片"
+                @error="$event.target.style.display='none'; $event.target.parentNode.classList.add('is-empty')"
+              >
+              <div class="image-placeholder">暂无赛事图片</div>
+            </div>
+          </div>
 
-        <div class="detail-actions">
-          <el-button type="primary" class="detail-back-btn" @click="back">返回</el-button>
+          <div class="detail-content-section">
+            <h3 class="content-title">赛事介绍</h3>
+            <div
+              v-if="ruleForm.saishiContent"
+              class="detail-content"
+              v-html="ruleForm.saishiContent"
+            />
+            <div v-else class="content-empty">暂无赛事介绍</div>
+          </div>
         </div>
       </div>
     </div>
@@ -124,7 +127,8 @@ export default {
         id: '',
         saishiName: '',
         saishiPhoto: '',
-        saishiAddress: '',        saishiTypes: '',
+        saishiAddress: '',
+        saishiTypes: '',
         saishiValue: '',
         saishiContent: '',
         saishiDelete: 1
@@ -132,7 +136,8 @@ export default {
       rules: {
         saishiName: [{ required: true, message: '请输入赛事名称', trigger: 'blur' }],
         saishiPhoto: [{ required: true, message: '请上传赛事图片', trigger: 'change' }],
-        saishiAddress: [{ required: true, message: '请输入赛事地点', trigger: 'blur' }],        saishiTypes: [{ required: true, message: '请选择赛事类型', trigger: 'change' }],
+        saishiAddress: [{ required: true, message: '请输入赛事地点', trigger: 'blur' }],
+        saishiTypes: [{ required: true, message: '请选择赛事类型', trigger: 'change' }],
         saishiContent: [{ required: true, message: '请输入赛事介绍', trigger: 'blur' }]
       }
     }
@@ -148,7 +153,8 @@ export default {
         id: '',
         saishiName: '',
         saishiPhoto: '',
-        saishiAddress: '',        saishiTypes: '',
+        saishiAddress: '',
+        saishiTypes: '',
         saishiValue: '',
         saishiContent: '',
         saishiDelete: 1
@@ -184,7 +190,8 @@ export default {
               id: '',
               saishiName: '',
               saishiPhoto: '',
-              saishiAddress: '',              saishiTypes: '',
+              saishiAddress: '',
+              saishiTypes: '',
               saishiValue: '',
               saishiContent: '',
               saishiDelete: 1
@@ -244,9 +251,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .addEdit-block {
-  max-width: 900px;
+  width: 100%;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 8px 0 0;
+  padding: 4px 0 0;
+  box-sizing: border-box;
 }
 
 .saishi-detail-page {
@@ -255,25 +264,34 @@ export default {
 
 .saishi-detail-card {
   background: #ffffff;
-  border: 1px solid #dbeafe;
-  border-radius: 14px;
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.08);
-  padding: 28px 30px 20px;
+  border: 1px solid #d8e1ee;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+  padding: 26px 28px;
+  box-sizing: border-box;
+}
+
+.detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .detail-title {
   margin: 0;
-  font-size: 38px;
+  font-size: 28px;
   line-height: 1.25;
-  color: #1e3a8a;
+  color: #102a66;
   font-weight: 800;
 }
 
 .detail-meta {
-  margin-top: 12px;
-  margin-bottom: 24px;
+  margin-top: 10px;
   color: #2563eb;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.6;
 }
 
@@ -282,17 +300,22 @@ export default {
   color: #93c5fd;
 }
 
+.detail-body {
+  display: block;
+  padding-top: 22px;
+}
+
 .detail-image-section {
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 .detail-image-box {
   position: relative;
   width: 100%;
-  min-height: 220px;
-  border-radius: 12px;
+  min-height: 170px;
+  border-radius: 10px;
   overflow: hidden;
-  background: #f8fbff;
+  background: #f7f9fc;
 }
 
 .detail-image-box .image-placeholder {
@@ -306,18 +329,18 @@ export default {
 .detail-image {
   display: block;
   width: 100%;
-  height: 340px;
+  height: 240px;
   object-fit: cover;
 }
 
 .image-placeholder {
   width: 100%;
-  min-height: 220px;
-  border-radius: 12px;
-  border: 1px dashed #c7dcff;
-  background: #f8fbff;
+  min-height: 170px;
+  border-radius: 10px;
+  border: 1px dashed #c8d6ea;
+  background: #f7f9fc;
   color: #6b7280;
-  font-size: 15px;
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -330,15 +353,16 @@ export default {
 }
 
 .content-title {
-  margin: 0 0 12px;
-  color: #1d4ed8;
-  font-size: 19px;
-  font-weight: 700;
+  margin: 0 0 10px;
+  color: #0b57d0;
+  font-size: 20px;
+  font-weight: 800;
 }
 
 .detail-content {
   color: #1f2937;
-  line-height: 1.95;
+  font-size: 15px;
+  line-height: 1.8;
   word-break: break-word;
   white-space: pre-wrap;
 }
@@ -348,24 +372,22 @@ export default {
   line-height: 1.8;
 }
 
-.detail-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 18px;
-}
-
 .detail-back-btn {
   border: none;
-  border-radius: 999px;
-  padding: 10px 26px;
+  border-radius: 8px;
+  padding: 9px 24px;
   font-weight: 600;
-  background: linear-gradient(135deg, #60a5fa, #2563eb);
-  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.24);
+  background: #2563eb;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.2);
 }
 
 .detail-back-btn:hover,
 .detail-back-btn:focus {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  background: #1d4ed8;
+}
+
+.top-back {
+  flex: 0 0 auto;
 }
 
 .detail-form-content {
@@ -407,16 +429,25 @@ export default {
     padding: 18px 14px 14px;
   }
 
+  .detail-header {
+    gap: 14px;
+    padding-bottom: 14px;
+  }
+
   .detail-title {
-    font-size: 30px;
+    font-size: 24px;
+  }
+
+  .detail-body {
+    padding-top: 18px;
   }
 
   .detail-image {
-    height: 220px;
+    height: 200px;
   }
 
   .image-placeholder {
-    min-height: 170px;
+    min-height: 150px;
   }
 }
 </style>

@@ -1,4 +1,4 @@
-﻿package com.entity;
+package com.entity;
 
 import com.annotation.ColumnInfo;
 import java.lang.reflect.InvocationTargetException;

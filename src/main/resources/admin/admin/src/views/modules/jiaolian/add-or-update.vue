@@ -87,31 +87,6 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="24">
-          <el-form-item label="头像" prop="jiaolianPhoto">
-            <template v-if="type === 'info'">
-              <div v-if="ruleForm.jiaolianPhoto">
-                <img
-                  v-for="(item, index) in (ruleForm.jiaolianPhoto || '').split(',')"
-                  :key="index"
-                  :src="$base.url + item"
-                  class="preview-image"
-                  alt="头像"
-                >
-              </div>
-              <span v-else>无</span>
-            </template>
-            <file-upload
-              v-else
-              tip="上传头像"
-              action="file/upload"
-              :limit="1"
-              :multiple="false"
-              :fileUrls="ruleForm.jiaolianPhoto ? $base.url + ruleForm.jiaolianPhoto : ''"
-              @change="jiaolianPhotoUploadChange"
-            />
-          </el-form-item>
-        </el-col>
       </el-row>
 
       <el-form-item class="btn">
@@ -163,7 +138,6 @@ export default {
             trigger: 'blur'
           }
         ],
-        jiaolianPhoto: [{ required: true, message: '请上传头像', trigger: 'change' }],
         sexTypes: [{ required: true, message: '请选择性别', trigger: 'change' }],
         jiaolianEmail: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
@@ -242,12 +216,6 @@ export default {
         }
       })
     },
-    jiaolianPhotoUploadChange(fileUrls) {
-      this.ruleForm.jiaolianPhoto = fileUrls
-      if (this.$refs.ruleForm) {
-        this.$refs.ruleForm.validateField('jiaolianPhoto')
-      }
-    },
     onSubmit() {
       this.$refs.ruleForm.validate(valid => {
         if (!valid) return
@@ -285,12 +253,4 @@ export default {
   padding: 8px 4px;
 }
 
-.preview-image {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1px solid #ebeef5;
-  margin-right: 12px;
-}
 </style>

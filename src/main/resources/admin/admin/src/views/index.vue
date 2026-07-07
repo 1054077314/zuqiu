@@ -26,32 +26,7 @@ export default {
   min-height: 100vh;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(180deg, #f0f2f5 0%, #f6f7f9 45%, #f3f4f6 100%);
-}
-
-.layout-shell::before,
-.layout-shell::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(70px);
-}
-
-.layout-shell::before {
-  width: 420px;
-  height: 420px;
-  top: -160px;
-  left: -120px;
-  background: rgba(59, 130, 246, 0.12);
-}
-
-.layout-shell::after {
-  width: 360px;
-  height: 360px;
-  right: -120px;
-  bottom: -140px;
-  background: rgba(17, 24, 39, 0.06);
+  background: #f3f4f7;
 }
 
 .layout-header {
@@ -67,6 +42,6 @@ export default {
   position: relative;
   z-index: 1;
   min-height: 100vh;
-  padding-top: 60px;
+  padding-top: 62px;
 }
 </style>

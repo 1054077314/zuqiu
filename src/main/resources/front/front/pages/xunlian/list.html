@@ -49,9 +49,9 @@
         .section-head h2 { margin: 0; font-size: 22px; font-weight: 700; }
         .section-head span { color: var(--muted); font-size: 14px; }
         .card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
-        .data-card { display: grid; grid-template-columns: 220px 1fr; gap: 18px; overflow: hidden; border-radius: 24px; background: linear-gradient(135deg, rgba(242,247,255,.95), rgba(255,255,255,.98)); border: 1px solid var(--border); box-shadow: 0 12px 28px rgba(32,85,161,.08); }
-        .data-cover { width: 100%; height: 100%; min-height: 220px; object-fit: cover; display: block; }
-        .data-body { padding: 20px 20px 20px 0; }
+        .data-card { min-height: 230px; overflow: hidden; border-radius: 24px; background: linear-gradient(135deg, rgba(242,247,255,.95), rgba(255,255,255,.98)); border: 1px solid var(--border); box-shadow: 0 12px 28px rgba(32,85,161,.08); transition: all .22s ease; cursor: pointer; }
+        .data-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+        .data-body { min-height: 230px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; }
         .data-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
         .data-title { margin: 0; font-size: 22px; color: var(--ink); }
         .data-chip { padding: 8px 12px; border-radius: 999px; background: rgba(220,233,249,.82); color: #547091; font-size: 13px; }
@@ -59,7 +59,7 @@
         .data-summary { margin-top: 10px; color: #48627f; line-height: 1.9; font-size: 14px; }
         .pager { margin-top: 24px; text-align: center; }
         .empty-box { padding: 36px 0; color: #98a8be; text-align: center; font-size: 14px; }
-        @media (max-width: 900px) { .card-grid { grid-template-columns: 1fr; } .data-card { grid-template-columns: 1fr; } .data-body { padding: 0 18px 20px; } }
+        @media (max-width: 900px) { .card-grid { grid-template-columns: 1fr; } .data-body { min-height:auto; padding: 18px; } }
     </style>
 </head>
 <body>
@@ -78,7 +78,7 @@
        
         <div class="menu-bar"><a v-for="(item,index) in centerMenu" :key="index" :href="'javascript:jump(\'' + item.url + '\')'" class="menu-link" :class="{active: item.url === '../xunlian/list.html'}">{{ item.name }}</a></div>
         <div class="toolbar"><div class="type-chip" :class="{active: !searchForm.xunlianTypes}" @click="setType('')">全部类型</div><div class="type-chip" v-for="(item,index) in xunlianTypesList" :key="index" :class="{active: String(searchForm.xunlianTypes) === String(item.codeIndex)}" @click="setType(item.codeIndex)">{{ item.indexName }}</div></div>
-        <div class="content-shell"><div class="section-head"><h2>训练列表</h2><span>共 {{ total }} 条训练计划</span></div><div class="card-grid" v-if="dataList.length"><div class="data-card" v-for="(item,index) in dataList" :key="index"><img class="data-cover" :src="img(item.img)" alt="训练计划"><div class="data-body"><div class="data-head"><h3 class="data-title">{{ item.xunlianName }}</h3><span class="data-chip">{{ item.xunlianValue || '未分类' }}</span></div><div class="data-meta">计划编号：{{ item.xunlianUuidNumber || '暂无' }}</div><div class="data-meta">训练科目：{{ item.xunlianKemu || '暂无' }}</div><div class="data-meta">训练日期：{{ item.xunlianTime || '暂无' }}</div><div class="data-summary">{{ summary(item.xunlianContent) }}</div></div></div></div><div class="empty-box" v-else>暂无训练计划数据</div><div class="pager" id="pager"></div></div>
+        <div class="content-shell"><div class="section-head"><h2>训练列表</h2><span>共 {{ total }} 条训练计划</span></div><div class="card-grid" v-if="dataList.length"><div class="data-card" v-for="(item,index) in dataList" :key="index" @click="jump('../xunlian/detail.html?id=' + item.id)"><div class="data-body"><div><div class="data-head"><h3 class="data-title">{{ item.xunlianName }}</h3><span class="data-chip">{{ item.xunlianValue || '未分类' }}</span></div><div class="data-meta">计划编号：{{ item.xunlianUuidNumber || '暂无' }}</div><div class="data-meta">训练科目：{{ item.xunlianKemu || '暂无' }}</div><div class="data-meta">训练日期：{{ item.xunlianTime || '暂无' }}</div><div class="data-summary">{{ summary(item.xunlianContent) }}</div></div><div class="data-summary">查看训练详情</div></div></div></div><div class="empty-box" v-else>暂无训练计划数据</div><div class="pager" id="pager"></div></div>
     </div>
 </div>
 <script src="../../layui/layui.js"></script>
@@ -90,7 +90,7 @@
 <script src="../../js/utils.js"></script>
 <script>
 var http = layui.http || { baseurl: (typeof resolveProjectBase === 'function' ? resolveProjectBase() : (window.location.protocol + '//' + window.location.host + '/')) };
-var vue = new Vue({ el: '#app', data: { baseUrl: http.baseurl, centerMenu: centerMenu, xunlianTypesList: [], dataList: [], total: 0, searchForm: { page: 1, limit: 6, sort: 'id', order: 'desc', xunlianDeleteStart: 1, xunlianDeleteEnd: 1, xunlianTypes: '' } }, methods: { img: function(path) { if (!path) return ''; if (path.indexOf('http') === 0) return path; return this.baseUrl.replace(/\/$/, '') + '/upload/' + path.replace(/^.*upload\//, ''); },  jump: function(url) { jump(url); }, setType: function(type) { this.searchForm.xunlianTypes = type; this.searchForm.page = 1; this.fetchList(); }, summary: function(content) { if (!content) { return '暂无说明'; } var text = content.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim(); return text.length > 88 ? text.substring(0, 88) + '...' : text; }, fetchList: function() {} } });
+var vue = new Vue({ el: '#app', data: { baseUrl: http.baseurl, centerMenu: centerMenu, xunlianTypesList: [], dataList: [], total: 0, searchForm: { page: 1, limit: 6, sort: 'id', order: 'desc', xunlianDeleteStart: 1, xunlianDeleteEnd: 1, xunlianTypes: '' } }, methods: { jump: function(url) { jump(url); }, setType: function(type) { this.searchForm.xunlianTypes = type; this.searchForm.page = 1; this.fetchList(); }, summary: function(content) { if (!content) { return '暂无说明'; } var text = content.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim(); return text.length > 88 ? text.substring(0, 88) + '...' : text; }, fetchList: function() {} } });
 layui.use(['http', 'laypage'], function() { var http = layui.http; var laypage = layui.laypage; vue.baseUrl = http.baseurl; localStorage.setItem('goUtl', './pages/xunlian/list.html'); http.request('dictionary/page', 'get', { page: 1, limit: 100, dicCode: 'xunlian_types' }, function(res) { vue.xunlianTypesList = (res.data && res.data.list) || []; }); vue.fetchList = function() { http.request('xunlian/page', 'get', vue.searchForm, function(res) { var data = res.data || {}; vue.dataList = data.list || []; vue.total = data.total || 0; laypage.render({ elem: 'pager', count: vue.total, limit: vue.searchForm.limit, curr: vue.searchForm.page, groups: 3, layout: ['prev', 'page', 'next'], jump: function(obj, first) { if (!first) { vue.searchForm.page = obj.curr; vue.fetchList(); } } }); }); }; vue.fetchList(); });
 </script>
 </body>

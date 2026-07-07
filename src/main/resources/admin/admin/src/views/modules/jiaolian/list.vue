@@ -42,17 +42,6 @@
           <el-table-column prop="jiaolianName" label="教练姓名" min-width="120" />
           <el-table-column prop="jiaolianPhone" label="手机号" min-width="130" />
           <el-table-column prop="jiaolianIdNumber" label="身份证号" min-width="180" show-overflow-tooltip />
-          <el-table-column prop="jiaolianPhoto" label="头像" min-width="100">
-            <template slot-scope="scope">
-              <img
-                v-if="scope.row.jiaolianPhoto"
-                :src="$base.url + scope.row.jiaolianPhoto"
-                alt="头像"
-                class="table-image"
-              />
-              <span v-else>无</span>
-            </template>
-          </el-table-column>
           <el-table-column prop="sexValue" label="性别" min-width="90" />
           <el-table-column prop="jiaolianEmail" label="邮箱" min-width="180" show-overflow-tooltip />
           <el-table-column prop="createTime" label="创建时间" min-width="170" />
@@ -218,14 +207,6 @@ export default {
 .form-content,
 .toolbar-content {
   margin-bottom: 12px;
-}
-
-.table-image {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 1px solid #ebeef5;
 }
 
 .danger-text {

@@ -45,17 +45,6 @@
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column type="index" label="#" width="60" align="center" />
           <el-table-column prop="gonggaoName" label="公告名称" min-width="180" />
-          <el-table-column prop="gonggaoPhoto" label="公告图片" min-width="120">
-            <template slot-scope="scope">
-              <img
-                v-if="scope.row.gonggaoPhoto"
-                :src="$base.url + scope.row.gonggaoPhoto"
-                alt="公告图片"
-                class="table-image"
-              />
-              <span v-else>无</span>
-            </template>
-          </el-table-column>
           <el-table-column prop="gonggaoValue" label="公告类型" min-width="110" />
           <el-table-column prop="insertTime" label="发布时间" min-width="170" />
           <el-table-column prop="gonggaoContent" label="公告详情" min-width="220" show-overflow-tooltip>
@@ -277,14 +266,6 @@ export default {
 .form-content,
 .toolbar-content {
   margin-bottom: 12px;
-}
-
-.table-image {
-  width: 70px;
-  height: 70px;
-  object-fit: cover;
-  border-radius: 6px;
-  border: 1px solid #ebeef5;
 }
 
 .danger-text {

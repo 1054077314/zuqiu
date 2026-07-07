@@ -46,7 +46,8 @@
               <span v-else>无</span>
             </template>
           </el-table-column>
-          <el-table-column prop="saishiAddress" label="赛事地点" min-width="150" />`n<el-table-column prop="saishiValue" label="赛事类型" min-width="110" />
+          <el-table-column prop="saishiAddress" label="赛事地点" min-width="150" />
+          <el-table-column prop="saishiValue" label="赛事类型" min-width="110" />
           <el-table-column prop="insertTime" label="录入时间" min-width="170" />
           <el-table-column prop="saishiContent" label="赛事介绍" min-width="220" show-overflow-tooltip>
             <template slot-scope="scope">
@@ -242,30 +243,68 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.form-content,
+.main-content {
+  padding: 0 4px;
+}
+
+.form-content {
+  margin-bottom: 14px;
+  padding: 18px 20px 4px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
 .toolbar-content {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+.table-content {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  padding: 0 0 4px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+}
+
+::v-deep .el-table {
+  border: none;
+}
+
+::v-deep .el-table th {
+  background: #f8fafc;
+  color: #334155;
+  font-weight: 700;
+  font-size: 13px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+::v-deep .el-table--striped .el-table__body tr.el-table__row--striped td {
+  background: #fafbfc;
 }
 
 .table-image {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   object-fit: cover;
   border-radius: 6px;
-  border: 1px solid #ebeef5;
+  border: 1px solid #e5e7eb;
 }
 
 .link-btn {
-  color: #409eff;
+  color: #2563eb;
   text-decoration: none;
 }
 
 .danger-text {
-  color: #f56c6c;
+  color: #ef4444;
 }
 
 .pagination-content {
-  margin-top: 16px;
+  margin-top: 0;
+  padding: 14px 20px;
   text-align: right;
 }
 </style>

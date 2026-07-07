@@ -100,32 +100,6 @@
         </el-col>
 
         <el-col :span="24">
-          <el-form-item label="计划图片" prop="xunlianPhoto">
-            <template v-if="type === 'info'">
-              <div v-if="ruleForm.xunlianPhoto">
-                <img
-                  v-for="(item, index) in (ruleForm.xunlianPhoto || '').split(',')"
-                  :key="index"
-                  :src="$base.url + item"
-                  class="preview-image"
-                  alt="计划图片"
-                >
-              </div>
-              <span v-else>无</span>
-            </template>
-            <file-upload
-              v-else
-              tip="上传计划图片"
-              action="file/upload"
-              :limit="1"
-              :multiple="false"
-              :fileUrls="ruleForm.xunlianPhoto ? $base.url + ruleForm.xunlianPhoto : ''"
-              @change="xunlianPhotoUploadChange"
-            />
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="24">
           <el-form-item label="计划介绍" prop="xunlianContent">
             <template v-if="type === 'info'">
               <div class="content-view" v-html="ruleForm.xunlianContent" />
@@ -183,7 +157,6 @@ export default {
         yonghuId: [{ required: true, message: '请选择用户', trigger: 'change' }],
         xunlianName: [{ required: true, message: '请输入计划名称', trigger: 'blur' }],
         xunlianUuidNumber: [{ required: true, message: '计划编号不能为空', trigger: 'blur' }],
-        xunlianPhoto: [{ required: true, message: '请上传计划图片', trigger: 'change' }],
         xunlianTypes: [{ required: true, message: '请选择计划类型', trigger: 'change' }],
         xunlianKemu: [{ required: true, message: '请输入训练科目', trigger: 'blur' }],
         xunlianTime: [{ required: true, message: '请选择日期', trigger: 'change' }],
@@ -303,12 +276,6 @@ export default {
         }
       })
     },
-    xunlianPhotoUploadChange(fileUrls) {
-      this.ruleForm.xunlianPhoto = fileUrls
-      if (this.$refs.ruleForm) {
-        this.$refs.ruleForm.validateField('xunlianPhoto')
-      }
-    },
     onSubmit() {
       this.$refs.ruleForm.validate(valid => {
         if (!valid) return
@@ -347,15 +314,6 @@ export default {
   padding: 8px 4px;
 }
 
-.preview-image {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 6px;
-  border: 1px solid #ebeef5;
-  margin-right: 12px;
-}
-
 .content-view {
   min-height: 100px;
   border: 1px solid #ebeef5;
@@ -363,4 +321,3 @@ export default {
   padding: 8px;
 }
 </style>
-

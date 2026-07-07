@@ -1,313 +1,323 @@
-﻿/*
-SQLyog Ultimate v11.3 (64 bit)
-MySQL - 5.7.32-log : Database - zuqiujulebguanli
-*********************************************************************
+/*
+ Navicat Premium Dump SQL
+
+ Source Server         : ZUQIU
+ Source Server Type    : MySQL
+ Source Server Version : 50744 (5.7.44)
+ Source Host           : localhost:3306
+ Source Schema         : zuqiujulebguanli
+
+ Target Server Type    : MySQL
+ Target Server Version : 50744 (5.7.44)
+ File Encoding         : 65001
+
+ Date: 07/05/2026 16:55:30
 */
 
-/*!40101 SET NAMES utf8 */;
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
 
-/*!40101 SET SQL_MODE=''*/;
-
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`zuqiujulebguanli` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
-USE `zuqiujulebguanli`;
-
-/*Table structure for table `config` */
-
+-- ----------------------------
+-- Table structure for config
+-- ----------------------------
 DROP TABLE IF EXISTS `config`;
+CREATE TABLE `config`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '配置参数名称',
+  `value` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '配置参数值',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统配置' ROW_FORMAT = Dynamic;
 
-CREATE TABLE `config` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '涓婚敭',
-  `name` varchar(100) NOT NULL COMMENT '閰嶇疆鍙傛暟鍚嶇О',
-  `value` varchar(100) DEFAULT NULL COMMENT '閰嶇疆鍙傛暟鍊?,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='绯荤粺閰嶇疆';
+-- ----------------------------
+-- Records of config
+-- ----------------------------
+INSERT INTO `config` VALUES (1, '首页轮播图1', 'upload/config1.jpg');
+INSERT INTO `config` VALUES (2, '首页轮播图2', 'upload/config2.jpg');
+INSERT INTO `config` VALUES (3, '首页轮播图3', 'upload/config3.jpg');
 
-/*Data for the table `config` */
-
-insert  into `config`(`id`,`name`,`value`) values 
-(1,'棣栭〉杞挱鍥?','https://img-blog.csdnimg.cn/8989654e0199472782e09575990c1234.jpeg'),
-(2,'棣栭〉杞挱鍥?','https://img-blog.csdnimg.cn/1234567890abcdef1234567890abcdef.jpeg'),
-(3,'棣栭〉杞挱鍥?','https://img-blog.csdnimg.cn/abcdef1234567890abcdef1234567890.jpeg');
-
-/*Table structure for table `dictionary` */
-
+-- ----------------------------
+-- Table structure for dictionary
+-- ----------------------------
 DROP TABLE IF EXISTS `dictionary`;
+CREATE TABLE `dictionary`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `dic_code` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '字典编码',
+  `dic_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '字典名称',
+  `code_index` int(11) NULL DEFAULT NULL COMMENT '编码',
+  `index_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '编码名称',
+  `super_id` int(11) NULL DEFAULT NULL COMMENT '父级字段ID',
+  `beizhu` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '字典' ROW_FORMAT = Dynamic;
 
-CREATE TABLE `dictionary` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '涓婚敭',
-  `dic_code` varchar(200) DEFAULT NULL COMMENT '瀛楀吀缂栫爜',
-  `dic_name` varchar(200) DEFAULT NULL COMMENT '瀛楀吀鍚嶇О',
-  `code_index` int(11) DEFAULT NULL COMMENT '缂栫爜',
-  `index_name` varchar(200) DEFAULT NULL COMMENT '缂栫爜鍚嶇О',
-  `super_id` int(11) DEFAULT NULL COMMENT '鐖剁骇瀛楁ID',
-  `beizhu` varchar(200) DEFAULT NULL COMMENT '澶囨敞',
-  `create_time` timestamp NULL DEFAULT NULL COMMENT '鍒涘缓鏃堕棿',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='瀛楀吀';
+-- ----------------------------
+-- Records of dictionary
+-- ----------------------------
+INSERT INTO `dictionary` VALUES (1, 'sex_types', '性别类型', 1, '男', NULL, NULL, '2026-03-21 09:00:00');
+INSERT INTO `dictionary` VALUES (2, 'sex_types', '性别类型', 2, '女', NULL, NULL, '2026-03-21 09:00:00');
+INSERT INTO `dictionary` VALUES (3, 'gonggao_types', '公告类型', 1, '俱乐部公告', NULL, NULL, '2026-03-21 09:00:00');
+INSERT INTO `dictionary` VALUES (4, 'gonggao_types', '公告类型', 2, '赛事通知', NULL, NULL, '2026-03-21 09:00:00');
+INSERT INTO `dictionary` VALUES (5, 'gonggao_types', '公告类型', 3, '转会动态', NULL, NULL, '2026-03-21 09:00:00');
+INSERT INTO `dictionary` VALUES (6, 'gonggao_types', '公告类型', 4, '活动公告', NULL, NULL, '2026-03-21 09:00:00');
+INSERT INTO `dictionary` VALUES (7, 'saishi_types', '赛事类型', 1, '中超联赛', NULL, NULL, '2026-03-21 09:00:00');
+INSERT INTO `dictionary` VALUES (8, 'saishi_types', '赛事类型', 2, '足协杯', NULL, NULL, '2026-03-21 09:00:00');
+INSERT INTO `dictionary` VALUES (9, 'saishi_types', '赛事类型', 3, '亚冠联赛', NULL, NULL, '2026-03-21 09:00:00');
+INSERT INTO `dictionary` VALUES (10, 'saishi_types', '赛事类型', 4, '热身赛', NULL, NULL, '2026-03-21 09:00:00');
+INSERT INTO `dictionary` VALUES (11, 'xunlian_types', '训练计划类型', 1, '体能训练', NULL, NULL, '2026-03-21 09:00:00');
+INSERT INTO `dictionary` VALUES (12, 'xunlian_types', '训练计划类型', 2, '战术训练', NULL, NULL, '2026-03-21 09:00:00');
+INSERT INTO `dictionary` VALUES (13, 'xunlian_types', '训练计划类型', 3, '技术训练', NULL, NULL, '2026-03-21 09:00:00');
+INSERT INTO `dictionary` VALUES (14, 'xunlian_types', '训练计划类型', 4, '恢复训练', NULL, NULL, '2026-03-21 09:00:00');
+INSERT INTO `dictionary` VALUES (15, 'shuju_types', '球员数据类型', 1, '前锋数据', NULL, NULL, '2026-03-21 09:00:00');
+INSERT INTO `dictionary` VALUES (16, 'shuju_types', '球员数据类型', 2, '中场数据', NULL, NULL, '2026-03-21 09:00:00');
 
-/*Data for the table `dictionary` */
-
-insert  into `dictionary`(`id`,`dic_code`,`dic_name`,`code_index`,`index_name`,`super_id`,`beizhu`,`create_time`) values 
-(1,'sex_types','鎬у埆绫诲瀷',1,'鐢?,NULL,NULL,'2026-03-21 09:00:00'),
-(2,'sex_types','鎬у埆绫诲瀷',2,'濂?,NULL,NULL,'2026-03-21 09:00:00'),
-(3,'gonggao_types','鍏憡绫诲瀷',1,'淇变箰閮ㄥ叕鍛?,NULL,NULL,'2026-03-21 09:00:00'),
-(4,'gonggao_types','鍏憡绫诲瀷',2,'璧涗簨閫氱煡',NULL,NULL,'2026-03-21 09:00:00'),
-(5,'gonggao_types','鍏憡绫诲瀷',3,'杞細鍔ㄦ€?,NULL,NULL,'2026-03-21 09:00:00'),
-(6,'gonggao_types','鍏憡绫诲瀷',4,'娲诲姩鍏憡',NULL,NULL,'2026-03-21 09:00:00'),
-(7,'saishi_types','璧涗簨绫诲瀷',1,'涓秴鑱旇禌',NULL,NULL,'2026-03-21 09:00:00'),
-(8,'saishi_types','璧涗簨绫诲瀷',2,'瓒冲崗鏉?,NULL,NULL,'2026-03-21 09:00:00'),
-(9,'saishi_types','璧涗簨绫诲瀷',3,'浜氬啝鑱旇禌',NULL,NULL,'2026-03-21 09:00:00'),
-(10,'saishi_types','璧涗簨绫诲瀷',4,'鐑韩璧?,NULL,NULL,'2026-03-21 09:00:00'),
-(11,'xunlian_types','璁粌璁″垝绫诲瀷',1,'浣撹兘璁粌',NULL,NULL,'2026-03-21 09:00:00'),
-(12,'xunlian_types','璁粌璁″垝绫诲瀷',2,'鎴樻湳璁粌',NULL,NULL,'2026-03-21 09:00:00'),
-(13,'xunlian_types','璁粌璁″垝绫诲瀷',3,'鎶€鏈缁?,NULL,NULL,'2026-03-21 09:00:00'),
-(14,'xunlian_types','璁粌璁″垝绫诲瀷',4,'鎭㈠璁粌',NULL,NULL,'2026-03-21 09:00:00'),
-(15,'shuju_types','鐞冨憳鏁版嵁绫诲瀷',1,'鍓嶉攱鏁版嵁',NULL,NULL,'2026-03-21 09:00:00'),
-(16,'shuju_types','鐞冨憳鏁版嵁绫诲瀷',2,'涓満鏁版嵁',NULL,NULL,'2026-03-21 09:00:00');
-
-/*Table structure for table `gonggao` */
-
+-- ----------------------------
+-- Table structure for gonggao
+-- ----------------------------
 DROP TABLE IF EXISTS `gonggao`;
+CREATE TABLE `gonggao`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `gonggao_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '公告名称',
+  `gonggao_photo` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '公告图片',
+  `gonggao_types` int(11) NOT NULL COMMENT '公告类型',
+  `insert_time` timestamp NULL DEFAULT NULL COMMENT '发布时间',
+  `gonggao_content` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '公告详情',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '公告信息' ROW_FORMAT = Dynamic;
 
-CREATE TABLE `gonggao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '涓婚敭',
-  `gonggao_name` varchar(200) DEFAULT NULL COMMENT '鍏憡鍚嶇О',
-  `gonggao_photo` varchar(200) DEFAULT NULL COMMENT '鍏憡鍥剧墖',
-  `gonggao_types` int(11) NOT NULL COMMENT '鍏憡绫诲瀷',
-  `insert_time` timestamp NULL DEFAULT NULL COMMENT '鍙戝竷鏃堕棿',
-  `gonggao_content` longtext COMMENT '鍏憡璇︽儏',
-  `create_time` timestamp NULL DEFAULT NULL COMMENT '鍒涘缓鏃堕棿',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='鍏憡淇℃伅';
+-- ----------------------------
+-- Records of gonggao
+-- ----------------------------
+INSERT INTO `gonggao` VALUES (1, '2026赛季备战计划正式启动', 'upload/gonggao1.jpg', 1, '2026-03-10 09:00:00', '<p>为迎接2026赛季中超联赛，俱乐部将于3月15日起启动全面备战计划。主要内容包括：</p><ul><li>一线队集结，进行体能恢复测试</li><li>新援融入训练，战术体系磨合</li><li>热身赛安排：3月22日对阵山东泰山、3月25日对阵上海海港</li></ul><p>请全体球员、教练员按时归队，共同为新赛季做好准备。</p>', '2026-03-10 09:00:00');
+INSERT INTO `gonggao` VALUES (2, '中超联赛第3轮主场赛事预告', 'upload/gonggao2.jpg', 2, '2026-03-18 14:00:00', '<p>我俱乐部将于3月29日19:35在主场迎战北京国安，这是中超联赛第3轮的关键战役。</p><p><strong>比赛信息：</strong></p><p>时间：2026年3月29日 19:35</p><p>地点：俱乐部主场体育场</p><p>转播：CCTV5、咪咕视频</p><p>欢迎广大球迷到场助威，共同见证精彩对决！</p>', '2026-03-18 14:00:00');
+INSERT INTO `gonggao` VALUES (3, '官宣：巴西前锋马科斯正式加盟', 'upload/gonggao3.jpg', 3, '2026-03-08 10:00:00', '<p>经俱乐部与巴西弗拉门戈足球俱乐部友好协商，巴西前锋马科斯正式加盟我俱乐部，转会费1200万欧元，合同为期三年。</p><p><strong>球员简介：</strong></p><p><strong>马科斯，25岁，身高182cm，司职中锋。上赛季巴甲联赛出场32次，打入18球，荣获联赛银靴奖。其出色的门前嗅觉和身体对抗能力将极大增强我队锋线实力。</strong></p><p><strong>欢迎马科斯加入俱乐部大家庭！</strong></p>', '2026-03-08 10:00:00');
+INSERT INTO `gonggao` VALUES (5, '关于客场远征军的组织通知', 'upload/gonggao5.jpg', 1, '2026-03-19 16:00:00', '<p>俱乐部将组织3月29日客场对阵北京国安的远征助威团。</p><p><strong>报名信息：</strong></p><p>名额：500人</p><p>费用：往返大巴+球票 380元/人</p><p>集合时间：3月29日 12:00</p><p>集合地点：俱乐部南门停车场</p><p>有意者请于3月25日前联系球迷协会报名。</p>', '2026-03-19 16:00:00');
+INSERT INTO `gonggao` VALUES (6, 'U21梯队获得全国青年联赛冠军', 'upload/gonggao6.jpg', 1, '2026-03-15 20:00:00', '<p>喜讯！我俱乐部U21青年队在全国青年足球联赛决赛中2:1战胜广州队，成功夺冠！</p><p>这是俱乐部青训体系的重要成果，展现了俱乐部在人才培养方面的实力。祝贺全体教练员和球员！</p><p>多名青年队球员将在新赛季进入一线队大名单，期待他们的表现。</p>', '2026-03-15 20:00:00');
+INSERT INTO `gonggao` VALUES (7, '队长张伟续约至2029年', 'upload/gonggao7.jpg', 3, '2026-03-12 11:00:00', '<p>俱乐部与队长张伟正式续约，新合同至2029年6月。</p><p>张伟，30岁，司职中场，自2020年加盟以来已为球队出场156次，打入28球，助攻45次，是球队中场核心。上赛季荣获中超最佳中场球员称号。</p><p>"这里是我的家，我会继续为冠军而战。"——张伟</p>', '2026-03-12 11:00:00');
+INSERT INTO `gonggao` VALUES (8, '俱乐部新训练基地竣工', 'upload/gonggao8.jpg', 1, '2026-03-05 09:00:00', '<p>历时两年建设，俱乐部新训练基地正式竣工并投入使用。</p><p><strong>基地设施：</strong></p><ul><li>4块标准天然草坪训练场</li><li>1块室内人工草坪训练场</li><li>现代化体能训练中心</li><li>运动康复理疗中心</li><li>球员公寓及餐厅</li></ul><p>新基地将为球队提供世界一流的训练条件，助力俱乐部向更高目标迈进。</p>', '2026-03-05 09:00:00');
 
-/*Data for the table `gonggao` */
-
-insert  into `gonggao`(`id`,`gonggao_name`,`gonggao_photo`,`gonggao_types`,`insert_time`,`gonggao_content`,`create_time`) values 
-(1,'2026璧涘澶囨垬璁″垝姝ｅ紡鍚姩','https://img-blog.csdnimg.cn/20240101000001.jpg',1,'2026-03-10 09:00:00','<p>涓鸿繋鎺?026璧涘涓秴鑱旇禌锛屼勘涔愰儴灏嗕簬3鏈?5鏃ヨ捣鍚姩鍏ㄩ潰澶囨垬璁″垝銆備富瑕佸唴瀹瑰寘鎷細</p><ul><li>涓€绾块槦闆嗙粨锛岃繘琛屼綋鑳芥仮澶嶆祴璇?/li><li>鏂版彺铻嶅叆璁粌锛屾垬鏈綋绯荤（鍚?/li><li>鐑韩璧涘畨鎺掞細3鏈?2鏃ュ闃靛北涓滄嘲灞便€?鏈?5鏃ュ闃典笂娴锋捣娓?/li></ul><p>璇峰叏浣撶悆鍛樸€佹暀缁冨憳鎸夋椂褰掗槦锛屽叡鍚屼负鏂拌禌瀛ｅ仛濂藉噯澶囥€?/p>','2026-03-10 09:00:00'),
-(2,'涓秴鑱旇禌绗?杞富鍦鸿禌浜嬮鍛?,'https://img-blog.csdnimg.cn/20240101000002.jpg',2,'2026-03-18 14:00:00','<p>鎴戜勘涔愰儴灏嗕簬3鏈?9鏃?9:35鍦ㄤ富鍦鸿繋鎴樺寳浜浗瀹夛紝杩欐槸涓秴鑱旇禌绗?杞殑鍏抽敭鎴樺焦銆?/p><p><strong>姣旇禌淇℃伅锛?/strong></p><p>鏃堕棿锛?026骞?鏈?9鏃?19:35</p><p>鍦扮偣锛氫勘涔愰儴涓诲満浣撹偛鍦?/p><p>杞挱锛欳CTV5銆佸挭鍜曡棰?/p><p>娆㈣繋骞垮ぇ鐞冭糠鍒板満鍔╁▉锛屽叡鍚岃璇佺簿褰╁鍐筹紒</p>','2026-03-18 14:00:00'),
-(3,'瀹樺锛氬反瑗垮墠閿嬮┈绉戞柉姝ｅ紡鍔犵洘','https://img-blog.csdnimg.cn/20240101000003.jpg',3,'2026-03-08 10:00:00','<p>缁忎勘涔愰儴涓庡反瑗垮紬鎷夐棬鎴堣冻鐞冧勘涔愰儴鍙嬪ソ鍗忓晢锛屽反瑗垮墠閿嬮┈绉戞柉姝ｅ紡鍔犵洘鎴戜勘涔愰儴锛岃浆浼氳垂1200涓囨鍏冿紝鍚堝悓涓烘湡涓夊勾銆?/p><p><strong>鐞冨憳绠€浠嬶細</strong></p><p>椹鏂紝25宀侊紝韬珮182cm锛屽徃鑱屼腑閿嬨€備笂璧涘宸寸敳鑱旇禌鍑哄満32娆★紝鎵撳叆18鐞冿紝鑽ｈ幏鑱旇禌閾堕澊濂栥€傚叾鍑鸿壊鐨勯棬鍓嶅梾瑙夊拰韬綋瀵规姉鑳藉姏灏嗘瀬澶у寮烘垜闃熼攱绾垮疄鍔涖€?/p><p>娆㈣繋椹鏂姞鍏ヤ勘涔愰儴澶у搴紒</p>','2026-03-08 10:00:00'),
-(4,'鐞冭糠寮€鏀炬棩娲诲姩閫氱煡','https://img-blog.csdnimg.cn/20240101000004.jpg',4,'2026-03-20 08:00:00','<p>涓哄洖棣堝箍澶х悆杩风殑鏀寔锛屼勘涔愰儴灏嗕簬4鏈?鏃ヤ妇鍔?026骞村害鐞冭糠寮€鏀炬棩娲诲姩銆?/p><p><strong>娲诲姩瀹夋帓锛?/strong></p><ul><li>10:00-12:00 鐞冨憳绛惧悕鍚堝奖浼?/li><li>13:00-14:30 璁粌鍦哄叕寮€璁粌瑙傛懇</li><li>14:30-15:30 淇变箰閮ㄨ崳瑾夊鍙傝</li><li>15:30-17:00 鐞冭糠浜掑姩娓告垙鍙婃娊濂?/li></ul><p>鎶ュ悕鏂瑰紡锛氬叧娉ㄤ勘涔愰儴瀹樻柟鍏紬鍙凤紝鐐瑰嚮鑿滃崟鏍?娲诲姩鎶ュ悕"銆?/p>','2026-03-20 08:00:00'),
-(5,'鍏充簬瀹㈠満杩滃緛鍐涚殑缁勭粐閫氱煡','https://img-blog.csdnimg.cn/20240101000005.jpg',1,'2026-03-19 16:00:00','<p>淇变箰閮ㄥ皢缁勭粐3鏈?9鏃ュ鍦哄闃靛寳浜浗瀹夌殑杩滃緛鍔╁▉鍥€?/p><p><strong>鎶ュ悕淇℃伅锛?/strong></p><p>鍚嶉锛?00浜?/p><p>璐圭敤锛氬線杩斿ぇ宸?鐞冪エ 380鍏?浜?/p><p>闆嗗悎鏃堕棿锛?鏈?9鏃?12:00</p><p>闆嗗悎鍦扮偣锛氫勘涔愰儴鍗楅棬鍋滆溅鍦?/p><p>鏈夋剰鑰呰浜?鏈?5鏃ュ墠鑱旂郴鐞冭糠鍗忎細鎶ュ悕銆?/p>','2026-03-19 16:00:00'),
-(6,'U21姊槦鑾峰緱鍏ㄥ浗闈掑勾鑱旇禌鍐犲啗','https://img-blog.csdnimg.cn/20240101000006.jpg',1,'2026-03-15 20:00:00','<p>鍠滆锛佹垜淇变箰閮║21闈掑勾闃熷湪鍏ㄥ浗闈掑勾瓒崇悆鑱旇禌鍐宠禌涓?:1鎴樿儨骞垮窞闃燂紝鎴愬姛澶哄啝锛?/p><p>杩欐槸淇变箰閮ㄩ潚璁綋绯荤殑閲嶈鎴愭灉锛屽睍鐜颁簡淇变箰閮ㄥ湪浜烘墠鍩瑰吇鏂归潰鐨勫疄鍔涖€傜璐哄叏浣撴暀缁冨憳鍜岀悆鍛橈紒</p><p>澶氬悕闈掑勾闃熺悆鍛樺皢鍦ㄦ柊璧涘杩涘叆涓€绾块槦澶у悕鍗曪紝鏈熷緟浠栦滑鐨勮〃鐜般€?/p>','2026-03-15 20:00:00'),
-(7,'闃熼暱寮犱紵缁害鑷?029骞?,'https://img-blog.csdnimg.cn/20240101000007.jpg',3,'2026-03-12 11:00:00','<p>淇变箰閮ㄤ笌闃熼暱寮犱紵姝ｅ紡缁害锛屾柊鍚堝悓鑷?029骞?鏈堛€?/p><p>寮犱紵锛?0宀侊紝鍙歌亴涓満锛岃嚜2020骞村姞鐩熶互鏉ュ凡涓虹悆闃熷嚭鍦?56娆★紝鎵撳叆28鐞冿紝鍔╂敾45娆★紝鏄悆闃熶腑鍦烘牳蹇冦€備笂璧涘鑽ｈ幏涓秴鏈€浣充腑鍦虹悆鍛樼О鍙枫€?/p><p>"杩欓噷鏄垜鐨勫锛屾垜浼氱户缁负鍐犲啗鑰屾垬銆?鈥斺€斿紶浼?/p>','2026-03-12 11:00:00'),
-(8,'淇变箰閮ㄦ柊璁粌鍩哄湴绔ｅ伐','https://img-blog.csdnimg.cn/20240101000008.jpg',1,'2026-03-05 09:00:00','<p>鍘嗘椂涓ゅ勾寤鸿锛屼勘涔愰儴鏂拌缁冨熀鍦版寮忕宸ュ苟鎶曞叆浣跨敤銆?/p><p><strong>鍩哄湴璁炬柦锛?/strong></p><ul><li>4鍧楁爣鍑嗗ぉ鐒惰崏鍧缁冨満</li><li>1鍧楀鍐呬汉宸ヨ崏鍧缁冨満</li><li>鐜颁唬鍖栦綋鑳借缁冧腑蹇?/li><li>杩愬姩搴峰鐞嗙枟涓績</li><li>鐞冨憳鍏瘬鍙婇鍘?/li></ul><p>鏂板熀鍦板皢涓虹悆闃熸彁渚涗笘鐣屼竴娴佺殑璁粌鏉′欢锛屽姪鍔涗勘涔愰儴鍚戞洿楂樼洰鏍囪繄杩涖€?/p>','2026-03-05 09:00:00');
-
-/*Table structure for table `hetong` */
-
+-- ----------------------------
+-- Table structure for hetong
+-- ----------------------------
 DROP TABLE IF EXISTS `hetong`;
+CREATE TABLE `hetong`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `yonghu_id` int(11) NULL DEFAULT NULL COMMENT '用户',
+  `hetong_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '合同标题',
+  `hetong_file` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '上传合同',
+  `hetong_text` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '备注',
+  `hetong_delete` int(11) NULL DEFAULT NULL COMMENT '逻辑删除',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '合同' ROW_FORMAT = Dynamic;
 
-CREATE TABLE `hetong` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '涓婚敭',
-  `yonghu_id` int(11) DEFAULT NULL COMMENT '鐢ㄦ埛',
-  `hetong_name` varchar(200) DEFAULT NULL COMMENT '鍚堝悓鏍囬',
-  `hetong_file` varchar(200) DEFAULT NULL COMMENT '涓婁紶鍚堝悓',
-  `hetong_text` text COMMENT '澶囨敞',
-  `hetong_delete` int(11) DEFAULT NULL COMMENT '閫昏緫鍒犻櫎',
-  `create_time` timestamp NULL DEFAULT NULL COMMENT '鍒涘缓鏃堕棿',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='鍚堝悓';
+-- ----------------------------
+-- Records of hetong
+-- ----------------------------
+INSERT INTO `hetong` VALUES (1, 1, '张伟续约合同（2026-2029）', 'upload/file.rar', '队长张伟续约三年，年薪800万元，附带队长津贴及进球奖金条款。', 1, '2026-03-12 11:00:00');
+INSERT INTO `hetong` VALUES (2, 2, '李强球员合同（2025-2028）', 'upload/file.rar', '门将李强合同，年薪450万元，附带零封奖金条款。', 1, '2025-07-15 10:00:00');
+INSERT INTO `hetong` VALUES (3, 3, '王磊青训合同', 'upload/file.rar', '青年队球员王磊晋升一线队合同，为期两年。', 1, '2026-01-20 14:00:00');
+INSERT INTO `hetong` VALUES (4, NULL, '某体育品牌赞助合同', 'upload/file.rar', '五年球衣赞助协议，总金额3亿元，包含装备赞助。', 2, '2026-01-01 09:00:00');
+INSERT INTO `hetong` VALUES (5, NULL, '新训练基地建设合同', 'upload/file.rar', '训练基地建设工程合同，总造价1.2亿元。', 1, '2024-03-01 09:00:00');
+INSERT INTO `hetong` VALUES (6, 1, '马科斯转会合同', 'upload/file.rar', '巴西前锋马科斯转会合同，转会费1200万欧元。', 1, '2026-03-08 10:00:00');
 
-/*Data for the table `hetong` */
-
-insert  into `hetong`(`id`,`yonghu_id`,`hetong_name`,`hetong_file`,`hetong_text`,`hetong_delete`,`create_time`) values 
-(1,1,'寮犱紵缁害鍚堝悓锛?026-2029锛?,'https://download.csdn.net/file/202401/hetong1.pdf','闃熼暱寮犱紵缁害涓夊勾锛屽勾钖?00涓囧厓锛岄檮甯﹂槦闀挎触璐村強杩涚悆濂栭噾鏉℃銆?,1,'2026-03-12 11:00:00'),
-(2,2,'鏉庡己鐞冨憳鍚堝悓锛?025-2028锛?,'https://download.csdn.net/file/202401/hetong2.pdf','闂ㄥ皢鏉庡己鍚堝悓锛屽勾钖?50涓囧厓锛岄檮甯﹂浂灏佸閲戞潯娆俱€?,1,'2025-07-15 10:00:00'),
-(3,3,'鐜嬬闈掕鍚堝悓','https://download.csdn.net/file/202401/hetong3.pdf','闈掑勾闃熺悆鍛樼帇纾婃檵鍗囦竴绾块槦鍚堝悓锛屼负鏈熶袱骞淬€?,1,'2026-01-20 14:00:00'),
-(4,NULL,'鏌愪綋鑲插搧鐗岃禐鍔╁悎鍚?,'https://download.csdn.net/file/202401/hetong4.pdf','浜斿勾鐞冭。璧炲姪鍗忚锛屾€婚噾棰?浜垮厓锛屽寘鍚澶囪禐鍔┿€?,1,'2026-01-01 09:00:00'),
-(5,NULL,'鏂拌缁冨熀鍦板缓璁惧悎鍚?,'https://download.csdn.net/file/202401/hetong5.pdf','璁粌鍩哄湴寤鸿宸ョ▼鍚堝悓锛屾€婚€犱环1.2浜垮厓銆?,1,'2024-03-01 09:00:00'),
-(6,1,'椹鏂浆浼氬悎鍚?,'https://download.csdn.net/file/202401/hetong6.pdf','宸磋タ鍓嶉攱椹鏂浆浼氬悎鍚岋紝杞細璐?200涓囨鍏冦€?,1,'2026-03-08 10:00:00');
-
-/*Table structure for table `jiaolian` */
-
+-- ----------------------------
+-- Table structure for jiaolian
+-- ----------------------------
 DROP TABLE IF EXISTS `jiaolian`;
+CREATE TABLE `jiaolian`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `username` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '账户',
+  `password` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
+  `jiaolian_uuid_number` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '教练编号',
+  `jiaolian_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '教练姓名',
+  `jiaolian_phone` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '教练手机号',
+  `jiaolian_id_number` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '教练身份证号',
+  `jiaolian_photo` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '教练头像',
+  `sex_types` int(11) NULL DEFAULT NULL COMMENT '性别',
+  `jiaolian_email` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '教练邮箱',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '教练' ROW_FORMAT = Dynamic;
 
-CREATE TABLE `jiaolian` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '涓婚敭',
-  `username` varchar(200) DEFAULT NULL COMMENT '璐︽埛',
-  `password` varchar(200) DEFAULT NULL COMMENT '瀵嗙爜',
-  `jiaolian_uuid_number` varchar(200) DEFAULT NULL COMMENT '鏁欑粌缂栧彿',
-  `jiaolian_name` varchar(200) DEFAULT NULL COMMENT '鏁欑粌濮撳悕',
-  `jiaolian_phone` varchar(200) DEFAULT NULL COMMENT '鏁欑粌鎵嬫満鍙?,
-  `jiaolian_id_number` varchar(200) DEFAULT NULL COMMENT '鏁欑粌韬唤璇佸彿',
-  `jiaolian_photo` varchar(200) DEFAULT NULL COMMENT '鏁欑粌澶村儚',
-  `sex_types` int(11) DEFAULT NULL COMMENT '鎬у埆',
-  `jiaolian_email` varchar(200) DEFAULT NULL COMMENT '鏁欑粌閭',
-  `create_time` timestamp NULL DEFAULT NULL COMMENT '鍒涘缓鏃堕棿',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='鏁欑粌';
+-- ----------------------------
+-- Records of jiaolian
+-- ----------------------------
+INSERT INTO `jiaolian` VALUES (1, 'coach_chen', '123456', '1710000000001', '陈志远', '13800138001', '110101197501011234', 'upload/jiaolian1.jpg', 1, 'chen@club.com', '2026-03-21 09:00:00');
+INSERT INTO `jiaolian` VALUES (2, 'coach_wang', '123456', '1710000000002', '王大明', '13800138002', '110101198002022345', 'upload/jiaolian2.jpg', 1, 'wang@club.com', '2026-03-21 09:00:00');
+INSERT INTO `jiaolian` VALUES (3, 'coach_li', '123456', '1710000000003', '李雪梅', '13800138003', '110101198503033456', 'upload/jiaolian3.jpg', 2, 'li@club.com', '2026-03-21 09:00:00');
+INSERT INTO `jiaolian` VALUES (4, 'coach_zhang', '123456', '1710000000004', '张海涛', '13800138004', '110101197804044567', 'upload/jiaolian1.jpg', 1, 'zhang@club.com', '2026-03-21 09:00:00');
 
-/*Data for the table `jiaolian` */
-
-insert  into `jiaolian`(`id`,`username`,`password`,`jiaolian_uuid_number`,`jiaolian_name`,`jiaolian_phone`,`jiaolian_id_number`,`jiaolian_photo`,`sex_types`,`jiaolian_email`,`create_time`) values 
-(1,'coach_chen','123456','1710000000001','闄堝織杩?,'13800138001','110101197501011234','https://img-blog.csdnimg.cn/20240101000101.jpg',1,'chen@club.com','2026-03-21 09:00:00'),
-(2,'coach_wang','123456','1710000000002','鐜嬪ぇ鏄?,'13800138002','110101198002022345','https://img-blog.csdnimg.cn/20240101000102.jpg',1,'wang@club.com','2026-03-21 09:00:00'),
-(3,'coach_li','123456','1710000000003','鏉庨洩姊?,'13800138003','110101198503033456','https://img-blog.csdnimg.cn/20240101000103.jpg',2,'li@club.com','2026-03-21 09:00:00'),
-(4,'coach_zhang','123456','1710000000004','寮犳捣娑?,'13800138004','110101197804044567','https://img-blog.csdnimg.cn/20240101000104.jpg',1,'zhang@club.com','2026-03-21 09:00:00');
-
-/*Table structure for table `saishi` */
-
+-- ----------------------------
+-- Table structure for saishi
+-- ----------------------------
 DROP TABLE IF EXISTS `saishi`;
+CREATE TABLE `saishi`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `saishi_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '赛事名称',
+  `saishi_uuid_number` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '赛事编号',
+  `saishi_photo` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '赛事照片',
+  `saishi_address` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '赛事地点',
+  `saishi_video` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '赛事视频',
+  `saishi_types` int(11) NULL DEFAULT NULL COMMENT '赛事类型',
+  `saishi_content` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '赛事介绍',
+  `saishi_delete` int(11) NULL DEFAULT NULL COMMENT '逻辑删除',
+  `insert_time` timestamp NULL DEFAULT NULL COMMENT '录入时间',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '赛事' ROW_FORMAT = Dynamic;
 
-CREATE TABLE `saishi` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '涓婚敭',
-  `saishi_name` varchar(200) DEFAULT NULL COMMENT '璧涗簨鍚嶇О',
-  `saishi_uuid_number` varchar(200) DEFAULT NULL COMMENT '璧涗簨缂栧彿',
-  `saishi_photo` varchar(200) DEFAULT NULL COMMENT '璧涗簨鐓х墖',
-  `saishi_address` varchar(200) DEFAULT NULL COMMENT '璧涗簨鍦扮偣',
-  `saishi_types` int(11) DEFAULT NULL COMMENT '璧涗簨绫诲瀷',
-  `saishi_content` longtext COMMENT '璧涗簨浠嬬粛',
-  `saishi_delete` int(11) DEFAULT NULL COMMENT '閫昏緫鍒犻櫎',
-  `insert_time` timestamp NULL DEFAULT NULL COMMENT '褰曞叆鏃堕棿',
-  `create_time` timestamp NULL DEFAULT NULL COMMENT '鍒涘缓鏃堕棿',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='璧涗簨';
+-- ----------------------------
+-- Records of saishi
+-- ----------------------------
+INSERT INTO `saishi` VALUES (1, '中超联赛第1轮：主场vs上海申花', '1710000000101', 'upload/saishi1.jpg', '俱乐部主场体育场', 'upload/video.mp4', 1, '<p>2026赛季中超联赛首轮，我俱乐部主场迎战上海申花。比赛时间：3月15日19:35。</p><p><strong>预计首发：</strong>4-3-3阵型</p><p>门将：李强</p><p>后卫：刘洋、赵鹏、孙铭、周伟</p><p>中场：张伟、马科斯、陈浩</p><p>前锋：马科斯、王磊、李明</p>', 1, '2026-03-10 09:00:00', '2026-03-10 09:00:00');
+INSERT INTO `saishi` VALUES (2, '中超联赛第2轮：客场vs山东泰山', '1710000000102', 'upload/saishi2.jpg', '济南奥体中心', 'upload/video.mp4', 1, '<p>中超联赛第2轮，我俱乐部客场挑战山东泰山。比赛时间：3月22日19:35。</p><p>山东泰山是传统强队，主场战绩出色，我队需做好充分准备。</p>', 1, '2026-03-10 09:00:00', '2026-03-10 09:00:00');
+INSERT INTO `saishi` VALUES (3, '中超联赛第3轮：主场vs北京国安', '1710000000103', 'upload/saishi3.jpg', '俱乐部主场体育场', 'upload/video.mp4', 1, '<p>中超联赛第3轮焦点战，我俱乐部主场迎战北京国安。比赛时间：3月29日19:35。</p><p>京沪对决历来精彩，本场关系到赛季初的积分排名走势。</p>', 1, '2026-03-15 09:00:00', '2026-03-15 09:00:00');
+INSERT INTO `saishi` VALUES (4, '中超联赛第4轮：客场vs成都蓉城', '1710000000104', 'upload/saishi4.jpg', '成都凤凰山体育场', 'upload/video.mp4', 1, '<p>中超联赛第4轮，客场挑战成都蓉城。比赛时间：4月5日19:35。</p><p>成都蓉城主场氛围火爆，我队需要保持冷静，发挥技战术水平。</p>', 1, '2026-03-15 09:00:00', '2026-03-15 09:00:00');
+INSERT INTO `saishi` VALUES (5, '中超联赛第5轮：主场vs广州队', '1710000000105', 'upload/saishi5.jpg', '俱乐部主场体育场', 'upload/video.mp4', 1, '<p>中超联赛第5轮，主场迎战广州队。比赛时间：4月12日19:35。</p><p>广州队本赛季阵容年轻化，技战术特点鲜明，需认真对待。</p>', 1, '2026-03-18 09:00:00', '2026-03-18 09:00:00');
+INSERT INTO `saishi` VALUES (6, '足协杯第3轮：主场vs武汉三镇', '1710000000106', 'upload/saishi6.jpg', '俱乐部主场体育场', 'upload/video.mp4', 2, '<p>足协杯第3轮，主场迎战武汉三镇。比赛时间：4月16日19:00。</p><p>足协杯是争冠的重要战线，我队将全力出战。</p>', 1, '2026-03-18 09:00:00', '2026-03-18 09:00:00');
+INSERT INTO `saishi` VALUES (7, '亚冠小组赛第1轮：主场vs韩国全北现代', '1710000000107', 'upload/saishi7.jpg', '俱乐部主场体育场', 'upload/video.mp4', 3, '<p>2026亚冠联赛小组赛首轮，主场迎战韩国K联赛冠军全北现代。比赛时间：4月20日20:00。</p><p>这是俱乐部时隔两年重返亚冠赛场，全队上下高度重视。</p>', 1, '2026-03-20 09:00:00', '2026-03-20 09:00:00');
+INSERT INTO `saishi` VALUES (8, '亚冠小组赛第2轮：客场vs日本横滨水手', '1710000000108', 'upload/saishi8.jpg', '横滨国际综合竞技场', 'upload/video.mp4', 3, '<p>亚冠小组赛第2轮，客场挑战日本J联赛冠军横滨水手。比赛时间：4月27日18:00。</p><p>横滨水手技术细腻，传控能力强，我队需要发挥身体优势。</p>', 1, '2026-03-20 09:00:00', '2026-03-20 09:00:00');
+INSERT INTO `saishi` VALUES (9, '热身赛：主场vs浙江队', '1710000000109', 'upload/saishi9.jpg', '俱乐部主场体育场', 'upload/video.mp4', 4, '<p>赛季前热身赛，主场对阵浙江队。比赛时间：3月8日15:00。</p><p>通过热身赛检验冬训成果，调整比赛状态。</p>', 1, '2026-03-01 09:00:00', '2026-03-01 09:00:00');
+INSERT INTO `saishi` VALUES (10, '热身赛：中立场vs河南队', '1710000000110', 'upload/saishi10.jpg', '海口观澜湖足球基地', 'upload/video.mp4', 4, '<p>赛季前热身赛第2场，中立场对阵河南队。比赛时间：3月11日15:00。</p><p>继续磨合阵容，确定新赛季主力框架。</p>', 1, '2026-03-01 09:00:00', '2026-03-01 09:00:00');
 
-/*Data for the table `saishi` */
-
-(1,'涓秴鑱旇禌绗?杞細涓诲満vs涓婃捣鐢宠姳','1710000000101','https://img-blog.csdnimg.cn/20240101000201.jpg','淇变箰閮ㄤ富鍦轰綋鑲插満',1,'<p>2026璧涘涓秴鑱旇禌棣栬疆锛屾垜淇变箰閮ㄤ富鍦鸿繋鎴樹笂娴风敵鑺便€傛瘮璧涙椂闂达細3鏈?5鏃?9:35銆?/p><p><strong>棰勮棣栧彂锛?/strong>4-3-3闃靛瀷</p><p>闂ㄥ皢锛氭潕寮?/p><p>鍚庡崼锛氬垬娲嬨€佽档楣忋€佸瓩閾€佸懆浼?/p><p>涓満锛氬紶浼熴€侀┈绉戞柉銆侀檲娴?/p><p>鍓嶉攱锛氶┈绉戞柉銆佺帇纾娿€佹潕鏄?/p>',1,'2026-03-10 09:00:00','2026-03-10 09:00:00'),
-(2,'涓秴鑱旇禌绗?杞細瀹㈠満vs灞变笢娉板北','1710000000102','https://img-blog.csdnimg.cn/20240101000202.jpg','娴庡崡濂ヤ綋涓績',1,'<p>涓秴鑱旇禌绗?杞紝鎴戜勘涔愰儴瀹㈠満鎸戞垬灞变笢娉板北銆傛瘮璧涙椂闂达細3鏈?2鏃?9:35銆?/p><p>灞变笢娉板北鏄紶缁熷己闃燂紝涓诲満鎴樼哗鍑鸿壊锛屾垜闃熼渶鍋氬ソ鍏呭垎鍑嗗銆?/p>',1,'2026-03-10 09:00:00','2026-03-10 09:00:00'),
-(3,'涓秴鑱旇禌绗?杞細涓诲満vs鍖椾含鍥藉畨','1710000000103','https://img-blog.csdnimg.cn/20240101000203.jpg','淇变箰閮ㄤ富鍦轰綋鑲插満',1,'<p>涓秴鑱旇禌绗?杞劍鐐规垬锛屾垜淇变箰閮ㄤ富鍦鸿繋鎴樺寳浜浗瀹夈€傛瘮璧涙椂闂达細3鏈?9鏃?9:35銆?/p><p>浜勃瀵瑰喅鍘嗘潵绮惧僵锛屾湰鍦哄叧绯诲埌璧涘鍒濈殑绉垎鎺掑悕璧板娍銆?/p>',1,'2026-03-15 09:00:00','2026-03-15 09:00:00'),
-(4,'涓秴鑱旇禌绗?杞細瀹㈠満vs鎴愰兘钃夊煄','1710000000104','https://img-blog.csdnimg.cn/20240101000204.jpg','鎴愰兘鍑ゅ嚢灞变綋鑲插満',1,'<p>涓秴鑱旇禌绗?杞紝瀹㈠満鎸戞垬鎴愰兘钃夊煄銆傛瘮璧涙椂闂达細4鏈?鏃?9:35銆?/p><p>鎴愰兘钃夊煄涓诲満姘涘洿鐏垎锛屾垜闃熼渶瑕佷繚鎸佸喎闈欙紝鍙戞尌鎶€鎴樻湳姘村钩銆?/p>',1,'2026-03-15 09:00:00','2026-03-15 09:00:00'),
-(5,'涓秴鑱旇禌绗?杞細涓诲満vs骞垮窞闃?,'1710000000105','https://img-blog.csdnimg.cn/20240101000205.jpg','淇变箰閮ㄤ富鍦轰綋鑲插満',1,'<p>涓秴鑱旇禌绗?杞紝涓诲満杩庢垬骞垮窞闃熴€傛瘮璧涙椂闂达細4鏈?2鏃?9:35銆?/p><p>骞垮窞闃熸湰璧涘闃靛骞磋交鍖栵紝鎶€鎴樻湳鐗圭偣椴滄槑锛岄渶璁ょ湡瀵瑰緟銆?/p>',1,'2026-03-18 09:00:00','2026-03-18 09:00:00'),
-(6,'瓒冲崗鏉3杞細涓诲満vs姝︽眽涓夐晣','1710000000106','https://img-blog.csdnimg.cn/20240101000206.jpg','淇变箰閮ㄤ富鍦轰綋鑲插満',2,'<p>瓒冲崗鏉3杞紝涓诲満杩庢垬姝︽眽涓夐晣銆傛瘮璧涙椂闂达細4鏈?6鏃?9:00銆?/p><p>瓒冲崗鏉槸浜夊啝鐨勯噸瑕佹垬绾匡紝鎴戦槦灏嗗叏鍔涘嚭鎴樸€?/p>',1,'2026-03-18 09:00:00','2026-03-18 09:00:00'),
-(7,'浜氬啝灏忕粍璧涚1杞細涓诲満vs闊╁浗鍏ㄥ寳鐜颁唬','1710000000107','https://img-blog.csdnimg.cn/20240101000207.jpg','淇变箰閮ㄤ富鍦轰綋鑲插満',3,'<p>2026浜氬啝鑱旇禌灏忕粍璧涢杞紝涓诲満杩庢垬闊╁浗K鑱旇禌鍐犲啗鍏ㄥ寳鐜颁唬銆傛瘮璧涙椂闂达細4鏈?0鏃?0:00銆?/p><p>杩欐槸淇变箰閮ㄦ椂闅斾袱骞撮噸杩斾簹鍐犺禌鍦猴紝鍏ㄩ槦涓婁笅楂樺害閲嶈銆?/p>',1,'2026-03-20 09:00:00','2026-03-20 09:00:00'),
-(8,'浜氬啝灏忕粍璧涚2杞細瀹㈠満vs鏃ユ湰妯花姘存墜','1710000000108','https://img-blog.csdnimg.cn/20240101000208.jpg','妯花鍥介檯缁煎悎绔炴妧鍦?,3,'<p>浜氬啝灏忕粍璧涚2杞紝瀹㈠満鎸戞垬鏃ユ湰J鑱旇禌鍐犲啗妯花姘存墜銆傛瘮璧涙椂闂达細4鏈?7鏃?8:00銆?/p><p>妯花姘存墜鎶€鏈粏鑵伙紝浼犳帶鑳藉姏寮猴紝鎴戦槦闇€瑕佸彂鎸ヨ韩浣撲紭鍔裤€?/p>',1,'2026-03-20 09:00:00','2026-03-20 09:00:00'),
-(9,'鐑韩璧涳細涓诲満vs娴欐睙闃?,'1710000000109','https://img-blog.csdnimg.cn/20240101000209.jpg','淇变箰閮ㄤ富鍦轰綋鑲插満',4,'<p>璧涘鍓嶇儹韬禌锛屼富鍦哄闃垫禉姹熼槦銆傛瘮璧涙椂闂达細3鏈?鏃?5:00銆?/p><p>閫氳繃鐑韩璧涙楠屽啲璁垚鏋滐紝璋冩暣姣旇禌鐘舵€併€?/p>',1,'2026-03-01 09:00:00','2026-03-01 09:00:00'),
-(10,'鐑韩璧涳細涓珛鍦簐s娌冲崡闃?,'1710000000110','https://img-blog.csdnimg.cn/20240101000210.jpg','娴峰彛瑙傛緶婀栬冻鐞冨熀鍦?,4,'<p>璧涘鍓嶇儹韬禌绗?鍦猴紝涓珛鍦哄闃垫渤鍗楅槦銆傛瘮璧涙椂闂达細3鏈?1鏃?5:00銆?/p><p>缁х画纾ㄥ悎闃靛锛岀‘瀹氭柊璧涘涓诲姏妗嗘灦銆?/p>',1,'2026-03-01 09:00:00','2026-03-01 09:00:00');
-
-/*Table structure for table `shuju` */
-
+-- ----------------------------
+-- Table structure for shuju
+-- ----------------------------
 DROP TABLE IF EXISTS `shuju`;
+CREATE TABLE `shuju`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `yonghu_id` int(11) NULL DEFAULT NULL COMMENT '用户',
+  `shuju_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '球员数据名称',
+  `shuju_uuid_number` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '球员数据编号',
+  `shuju_photo` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '球员数据照片',
+  `shuju_types` int(11) NULL DEFAULT NULL COMMENT '球员数据类型',
+  `shuju_time` date NULL DEFAULT NULL COMMENT '日期',
+  `shuju_content` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '球员数据介绍',
+  `shuju_delete` int(11) NULL DEFAULT NULL COMMENT '逻辑删除',
+  `insert_time` timestamp NULL DEFAULT NULL COMMENT '录入时间',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '球员数据' ROW_FORMAT = Dynamic;
 
-CREATE TABLE `shuju` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '涓婚敭',
-  `yonghu_id` int(11) DEFAULT NULL COMMENT '鐢ㄦ埛',
-  `shuju_name` varchar(200) DEFAULT NULL COMMENT '鐞冨憳鏁版嵁鍚嶇О',
-  `shuju_uuid_number` varchar(200) DEFAULT NULL COMMENT '鐞冨憳鏁版嵁缂栧彿',
-  `shuju_photo` varchar(200) DEFAULT NULL COMMENT '鐞冨憳鏁版嵁鐓х墖',
-  `shuju_types` int(11) DEFAULT NULL COMMENT '鐞冨憳鏁版嵁绫诲瀷',
-  `shuju_time` date DEFAULT NULL COMMENT '鏃ユ湡',
-  `shuju_content` longtext COMMENT '鐞冨憳鏁版嵁浠嬬粛',
-  `shuju_delete` int(11) DEFAULT NULL COMMENT '閫昏緫鍒犻櫎',
-  `insert_time` timestamp NULL DEFAULT NULL COMMENT '褰曞叆鏃堕棿',
-  `create_time` timestamp NULL DEFAULT NULL COMMENT '鍒涘缓鏃堕棿',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='鐞冨憳鏁版嵁';
+-- ----------------------------
+-- Records of shuju
+-- ----------------------------
+INSERT INTO `shuju` VALUES (1, 1, '队长张伟 - 2025赛季数据', '1710000000201', 'upload/shuju1.jpg', 2, '2025-12-31', '<p><strong>张伟（队长/中场）</strong></p><p>出场：32次（首发30次）</p><p>进球：8球</p><p>助攻：12次</p><p>传球成功率：87%</p><p>关键传球：96次</p><p>抢断：78次</p><p>荣获2025赛季中超最佳中场球员</p>', 1, '2026-01-15 10:00:00', '2026-01-15 10:00:00');
+INSERT INTO `shuju` VALUES (2, 1, '马科斯 - 2025赛季数据（巴西）', '1710000000202', 'upload/shuju2.jpg', 1, '2025-12-31', '<p><strong>马科斯（前锋/新援）</strong></p><p>出场：30次（首发28次）</p><p>进球：18球</p><p>助攻：5次</p><p>射门：98次</p><p>射正率：48%</p><p>过人成功率：62%</p><p>巴甲联赛银靴奖得主</p>', 1, '2026-03-08 10:00:00', '2026-03-08 10:00:00');
+INSERT INTO `shuju` VALUES (3, 2, '李强 - 2025赛季数据', '1710000000203', 'upload/shuju3.jpg', 2, '2025-12-31', '<p><strong>李强（门将）</strong></p><p>出场：30次（首发30次）</p><p>扑救：112次</p><p>扑救成功率：78%</p><p>零封：12场</p><p>出击成功：23次</p><p>传球成功率：82%</p>', 1, '2026-01-15 10:00:00', '2026-01-15 10:00:00');
+INSERT INTO `shuju` VALUES (4, 1, '王磊 - 2025赛季数据', '1710000000204', 'upload/shuju4.jpg', 1, '2025-12-31', '<p><strong>王磊（前锋）</strong></p><p>出场：28次（首发22次）</p><p>进球：12球</p><p>助攻：6次</p><p>射门：76次</p><p>射正率：42%</p><p>头球进球：4个</p>', 1, '2026-01-15 10:00:00', '2026-01-15 10:00:00');
+INSERT INTO `shuju` VALUES (5, 3, '刘洋 - 2025赛季数据', '1710000000205', 'upload/shuju5.jpg', 2, '2025-12-31', '<p><strong>刘洋（边后卫）</strong></p><p>出场：31次（首发30次）</p><p>进球：2球</p><p>助攻：8次</p><p>抢断：102次</p><p>拦截：56次</p><p>传中成功率：35%</p>', 1, '2026-01-15 10:00:00', '2026-01-15 10:00:00');
+INSERT INTO `shuju` VALUES (6, 1, '陈浩 - 2025赛季数据', '1710000000206', 'upload/shuju6.jpg', 2, '2025-12-31', '<p><strong>陈浩（中场）</strong></p><p>出场：29次（首发26次）</p><p>进球：5球</p><p>助攻：9次</p><p>传球成功率：85%</p><p>长传成功率：72%</p><p>远射进球：3个</p>', 1, '2026-01-15 10:00:00', '2026-01-15 10:00:00');
 
-/*Data for the table `shuju` */
-
-insert  into `shuju`(`id`,`yonghu_id`,`shuju_name`,`shuju_uuid_number`,`shuju_photo`,`shuju_types`,`shuju_time`,`shuju_content`,`shuju_delete`,`insert_time`,`create_time`) values 
-(1,1,'闃熼暱寮犱紵 - 2025璧涘鏁版嵁','1710000000201','https://img-blog.csdnimg.cn/20240101000301.jpg',2,'2025-12-31','<p><strong>寮犱紵锛堥槦闀?涓満锛?/strong></p><p>鍑哄満锛?2娆★紙棣栧彂30娆★級</p><p>杩涚悆锛?鐞?/p><p>鍔╂敾锛?2娆?/p><p>浼犵悆鎴愬姛鐜囷細87%</p><p>鍏抽敭浼犵悆锛?6娆?/p><p>鎶㈡柇锛?8娆?/p><p>鑽ｈ幏2025璧涘涓秴鏈€浣充腑鍦虹悆鍛?/p>',1,'2026-01-15 10:00:00','2026-01-15 10:00:00'),
-(2,1,'椹鏂?- 2025璧涘鏁版嵁锛堝反瑗匡級','1710000000202','https://img-blog.csdnimg.cn/20240101000302.jpg',1,'2025-12-31','<p><strong>椹鏂紙鍓嶉攱/鏂版彺锛?/strong></p><p>鍑哄満锛?0娆★紙棣栧彂28娆★級</p><p>杩涚悆锛?8鐞?/p><p>鍔╂敾锛?娆?/p><p>灏勯棬锛?8娆?/p><p>灏勬鐜囷細48%</p><p>杩囦汉鎴愬姛鐜囷細62%</p><p>宸寸敳鑱旇禌閾堕澊濂栧緱涓?/p>',1,'2026-03-08 10:00:00','2026-03-08 10:00:00'),
-(3,2,'鏉庡己 - 2025璧涘鏁版嵁','1710000000203','https://img-blog.csdnimg.cn/20240101000303.jpg',2,'2025-12-31','<p><strong>鏉庡己锛堥棬灏嗭級</strong></p><p>鍑哄満锛?0娆★紙棣栧彂30娆★級</p><p>鎵戞晳锛?12娆?/p><p>鎵戞晳鎴愬姛鐜囷細78%</p><p>闆跺皝锛?2鍦?/p><p>鍑哄嚮鎴愬姛锛?3娆?/p><p>浼犵悆鎴愬姛鐜囷細82%</p>',1,'2026-01-15 10:00:00','2026-01-15 10:00:00'),
-(4,1,'鐜嬬 - 2025璧涘鏁版嵁','1710000000204','https://img-blog.csdnimg.cn/20240101000304.jpg',1,'2025-12-31','<p><strong>鐜嬬锛堝墠閿嬶級</strong></p><p>鍑哄満锛?8娆★紙棣栧彂22娆★級</p><p>杩涚悆锛?2鐞?/p><p>鍔╂敾锛?娆?/p><p>灏勯棬锛?6娆?/p><p>灏勬鐜囷細42%</p><p>澶寸悆杩涚悆锛?涓?/p>',1,'2026-01-15 10:00:00','2026-01-15 10:00:00'),
-(5,3,'鍒樻磱 - 2025璧涘鏁版嵁','1710000000205','https://img-blog.csdnimg.cn/20240101000305.jpg',2,'2025-12-31','<p><strong>鍒樻磱锛堣竟鍚庡崼锛?/strong></p><p>鍑哄満锛?1娆★紙棣栧彂30娆★級</p><p>杩涚悆锛?鐞?/p><p>鍔╂敾锛?娆?/p><p>鎶㈡柇锛?02娆?/p><p>鎷︽埅锛?6娆?/p><p>浼犱腑鎴愬姛鐜囷細35%</p>',1,'2026-01-15 10:00:00','2026-01-15 10:00:00'),
-(6,1,'闄堟旦 - 2025璧涘鏁版嵁','1710000000206','https://img-blog.csdnimg.cn/20240101000306.jpg',2,'2025-12-31','<p><strong>闄堟旦锛堜腑鍦猴級</strong></p><p>鍑哄満锛?9娆★紙棣栧彂26娆★級</p><p>杩涚悆锛?鐞?/p><p>鍔╂敾锛?娆?/p><p>浼犵悆鎴愬姛鐜囷細85%</p><p>闀夸紶鎴愬姛鐜囷細72%</p><p>杩滃皠杩涚悆锛?涓?/p>',1,'2026-01-15 10:00:00','2026-01-15 10:00:00');
-
-/*Table structure for table `token` */
-
+-- ----------------------------
+-- Table structure for token
+-- ----------------------------
 DROP TABLE IF EXISTS `token`;
+CREATE TABLE `token`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `userid` bigint(20) NOT NULL COMMENT '用户ID',
+  `username` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
+  `tablename` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '表名',
+  `role` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '角色',
+  `token` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '令牌',
+  `addtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '新增时间',
+  `expiratedtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '过期时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '令牌表' ROW_FORMAT = Dynamic;
 
-CREATE TABLE `token` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '涓婚敭',
-  `userid` bigint(20) NOT NULL COMMENT '鐢ㄦ埛ID',
-  `username` varchar(100) NOT NULL COMMENT '鐢ㄦ埛鍚?,
-  `tablename` varchar(100) DEFAULT NULL COMMENT '琛ㄥ悕',
-  `role` varchar(100) DEFAULT NULL COMMENT '瑙掕壊',
-  `token` varchar(200) NOT NULL COMMENT '浠ょ墝',
-  `addtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '鏂板鏃堕棿',
-  `expiratedtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '杩囨湡鏃堕棿',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='浠ょ墝琛?;
+-- ----------------------------
+-- Records of token
+-- ----------------------------
+INSERT INTO `token` VALUES (1, 1, 'zhangwei', 'yonghu', '用户', 'sy262982zkm0x72rg5vetfexnsplhern', '2026-03-23 11:49:59', '2026-05-07 17:44:39');
+INSERT INTO `token` VALUES (2, 2, 'manager', 'users', '管理员', 's2ev7aci13rdgy6wl22jh7wz9p1cvfdj', '2026-03-23 11:51:28', '2026-05-07 17:44:07');
+INSERT INTO `token` VALUES (3, 1, 'coach_chen', 'jiaolian', '教练', 'jje7nkgkcft6rxc0yuhb0cd71vuqz1ib', '2026-03-25 18:33:38', '2026-03-25 22:00:29');
+INSERT INTO `token` VALUES (4, 2, 'liqiang', 'yonghu', '用户', 'a74sh6c55ukzi7we3wb9fy00q6n96ybr', '2026-04-11 22:52:41', '2026-04-11 23:52:42');
 
-/*Table structure for table `users` */
-
+-- ----------------------------
+-- Table structure for users
+-- ----------------------------
 DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `username` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
+  `password` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
+  `role` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '管理员' COMMENT '角色',
+  `addtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '新增时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员' ROW_FORMAT = Dynamic;
 
-CREATE TABLE `users` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '涓婚敭',
-  `username` varchar(100) NOT NULL COMMENT '鐢ㄦ埛鍚?,
-  `password` varchar(100) NOT NULL COMMENT '瀵嗙爜',
-  `role` varchar(100) DEFAULT '绠＄悊鍛? COMMENT '瑙掕壊',
-  `addtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '鏂板鏃堕棿',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='绠＄悊鍛?;
+-- ----------------------------
+-- Records of users
+-- ----------------------------
+INSERT INTO `users` VALUES (2, 'manager', 'manager', '管理员', '2026-03-21 09:00:00');
 
-/*Data for the table `users` */
-
-insert  into `users`(`id`,`username`,`password`,`role`,`addtime`) values 
-(1,'admin','admin','绠＄悊鍛?,'2026-03-21 09:00:00'),
-(2,'manager','manager','绠＄悊鍛?,'2026-03-21 09:00:00');
-
-/*Table structure for table `xunlian` */
-
+-- ----------------------------
+-- Table structure for xunlian
+-- ----------------------------
 DROP TABLE IF EXISTS `xunlian`;
+CREATE TABLE `xunlian`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `yonghu_id` int(11) NULL DEFAULT NULL COMMENT '用户',
+  `xunlian_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '训练计划名称',
+  `xunlian_uuid_number` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '训练计划编号',
+  `xunlian_photo` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '训练计划照片',
+  `xunlian_types` int(11) NULL DEFAULT NULL COMMENT '训练计划类型',
+  `xunlian_kemu` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '训练科目',
+  `xunlian_time` date NULL DEFAULT NULL COMMENT '日期',
+  `xunlian_content` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '训练计划介绍',
+  `xunlian_delete` int(11) NULL DEFAULT NULL COMMENT '逻辑删除',
+  `insert_time` timestamp NULL DEFAULT NULL COMMENT '录入时间',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '训练计划' ROW_FORMAT = Dynamic;
 
-CREATE TABLE `xunlian` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '涓婚敭',
-  `yonghu_id` int(11) DEFAULT NULL COMMENT '鐢ㄦ埛',
-  `xunlian_name` varchar(200) DEFAULT NULL COMMENT '璁粌璁″垝鍚嶇О',
-  `xunlian_uuid_number` varchar(200) DEFAULT NULL COMMENT '璁粌璁″垝缂栧彿',
-  `xunlian_photo` varchar(200) DEFAULT NULL COMMENT '璁粌璁″垝鐓х墖',
-  `xunlian_types` int(11) DEFAULT NULL COMMENT '璁粌璁″垝绫诲瀷',
-  `xunlian_kemu` varchar(200) DEFAULT NULL COMMENT '璁粌绉戠洰',
-  `xunlian_time` date DEFAULT NULL COMMENT '鏃ユ湡',
-  `xunlian_content` longtext COMMENT '璁粌璁″垝浠嬬粛',
-  `xunlian_delete` int(11) DEFAULT NULL COMMENT '閫昏緫鍒犻櫎',
-  `insert_time` timestamp NULL DEFAULT NULL COMMENT '褰曞叆鏃堕棿',
-  `create_time` timestamp NULL DEFAULT NULL COMMENT '鍒涘缓鏃堕棿',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='璁粌璁″垝';
+-- ----------------------------
+-- Records of xunlian
+-- ----------------------------
+INSERT INTO `xunlian` VALUES (1, NULL, '周一：体能强化训练', '1710000000301', 'upload/xunlian1.jpg', 1, '体能训练', '2026-03-17', '<p><strong>训练时间：</strong>09:00-11:30</p><p><strong>训练内容：</strong></p><ul><li>热身跑：15分钟</li><li>核心力量训练：45分钟</li><li>有氧耐力训练：30分钟</li><li>拉伸放松：20分钟</li></ul><p><strong>目标：</strong>提升球员基础体能储备，为赛季做好准备。</p>', 1, '2026-03-15 09:00:00', '2026-03-15 09:00:00');
+INSERT INTO `xunlian` VALUES (2, NULL, '周二：战术配合训练', '1710000000302', 'upload/xunlian2.jpg', 2, '战术训练', '2026-03-18', '<p><strong>训练时间：</strong>09:00-11:30</p><p><strong>训练内容：</strong></p><ul><li>视频分析（对手分析）：30分钟</li><li>定位球演练：45分钟</li><li>进攻套路配合：45分钟</li><li>防守站位练习：30分钟</li></ul><p><strong>目标：</strong>强化球队整体战术执行力。</p>', 1, '2026-03-15 09:00:00', '2026-03-15 09:00:00');
+INSERT INTO `xunlian` VALUES (3, NULL, '周三：技术专项训练', '1710000000303', 'upload/xunlian3.jpg', 3, '技术训练', '2026-03-19', '<p><strong>训练时间：</strong>09:00-11:30</p><p><strong>训练内容：</strong></p><ul><li>传球精度练习：30分钟</li><li>射门训练：45分钟</li><li>头球争顶训练：30分钟</li><li>小场地对抗赛：45分钟</li></ul><p><strong>目标：</strong>提升球员个人技术能力。</p>', 1, '2026-03-15 09:00:00', '2026-03-15 09:00:00');
+INSERT INTO `xunlian` VALUES (4, NULL, '周四：恢复性训练', '1710000000304', 'upload/xunlian4.jpg', 4, '恢复训练', '2026-03-20', '<p><strong>训练时间：</strong>09:00-10:30</p><p><strong>训练内容：</strong></p><ul><li>轻松慢跑：20分钟</li><li>游泳放松：30分钟</li><li>按摩理疗：40分钟</li></ul><p><strong>目标：</strong>帮助球员恢复体能，预防伤病。</p>', 1, '2026-03-15 09:00:00', '2026-03-15 09:00:00');
+INSERT INTO `xunlian` VALUES (5, NULL, '周五：赛前针对性训练', '1710000000305', 'upload/xunlian5.jpg', 2, '战术训练', '2026-03-21', '<p><strong>训练时间：</strong>09:00-11:00</p><p><strong>训练内容：</strong></p><ul><li>对手技战术分析：30分钟</li><li>针对性战术演练：60分钟</li><li>定位球攻防演练：30分钟</li></ul><p><strong>目标：</strong>为周末比赛做好战术准备。</p>', 1, '2026-03-15 09:00:00', '2026-03-15 09:00:00');
+INSERT INTO `xunlian` VALUES (6, NULL, '周六：赛前适应训练', '1710000000306', 'upload/xunlian6.jpg', 4, '恢复训练', '2026-03-22', '<p><strong>训练时间：</strong>10:00-11:00</p><p><strong>训练内容：</strong></p><ul><li>场地适应：20分钟</li><li>传接球练习：20分钟</li><li>射门热身：20分钟</li></ul><p><strong>目标：</strong>保持比赛状态，调整心态。</p>', 1, '2026-03-15 09:00:00', '2026-03-15 09:00:00');
+INSERT INTO `xunlian` VALUES (7, NULL, '守门员专项训练', '1710000000307', 'upload/xunlian7.jpg', 3, '技术训练', '2026-03-17', '<p><strong>训练时间：</strong>14:00-16:00</p><p><strong>参训人员：</strong>守门员组</p><p><strong>训练内容：</strong></p><ul><li>扑救反应训练：45分钟</li><li>出击时机训练：30分钟</li><li>门线技术训练：30分钟</li><li>大脚开球训练：15分钟</li></ul>', 1, '2026-03-15 09:00:00', '2026-03-15 09:00:00');
+INSERT INTO `xunlian` VALUES (8, NULL, '青年队联合训练', '1710000000308', 'upload/xunlian8.jpg', 1, '体能训练', '2026-03-19', '<p><strong>训练时间：</strong>14:00-16:00</p><p><strong>参训人员：</strong>一线队替补 + U21青年队</p><p><strong>训练内容：</strong></p><ul><li>联合体能训练：45分钟</li><li>分组对抗赛：75分钟</li></ul><p><strong>目标：</strong>考察青年队球员，保持替补球员状态。</p>', 1, '2026-03-15 09:00:00', '2026-03-15 09:00:00');
+INSERT INTO `xunlian` VALUES (9, NULL, '定位球专项训练', '1710000000309', 'upload/xunlian9.jpg', 3, '技术训练', '2026-03-20', '<p><strong>训练时间：</strong>15:00-16:30</p><p><strong>训练内容：</strong></p><ul><li>角球进攻套路：30分钟</li><li>任意球配合：30分钟</li><li>点球练习：15分钟</li><li>界外球战术：15分钟</li></ul><p><strong>目标：</strong>提升定位球得分效率。</p>', 1, '2026-03-18 09:00:00', '2026-03-18 09:00:00');
+INSERT INTO `xunlian` VALUES (10, NULL, '伤病球员康复训练', '1710000000310', 'upload/xunlian10.jpg', 4, '恢复训练', '2026-03-21', '<p><strong>训练时间：</strong>09:00-10:30</p><p><strong>参训人员：</strong>伤病恢复期球员</p><p><strong>训练内容：</strong></p><ul><li>水疗放松：20分钟</li><li>核心稳定训练：25分钟</li><li>下肢力量恢复：25分钟</li><li>拉伸理疗：20分钟</li></ul>', 1, '2026-03-18 09:00:00', '2026-03-18 09:00:00');
+INSERT INTO `xunlian` VALUES (11, 0, '体能训练', '1775918918239', 'upload/xunlian11.jpg', 4, '跑步', '2026-04-24', '1111111111111111', 1, '2026-04-11 22:49:09', '2026-04-11 22:49:09');
+INSERT INTO `xunlian` VALUES (12, 1, '体能训练', '1778143499735', 'upload/xunlian12.jpg', 4, '跑步', '2026-05-13', '体能训练1小时', 1, '2026-05-07 16:45:26', '2026-05-07 16:45:26');
 
-/*Data for the table `xunlian` */
-
-insert  into `xunlian`(`id`,`yonghu_id`,`xunlian_name`,`xunlian_uuid_number`,`xunlian_photo`,`xunlian_types`,`xunlian_kemu`,`xunlian_time`,`xunlian_content`,`xunlian_delete`,`insert_time`,`create_time`) values 
-(1,NULL,'鍛ㄤ竴锛氫綋鑳藉己鍖栬缁?,'1710000000301','https://img-blog.csdnimg.cn/20240101000401.jpg',1,'浣撹兘璁粌','2026-03-17','<p><strong>璁粌鏃堕棿锛?/strong>09:00-11:30</p><p><strong>璁粌鍐呭锛?/strong></p><ul><li>鐑韩璺戯細15鍒嗛挓</li><li>鏍稿績鍔涢噺璁粌锛?5鍒嗛挓</li><li>鏈夋哀鑰愬姏璁粌锛?0鍒嗛挓</li><li>鎷変几鏀炬澗锛?0鍒嗛挓</li></ul><p><strong>鐩爣锛?/strong>鎻愬崌鐞冨憳鍩虹浣撹兘鍌ㄥ锛屼负璧涘鍋氬ソ鍑嗗銆?/p>',1,'2026-03-15 09:00:00','2026-03-15 09:00:00'),
-(2,NULL,'鍛ㄤ簩锛氭垬鏈厤鍚堣缁?,'1710000000302','https://img-blog.csdnimg.cn/20240101000402.jpg',2,'鎴樻湳璁粌','2026-03-18','<p><strong>璁粌鏃堕棿锛?/strong>09:00-11:30</p><p><strong>璁粌鍐呭锛?/strong></p><ul><li>瑙嗛鍒嗘瀽锛堝鎵嬪垎鏋愶級锛?0鍒嗛挓</li><li>瀹氫綅鐞冩紨缁冿細45鍒嗛挓</li><li>杩涙敾濂楄矾閰嶅悎锛?5鍒嗛挓</li><li>闃插畧绔欎綅缁冧範锛?0鍒嗛挓</li></ul><p><strong>鐩爣锛?/strong>寮哄寲鐞冮槦鏁翠綋鎴樻湳鎵ц鍔涖€?/p>',1,'2026-03-15 09:00:00','2026-03-15 09:00:00'),
-(3,NULL,'鍛ㄤ笁锛氭妧鏈笓椤硅缁?,'1710000000303','https://img-blog.csdnimg.cn/20240101000403.jpg',3,'鎶€鏈缁?,'2026-03-19','<p><strong>璁粌鏃堕棿锛?/strong>09:00-11:30</p><p><strong>璁粌鍐呭锛?/strong></p><ul><li>浼犵悆绮惧害缁冧範锛?0鍒嗛挓</li><li>灏勯棬璁粌锛?5鍒嗛挓</li><li>澶寸悆浜夐《璁粌锛?0鍒嗛挓</li><li>灏忓満鍦板鎶楄禌锛?5鍒嗛挓</li></ul><p><strong>鐩爣锛?/strong>鎻愬崌鐞冨憳涓汉鎶€鏈兘鍔涖€?/p>',1,'2026-03-15 09:00:00','2026-03-15 09:00:00'),
-(4,NULL,'鍛ㄥ洓锛氭仮澶嶆€ц缁?,'1710000000304','https://img-blog.csdnimg.cn/20240101000404.jpg',4,'鎭㈠璁粌','2026-03-20','<p><strong>璁粌鏃堕棿锛?/strong>09:00-10:30</p><p><strong>璁粌鍐呭锛?/strong></p><ul><li>杞绘澗鎱㈣窇锛?0鍒嗛挓</li><li>娓告吵鏀炬澗锛?0鍒嗛挓</li><li>鎸夋懇鐞嗙枟锛?0鍒嗛挓</li></ul><p><strong>鐩爣锛?/strong>甯姪鐞冨憳鎭㈠浣撹兘锛岄闃蹭激鐥呫€?/p>',1,'2026-03-15 09:00:00','2026-03-15 09:00:00'),
-(5,NULL,'鍛ㄤ簲锛氳禌鍓嶉拡瀵规€ц缁?,'1710000000305','https://img-blog.csdnimg.cn/20240101000405.jpg',2,'鎴樻湳璁粌','2026-03-21','<p><strong>璁粌鏃堕棿锛?/strong>09:00-11:00</p><p><strong>璁粌鍐呭锛?/strong></p><ul><li>瀵规墜鎶€鎴樻湳鍒嗘瀽锛?0鍒嗛挓</li><li>閽堝鎬ф垬鏈紨缁冿細60鍒嗛挓</li><li>瀹氫綅鐞冩敾闃叉紨缁冿細30鍒嗛挓</li></ul><p><strong>鐩爣锛?/strong>涓哄懆鏈瘮璧涘仛濂芥垬鏈噯澶囥€?/p>',1,'2026-03-15 09:00:00','2026-03-15 09:00:00'),
-(6,NULL,'鍛ㄥ叚锛氳禌鍓嶉€傚簲璁粌','1710000000306','https://img-blog.csdnimg.cn/20240101000406.jpg',4,'鎭㈠璁粌','2026-03-22','<p><strong>璁粌鏃堕棿锛?/strong>10:00-11:00</p><p><strong>璁粌鍐呭锛?/strong></p><ul><li>鍦哄湴閫傚簲锛?0鍒嗛挓</li><li>浼犳帴鐞冪粌涔狅細20鍒嗛挓</li><li>灏勯棬鐑韩锛?0鍒嗛挓</li></ul><p><strong>鐩爣锛?/strong>淇濇寔姣旇禌鐘舵€侊紝璋冩暣蹇冩€併€?/p>',1,'2026-03-15 09:00:00','2026-03-15 09:00:00'),
-(7,NULL,'瀹堥棬鍛樹笓椤硅缁?,'1710000000307','https://img-blog.csdnimg.cn/20240101000407.jpg',3,'鎶€鏈缁?,'2026-03-17','<p><strong>璁粌鏃堕棿锛?/strong>14:00-16:00</p><p><strong>鍙傝浜哄憳锛?/strong>瀹堥棬鍛樼粍</p><p><strong>璁粌鍐呭锛?/strong></p><ul><li>鎵戞晳鍙嶅簲璁粌锛?5鍒嗛挓</li><li>鍑哄嚮鏃舵満璁粌锛?0鍒嗛挓</li><li>闂ㄧ嚎鎶€鏈缁冿細30鍒嗛挓</li><li>澶ц剼寮€鐞冭缁冿細15鍒嗛挓</li></ul>',1,'2026-03-15 09:00:00','2026-03-15 09:00:00'),
-(8,NULL,'闈掑勾闃熻仈鍚堣缁?,'1710000000308','https://img-blog.csdnimg.cn/20240101000408.jpg',1,'浣撹兘璁粌','2026-03-19','<p><strong>璁粌鏃堕棿锛?/strong>14:00-16:00</p><p><strong>鍙傝浜哄憳锛?/strong>涓€绾块槦鏇胯ˉ + U21闈掑勾闃?/p><p><strong>璁粌鍐呭锛?/strong></p><ul><li>鑱斿悎浣撹兘璁粌锛?5鍒嗛挓</li><li>鍒嗙粍瀵规姉璧涳細75鍒嗛挓</li></ul><p><strong>鐩爣锛?/strong>鑰冨療闈掑勾闃熺悆鍛橈紝淇濇寔鏇胯ˉ鐞冨憳鐘舵€併€?/p>',1,'2026-03-15 09:00:00','2026-03-15 09:00:00'),
-(9,NULL,'瀹氫綅鐞冧笓椤硅缁?,'1710000000309','https://img-blog.csdnimg.cn/20240101000409.jpg',3,'鎶€鏈缁?,'2026-03-20','<p><strong>璁粌鏃堕棿锛?/strong>15:00-16:30</p><p><strong>璁粌鍐呭锛?/strong></p><ul><li>瑙掔悆杩涙敾濂楄矾锛?0鍒嗛挓</li><li>浠绘剰鐞冮厤鍚堬細30鍒嗛挓</li><li>鐐圭悆缁冧範锛?5鍒嗛挓</li><li>鐣屽鐞冩垬鏈細15鍒嗛挓</li></ul><p><strong>鐩爣锛?/strong>鎻愬崌瀹氫綅鐞冨緱鍒嗘晥鐜囥€?/p>',1,'2026-03-18 09:00:00','2026-03-18 09:00:00'),
-(10,NULL,'浼ょ梾鐞冨憳搴峰璁粌','1710000000310','https://img-blog.csdnimg.cn/20240101000410.jpg',4,'鎭㈠璁粌','2026-03-21','<p><strong>璁粌鏃堕棿锛?/strong>09:00-10:30</p><p><strong>鍙傝浜哄憳锛?/strong>浼ょ梾鎭㈠鏈熺悆鍛?/p><p><strong>璁粌鍐呭锛?/strong></p><ul><li>姘寸枟鏀炬澗锛?0鍒嗛挓</li><li>鏍稿績绋冲畾璁粌锛?5鍒嗛挓</li><li>涓嬭偄鍔涢噺鎭㈠锛?5鍒嗛挓</li><li>鎷変几鐞嗙枟锛?0鍒嗛挓</li></ul>',1,'2026-03-18 09:00:00','2026-03-18 09:00:00');
-
-/*Table structure for table `yonghu` */
-
+-- ----------------------------
+-- Table structure for yonghu
+-- ----------------------------
 DROP TABLE IF EXISTS `yonghu`;
+CREATE TABLE `yonghu`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `username` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '账户',
+  `password` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
+  `yonghu_uuid_number` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户编号',
+  `yonghu_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户姓名',
+  `yonghu_phone` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户手机号',
+  `yonghu_id_number` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户身份证号',
+  `yonghu_photo` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户头像',
+  `sex_types` int(11) NULL DEFAULT NULL COMMENT '性别',
+  `yonghu_email` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户邮箱',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户' ROW_FORMAT = Dynamic;
 
-CREATE TABLE `yonghu` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '涓婚敭',
-  `username` varchar(200) DEFAULT NULL COMMENT '璐︽埛',
-  `password` varchar(200) DEFAULT NULL COMMENT '瀵嗙爜',
-  `yonghu_uuid_number` varchar(200) DEFAULT NULL COMMENT '鐢ㄦ埛缂栧彿',
-  `yonghu_name` varchar(200) DEFAULT NULL COMMENT '鐢ㄦ埛濮撳悕',
-  `yonghu_phone` varchar(200) DEFAULT NULL COMMENT '鐢ㄦ埛鎵嬫満鍙?,
-  `yonghu_id_number` varchar(200) DEFAULT NULL COMMENT '鐢ㄦ埛韬唤璇佸彿',
-  `yonghu_photo` varchar(200) DEFAULT NULL COMMENT '鐢ㄦ埛澶村儚',
-  `sex_types` int(11) DEFAULT NULL COMMENT '鎬у埆',
-  `yonghu_email` varchar(200) DEFAULT NULL COMMENT '鐢ㄦ埛閭',
-  `create_time` timestamp NULL DEFAULT NULL COMMENT '鍒涘缓鏃堕棿',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='鐢ㄦ埛';
+-- ----------------------------
+-- Records of yonghu
+-- ----------------------------
+INSERT INTO `yonghu` VALUES (1, 'zhangwei', '123456', '1710000000001', '张伟', '13900139001', '110101199501011234', 'upload/yonghu1.jpg', 1, 'zhangwei@club.com', '2026-03-21 09:00:00');
+INSERT INTO `yonghu` VALUES (2, 'liqiang', '123456', '1710000000002', '李强', '13900139002', '110101199602022345', 'upload/yonghu2.jpg', 1, 'liqiang@club.com', '2026-03-21 09:00:00');
+INSERT INTO `yonghu` VALUES (3, 'wanglei', '123456', '1710000000003', '王磊', '13900139003', '110101199903033456', 'upload/yonghu3.jpg', 1, 'wanglei@club.com', '2026-03-21 09:00:00');
+INSERT INTO `yonghu` VALUES (4, 'liuyang', '123456', '1710000000004', '刘洋', '13900139004', '110101199704044567', 'upload/yonghu1.jpg', 1, 'liuyang@club.com', '2026-03-21 09:00:00');
+INSERT INTO `yonghu` VALUES (5, 'chenhao', '123456', '1710000000005', '陈浩', '13900139005', '110101199805055678', 'upload/yonghu2.jpg', 1, 'chenhao@club.com', '2026-03-21 09:00:00');
+INSERT INTO `yonghu` VALUES (6, 'marcos', '123456', '1710000000006', '马科斯', '13900139006', '110101199906066789', 'upload/yonghu3.jpg', 2, 'marcos@club.com', '2026-03-21 09:00:00');
 
-/*Data for the table `yonghu` */
+SET FOREIGN_KEY_CHECKS = 1;
 
-insert  into `yonghu`(`id`,`username`,`password`,`yonghu_uuid_number`,`yonghu_name`,`yonghu_phone`,`yonghu_id_number`,`yonghu_photo`,`sex_types`,`yonghu_email`,`create_time`) values 
-(1,'zhangwei','123456','1710000000001','寮犱紵','13900139001','110101199501011234','https://img-blog.csdnimg.cn/20240101000501.jpg',1,'zhangwei@club.com','2026-03-21 09:00:00'),
-(2,'liqiang','123456','1710000000002','鏉庡己','13900139002','110101199602022345','https://img-blog.csdnimg.cn/20240101000502.jpg',1,'liqiang@club.com','2026-03-21 09:00:00'),
-(3,'wanglei','123456','1710000000003','鐜嬬','13900139003','110101199903033456','https://img-blog.csdnimg.cn/20240101000503.jpg',1,'wanglei@club.com','2026-03-21 09:00:00'),
-(4,'liuyang','123456','1710000000004','鍒樻磱','13900139004','110101199704044567','https://img-blog.csdnimg.cn/20240101000504.jpg',1,'liuyang@club.com','2026-03-21 09:00:00'),
-(5,'chenhao','123456','1710000000005','闄堟旦','13900139005','110101199805055678','https://img-blog.csdnimg.cn/20240101000505.jpg',1,'chenhao@club.com','2026-03-21 09:00:00'),
-(6,'marcos','123456','1710000000006','椹鏂?,'13900139006','110101199906066789','https://img-blog.csdnimg.cn/20240101000506.jpg',1,'marcos@club.com','2026-03-21 09:00:00');
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;

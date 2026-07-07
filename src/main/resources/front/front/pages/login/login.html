@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Ohana 俱乐部 | 梦幻冒险</title>
+    <title>足球俱乐部登录</title>
     <link rel="stylesheet" href="../../layui/css/layui.css">
     <style>
         :root {
@@ -204,8 +204,8 @@
             </div>
 
             <div class="header">
-                <h1>欢迎回家</h1>
-                <p>Aloha! 这里是您的快乐实验站</p>
+                <h1>欢迎回到俱乐部</h1>
+                <p>登录后查看训练、赛事与个人信息</p>
             </div>
 
             <div class="role-selector">
@@ -215,10 +215,10 @@
 
             <form id="loginForm" class="layui-form">
                 <div class="layui-form-item">
-                    <input type="text" name="username" required lay-verify="required" placeholder="通行账号" autocomplete="off" class="layui-input">
+                    <input type="text" name="username" required lay-verify="required" placeholder="请输入账号" autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-item">
-                    <input type="password" name="password" required lay-verify="required" placeholder="安全密码" autocomplete="off" class="layui-input">
+                    <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-item captcha-item">
                     <div class="captcha-row">
@@ -228,11 +228,11 @@
                         </div>
                     </div>
                 </div>
-                <button class="submit-btn" lay-submit lay-filter="login">开启冒险</button>
+                <button class="submit-btn" lay-submit lay-filter="login">立即登录</button>
             </form>
 
             <div class="footer">
-                还没有通行证？<a href="../yonghu/register.html?tablename=yonghu">申请加入 Ohana</a>
+                还没有账号？<a href="../yonghu/register.html?tablename=yonghu">注册成员账号</a>
             </div>
         </div>
     </div>
@@ -289,7 +289,7 @@
                 }
                 formData.role = vue.role;
                 http.request(formData.role + '/login', 'get', formData, function(res) {
-                    layer.msg('Aloha! 登录成功', { time: 1500, icon: 6 });
+                    layer.msg('登录成功', { time: 1500, icon: 6 });
                     localStorage.setItem('Token', res.token);
                     localStorage.setItem('role', res.role);
                     localStorage.setItem('userTable', formData.role);

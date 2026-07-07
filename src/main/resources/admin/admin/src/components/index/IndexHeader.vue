@@ -1,10 +1,24 @@
-﻿<template>
+<template>
   <header class="navbar">
-    <div class="left">
-      <div class="title-name">{{ projectName }}</div>
-    </div>
-    <div class="right">
-      <span class="user-info">{{ roleName }} {{ adminName }}</span>
+    <div class="brand" @click="go('/index')">足球俱乐部管理系统</div>
+
+    <nav class="nav-menu">
+      <button
+        v-for="item in navItems"
+        :key="item.path"
+        type="button"
+        :class="{ active: isActive(item.path) }"
+        @click="go(item.path)"
+      >
+        {{ item.label }}
+      </button>
+    </nav>
+
+    <div class="right-tools">
+      <div class="admin-entry" @click="go('/center')">
+        <span>{{ roleName }}</span>
+        <strong>{{ adminName || '管理员' }}</strong>
+      </div>
       <el-button class="logout-btn" size="mini" type="primary" plain @click="onLogout">退出登录</el-button>
     </div>
   </header>
@@ -14,13 +28,17 @@
 export default {
   data() {
     return {
-      user: {}
+      user: {},
+      navItems: [
+        { label: '首页', path: '/index' },
+        { label: '球队管理', path: '/yonghu' },
+        { label: '训练计划', path: '/xunlian' },
+        { label: '合同管理', path: '/hetong' },
+        { label: '赛事管理', path: '/saishi' }
+      ]
     }
   },
   computed: {
-    projectName() {
-      return (this.$project && this.$project.projectName) || '足球俱乐部管理系统'
-    },
     roleName() {
       return this.$storage.get('role') || '管理员'
     },
@@ -44,6 +62,15 @@ export default {
     }).catch(() => {})
   },
   methods: {
+    isActive(path) {
+      if (path === '/index') {
+        return this.$route.path === '/' || this.$route.path === '/index'
+      }
+      return this.$route.path === path
+    },
+    go(path) {
+      this.$router.push({ path })
+    },
     onLogout() {
       this.$storage.clear()
       this.$router.replace({ path: '/login' }).catch(() => {})
@@ -59,71 +86,149 @@ export default {
 .navbar {
   position: sticky;
   top: 0;
-  height: 60px;
+  height: 62px;
   width: 100%;
-  padding: 0 18px;
+  padding: 0 32px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: rgba(255, 255, 255, 0.62);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  gap: 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #dfe3ea;
+  box-shadow: 0 3px 14px rgba(15, 23, 42, 0.05);
 }
 
-.left {
+.brand {
+  flex: 0 0 auto;
+  max-width: 240px;
+  color: #0f172a;
+  font-size: 19px;
+  line-height: 1.2;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   min-width: 0;
-  flex: 1;
+  flex: 1 1 auto;
+  overflow-x: auto;
 }
 
-.title-name {
-  color: #111827;
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
+.nav-menu button {
+  position: relative;
+  height: 62px;
+  border: 0;
+  background: transparent;
+  color: #5b6b83;
+  font-size: 14px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.nav-menu button.active,
+.nav-menu button:hover {
+  color: #0b57d0;
+  font-weight: 700;
+}
+
+.nav-menu button.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: #2563eb;
+}
+
+.right-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 0 0 auto;
+}
+
+.admin-entry {
+  width: auto;
+  min-width: 72px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.24);
+  box-sizing: border-box;
+}
+
+.admin-entry span {
+  display: block;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.admin-entry strong {
+  max-width: 64px;
   overflow: hidden;
+  color: #ffffff;
+  font-size: 12px;
+  line-height: 1;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.right {
-  margin-left: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-}
-
-.user-info {
-  color: #4b5563;
-  font-size: 14px;
-}
-
 .logout-btn {
-  border-color: rgba(59, 130, 246, 0.45);
+  border-color: rgba(37, 99, 235, 0.4);
   color: #2563eb;
-  background: rgba(59, 130, 246, 0.08);
+  background: #ffffff;
 }
 
-.logout-btn:hover,
-.logout-btn:focus {
-  background: rgba(59, 130, 246, 0.16);
-  color: #1d4ed8;
-  border-color: rgba(37, 99, 235, 0.6);
-}
-
-@media (max-width: 760px) {
+@media (max-width: 1320px) {
   .navbar {
-    padding: 0 10px;
+    gap: 16px;
+    padding: 0 24px;
+  }
+}
+
+@media (max-width: 980px) {
+  .navbar {
+    height: auto;
+    min-height: 62px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 12px 16px;
   }
 
-  .title-name {
-    font-size: 16px;
+  .nav-menu {
+    order: 3;
+    width: 100%;
+    flex-basis: 100%;
   }
 
-  .user-info {
+  .nav-menu button {
+    height: 38px;
+  }
+
+  .right-tools {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .brand {
+    max-width: 160px;
+    font-size: 17px;
+  }
+
+  .logout-btn {
     display: none;
   }
 }

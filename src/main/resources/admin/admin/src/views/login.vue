@@ -9,20 +9,15 @@
     <main class="main-content">
       <div class="brand-section">
         <div class="brand-content">
-          <span class="system-tag">SOVEREIGN SYSTEM</span>
+          <span class="system-tag">后台管理平台</span>
           <h1 class="main-title">
-            <span class="light">FOOTBALL</span><br/>
-            <span class="bold">MANAGEMENT</span>
+            <span class="light">足球俱乐部</span><br/>
+            <span class="bold">管理系统</span>
           </h1>
-          <p class="description">
-            The ultimate digital infrastructure for elite football institutions. 
-            Managing greatness with precision.
-          </p>
-          
           <div class="status-card">
             <div class="status-info">
-              <span class="status-label">ELITE STATUS</span>
-              <span class="status-value">Active Duty</span>
+              <span class="status-label">系统状态</span>
+              <span class="status-value">正常</span>
             </div>
             <div class="divider"></div>
             <i class="el-icon-success verified-icon"></i>
@@ -35,15 +30,15 @@
           <div class="golden-bar"></div>
           
           <header class="form-header">
-            <h2>欢迎回来</h2>
-            <p>请输入您的凭据以访问指挥中心。</p>
+            <h2>管理员登录</h2>
+            <p>请输入登录信息</p>
           </header>
 
           <el-form :model="rulesForm" :rules="rules" ref="rulesForm" class="custom-form">
             <div class="input-group">
               <label class="input-label">账号</label>
               <el-form-item prop="username">
-                <el-input v-model="rulesForm.username" placeholder="Username / Email">
+                <el-input v-model="rulesForm.username" placeholder="请输入账号">
                   <i slot="suffix" class="el-icon-user"></i>
                 </el-input>
               </el-form-item>
@@ -52,7 +47,7 @@
             <div class="input-group">
               <label class="input-label">密码</label>
               <el-form-item prop="password">
-                <el-input v-model="rulesForm.password" type="password" placeholder="••••••••" show-password>
+                <el-input v-model="rulesForm.password" type="password" placeholder="请输入密码" show-password>
                   <i slot="suffix" class="el-icon-lock"></i>
                 </el-input>
               </el-form-item>
@@ -62,7 +57,7 @@
               <label class="input-label">验证码</label>
               <div class="captcha-container">
                 <el-form-item prop="code" style="flex: 1; margin-bottom: 0;">
-                  <el-input v-model="rulesForm.code" placeholder="Code"></el-input>
+                  <el-input v-model="rulesForm.code" placeholder="请输入验证码"></el-input>
                 </el-form-item>
                 <div class="v-code-display" @click="getVerify" title="点击切换验证码">
                   <span v-for="(item, index) in codes" :key="index" :style="{color:item.color, transform:item.rotate}">
@@ -81,18 +76,18 @@
             </div>
 
             <el-button type="primary" class="submit-btn" @click="login()">
-              登录 <i class="el-icon-right"></i>
+              立即登录 <i class="el-icon-right"></i>
             </el-button>
             
             <footer class="form-footer">
-              <p>还没有账户？ <el-button type="text" @click="register('jiaolian')">账号注册</el-button></p>
+              <p><el-button type="text" @click="register('jiaolian')">注册账号</el-button></p>
             </footer>
           </el-form>
         </div>
       </div>
     </main>
 
-    <div class="side-info">EST. 2024 • SOVEREIGN GALLERY</div>
+    <div class="side-info">足球俱乐部管理系统</div>
   </div>
 </template>
 
@@ -200,7 +195,7 @@ export default {
 
   .brand-section {
     display: flex; flex-direction: column; justify-content: center; padding-right: 50px;
-    .system-tag { display: inline-block; padding: 4px 12px; background: #000; color: #fff; font-size: 10px; font-weight: 800; border-radius: 4px; letter-spacing: 2px; margin-bottom: 24px; width: fit-content; }
+    .system-tag { display: inline-block; padding: 5px 14px; background: #1e40af; color: #fff; font-size: 11px; font-weight: 700; border-radius: 6px; letter-spacing: 2px; margin-bottom: 24px; width: fit-content; }
     .main-title { font-size: 56px; line-height: 1; color: #1a1a1a; letter-spacing: -2px; margin-bottom: 30px;
       .light { font-weight: 200; opacity: 0.4; }
       .bold { font-weight: 900; }
@@ -210,7 +205,7 @@ export default {
     .status-card {
       background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(10px);
       padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); border-left: 4px solid #000; width: fit-content;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); border-left: 4px solid #2563eb; width: fit-content;
       .status-label { display: block; color: #666; font-size: 9px; font-weight: 800; letter-spacing: 2px; }
       .status-value { font-size: 24px; font-weight: 700; color: #000; }
       .divider { width: 1px; height: 35px; background: rgba(0, 0, 0, 0.1); }
@@ -226,7 +221,7 @@ export default {
       border-radius: 24px; padding: 50px;
       border: 1px solid rgba(255, 255, 255, 0.6);
       box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08); position: relative; overflow: hidden;
-      .golden-bar { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, #000, #755a1f, #000); }
+      .golden-bar { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, #1e40af, #3b82f6, #1e40af); }
     }
   }
 
@@ -254,9 +249,9 @@ export default {
   }
 
   .submit-btn {
-    width: 100%; height: 56px; background: #000; border: none; border-radius: 12px;
-    font-size: 14px; font-weight: 700; letter-spacing: 1px; transition: all 0.3s;
-    &:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+    width: 100%; height: 56px; background: #1e40af; border: none; border-radius: 12px;
+    font-size: 15px; font-weight: 700; letter-spacing: 1px; transition: all 0.3s;
+    &:hover { background: #1e3a8a; transform: translateY(-2px); box-shadow: 0 10px 24px rgba(30,64,175,0.35); }
   }
 
   .form-footer { margin-top: 30px; text-align: center; p { font-size: 14px; } .el-button { color: #000; font-weight: 800; } }

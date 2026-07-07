@@ -51,17 +51,6 @@
           <el-table-column prop="yonghuName" label="用户姓名" min-width="110" />
           <el-table-column prop="xunlianName" label="训练计划名称" min-width="160" />
           <el-table-column prop="xunlianUuidNumber" label="计划编号" min-width="130" />
-          <el-table-column prop="xunlianPhoto" label="计划图片" min-width="100">
-            <template slot-scope="scope">
-              <img
-                v-if="scope.row.xunlianPhoto"
-                :src="$base.url + scope.row.xunlianPhoto"
-                alt="计划图片"
-                class="table-image"
-              />
-              <span v-else>无</span>
-            </template>
-          </el-table-column>
           <el-table-column prop="xunlianValue" label="计划类型" min-width="110" />
           <el-table-column prop="xunlianKemu" label="训练科目" min-width="140" />
           <el-table-column prop="xunlianTime" label="日期" min-width="110" />
@@ -234,14 +223,6 @@ export default {
   margin-bottom: 12px;
 }
 
-.table-image {
-  width: 70px;
-  height: 70px;
-  object-fit: cover;
-  border-radius: 6px;
-  border: 1px solid #ebeef5;
-}
-
 .danger-text {
   color: #f56c6c;
 }
@@ -251,5 +232,4 @@ export default {
   text-align: right;
 }
 </style>
-
 
