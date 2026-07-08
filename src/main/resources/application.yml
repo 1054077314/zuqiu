@@ -60,6 +60,7 @@ logging:
     com.dao: warn
     com.zuqiujulebguanli.listener: warn
     com.service.DictionaryCacheService: info
+    com.filter.RequestLoggingFilter: info
     com.zaxxer.hikari: warn
     org.apache.catalina.core.StandardService: warn
     org.apache.catalina.core.StandardEngine: warn
