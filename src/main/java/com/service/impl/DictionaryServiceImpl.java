@@ -4,11 +4,13 @@ import com.utils.StringUtil;
 import com.dao.DictionaryDao;
 import com.entity.DictionaryEntity;
 import com.entity.view.DictionaryView;
+import com.service.DictionaryCacheService;
 import com.service.DictionaryService;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.utils.PageUtils;
 import com.utils.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,9 @@ import java.util.Map;
 @Service("dictionaryService")
 @Transactional
 public class DictionaryServiceImpl extends ServiceImpl<DictionaryDao, DictionaryEntity> implements DictionaryService {
+
+    @Autowired
+    private DictionaryCacheService dictionaryCacheService;
 
     @Override
     public PageUtils queryPage(Map<String,Object> params) {
@@ -57,7 +62,11 @@ public class DictionaryServiceImpl extends ServiceImpl<DictionaryDao, Dictionary
             // 获取监听器中的字典表
 //            ServletContext servletContext = ContextLoader.getCurrentWebApplicationContext().getServletContext();
             ServletContext servletContext = request.getServletContext();
-            Map<String, Map<Integer, String>> dictionaryMap= (Map<String, Map<Integer, String>>) servletContext.getAttribute("dictionaryMap");
+            // 优先从 Redis 读取字典缓存，降级到 ServletContext
+            Map<String, Map<Integer, String>> dictionaryMap = dictionaryCacheService.getAllAsMap();
+            if (dictionaryMap == null) {
+                dictionaryMap = (Map<String, Map<Integer, String>>) servletContext.getAttribute("dictionaryMap");
+            }
 
             //通过Types的值给Value字段赋值
             for (String s : fieldNameList) {

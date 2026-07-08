@@ -10,6 +10,10 @@ spring:
     main:
         banner-mode: "off"
         log-startup-info: true
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      timeout: 3000
     datasource:
         driverClassName: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:3306/zuqiujulebguanli?useUnicode=true&characterEncoding=utf-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&useSSL=false
@@ -55,6 +59,7 @@ logging:
     root: info
     com.dao: warn
     com.zuqiujulebguanli.listener: warn
+    com.service.DictionaryCacheService: info
     com.zaxxer.hikari: warn
     org.apache.catalina.core.StandardService: warn
     org.apache.catalina.core.StandardEngine: warn

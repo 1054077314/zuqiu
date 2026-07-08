@@ -30,6 +30,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.entity.DictionaryEntity;
 import com.entity.view.DictionaryView;
+import com.service.DictionaryCacheService;
 import com.service.DictionaryService;
 import com.utils.CommonUtil;
 import com.utils.PageUtils;
@@ -45,6 +46,9 @@ public class DictionaryController {
 
     @Autowired
     private DictionaryService dictionaryService;
+
+    @Autowired
+    private DictionaryCacheService dictionaryCacheService;
 
     @GetMapping("/page")
     @IgnoreAuth
@@ -140,5 +144,7 @@ public class DictionaryController {
             map.put(item.getDicCode(), valueMap);
         }
         servletContext.setAttribute("dictionaryMap", map);
+        // 同步刷新 Redis 缓存（失败不影响 ServletContext）
+        dictionaryCacheService.refresh(dictionaryEntities);
     }
 }

@@ -2,6 +2,7 @@ package com.listener;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.entity.DictionaryEntity;
+import com.service.DictionaryCacheService;
 import com.service.DictionaryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,15 @@ public class DictionaryServletContextListener implements ServletContextListener 
             map.put(d.getDicCode(), m);
         }
         sce.getServletContext().setAttribute("dictionaryMap", map);
-        logger.info("----------字典表初始化完成----------");
+        logger.info("----------字典表 ServletContext 初始化完成----------");
+
+        // 同步写入 Redis 缓存（Redis 不可用时自动跳过，不影响启动）
+        try {
+            DictionaryCacheService cacheService = appContext.getBean(DictionaryCacheService.class);
+            cacheService.refresh(dictionaryEntities);
+            logger.info("----------字典表 Redis 缓存初始化完成----------");
+        } catch (Exception e) {
+            logger.warn("Redis 字典缓存初始化失败，使用 ServletContext 降级方案: {}", e.getMessage());
+        }
     }
 }
