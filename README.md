@@ -8,6 +8,16 @@
 
 **项目定位**：单体 Spring Boot 应用，前后端半分离架构（后台 Vue SPA，前台静态 HTML + API），适合中小型俱乐部快速部署使用。
 
+## 系统截图
+
+**前台门户** — 公告信息、赛事信息、足球资讯展示
+
+![前台门户](docs/screenshots/frontend-portal.png)
+
+**后台管理仪表盘** — 数据统计、最新公告、最新赛事一览
+
+![后台管理仪表盘](docs/screenshots/admin-dashboard.png)
+
 ## 技术栈
 
 | 层次 | 技术 | 版本 |
@@ -15,6 +25,7 @@
 | 框架 | Spring Boot | 2.2.2.RELEASE |
 | ORM | MyBatis-Plus | 2.3 |
 | 数据库 | MySQL | 5.7+ |
+| 缓存 | Redis | 5.0+（字典数据缓存，不可用时自动降级） |
 | 连接池 | HikariCP | (Spring Boot 内置) |
 | 权限 | Apache Shiro | 1.3.2 |
 | 模板引擎 | Thymeleaf | (Spring Boot 内置) |
@@ -31,6 +42,10 @@ zuqiu/
 ├── pom.xml                                  # Maven 配置
 ├── db.sql                                   # 数据库初始化脚本
 ├── README.md
+├── docs/                                    # 项目文档
+│   ├── sql-optimization.md                  # SQL 优化分析
+│   ├── deploy.md                            # 部署指南
+│   └── screenshots/                         # 系统截图
 ├── .vscode/                                 # VS Code 配置
 ├── src/main/java/com/
 │   ├── ZuqiujulebguanliApplication.java     # 应用启动入口
@@ -41,6 +56,7 @@ zuqiu/
 │   │   └── GlobalExceptionHandler.java      # 全局异常处理器
 │   ├── config/
 │   │   ├── MybatisPlusConfig.java           # MyBatis-Plus 分页插件配置
+│   │   ├── RedisConfig.java                 # Redis 序列化配置
 │   │   └── WebMvcConfig.java                # Web MVC 配置(拦截器/静态资源)
 │   ├── controller/                          # REST 控制器 (10 个模块)
 │   │   ├── ConfigController.java
@@ -59,6 +75,7 @@ zuqiu/
 │   ├── entity/                              # 数据库实体 (对应表)
 │   │   └── view/                            # 视图对象 (带字典翻译字段)
 │   ├── service/                             # 业务接口
+│   │   ├── DictionaryCacheService.java      # Redis 字典缓存服务（含降级策略）
 │   │   └── impl/
 │   │       ├── BaseService.java             # 抽象基类 (模板方法模式)
 │   │       ├── GonggaoServiceImpl.java
@@ -105,6 +122,7 @@ zuqiu/
 - JDK 8
 - Maven 3.6+
 - MySQL 5.7+（已安装并运行）
+- Redis 5.0+（可选，字典缓存；不可用时自动降级到内存缓存）
 
 ### 1. 创建数据库并导入数据
 
@@ -269,6 +287,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)          // 未知异常 → 500
 }
 ```
+
+### 6. Redis 字典缓存 + 降级策略
+
+`DictionaryCacheService` 将字典数据缓存到 Redis Hash 结构中（key: `zuqiu:dict:{dic_code}`）：
+
+- **启动时**：`DictionaryServletContextListener` 同时将字典数据写入 ServletContext（原方案）和 Redis
+- **查询时**：`dictionaryConvert()` 优先读 Redis，返回 null 时自动降级到 ServletContext
+- **变更时**：字典增删改操作同步刷新 Redis 和 ServletContext
+- **降级策略**：每个 Redis 操作用 try-catch 包裹，失败后 30 秒内不重试，避免频繁报错
+- **限制**：Redis 宕机期间的字典变更不会自动补偿，恢复后需重启应用或触发一次字典变更
+
+详见 `docs/deploy.md` 中的 Redis 降级与恢复说明。
 
 ## 部署方式
 
