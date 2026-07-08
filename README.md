@@ -13,7 +13,7 @@
 > 部署环境：阿里云 ECS（Ubuntu 22.04 / 2核2G / MySQL + Redis）
 
 - **前台门户**：http://120.26.174.97:8080/zuqiujulebguanli/front/index.html
-- **后台管理**：http://120.26.174.97:8080/zuqiujulebguanli/admin/dist/index.html
+- **后台管理**：http://120.26.174.97:8080/zuqiujulebguanli/admin
   - 管理员账号：`manager` / `manager`
   - 教练账号：`coach_chen` / `123456`
   - 球员账号：`zhangwei` / `123456`
@@ -176,7 +176,7 @@ java -jar target/zuqiujulebguanli-0.0.1-SNAPSHOT.jar
 - 后端启动端口：`8080`
 - 上下文路径：`/zuqiujulebguanli`
 - 前台首页：`http://localhost:8080/zuqiujulebguanli/front/index.html`
-- 后台管理：`http://localhost:8080/zuqiujulebguanli/admin/dist/index.html`
+- 后台管理：`http://localhost:8080/zuqiujulebguanli/admin`
 - 默认管理员：`manager` / `manager`
 
 ## 前端启动/打包步骤
