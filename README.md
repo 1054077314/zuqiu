@@ -8,6 +8,16 @@
 
 **项目定位**：单体 Spring Boot 应用，前后端半分离架构（后台 Vue SPA，前台静态 HTML + API），适合中小型俱乐部快速部署使用。
 
+## 在线演示
+
+> 部署环境：阿里云 ECS（Ubuntu 22.04 / 2核2G / MySQL + Redis）
+
+- **前台门户**：http://120.26.174.97:8080/zuqiujulebguanli/front/index.html
+- **后台管理**：http://120.26.174.97:8080/zuqiujulebguanli/admin/dist/index.html
+  - 管理员账号：`manager` / `manager`
+  - 教练账号：`coach_chen` / `123456`
+  - 球员账号：`zhangwei` / `123456`
+
 ## 系统截图
 
 **前台门户** — 公告信息、赛事信息、足球资讯展示
