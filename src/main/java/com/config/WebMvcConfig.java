@@ -33,10 +33,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     /**
-     * 快捷访问路径：/admin → /admin/（尾部斜杠），由静态资源映射自动返回 index.html
+     * 快捷访问路径：/admin → /admin/，/admin/ 显式 forward 到 index.html
+     * （jar 包内无法自动发现 welcome page，需显式指定）
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addRedirectViewController("/admin", "/admin/");
+        registry.addViewController("/admin/").setViewName("forward:/admin/index.html");
     }
 }
