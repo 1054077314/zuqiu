@@ -1,14 +1,6 @@
 ﻿<template>
   <div class="main-content">
     <div v-if="showFlag">
-      <div class="module-head">
-        <div>
-          <h1>合同管理</h1>
-          <p>统一维护球员及用户合同资料、附件与备注信息</p>
-        </div>
-        <span>Contract Center</span>
-      </div>
-
       <el-form :inline="true" :model="searchForm" class="form-content">
         <el-form-item label="用户编号">
           <el-input
@@ -50,16 +42,9 @@
       </el-form>
 
       <div class="table-content">
-        <div class="table-head">
-          <div>
-            <h2>合同列表</h2>
-            <p>共 {{ totalPage }} 条合同记录</p>
-          </div>
-        </div>
         <el-table
           class="tables"
           :data="dataList"
-          border
           stripe
           v-loading="dataListLoading"
           @selection-change="selectionChangeHandler"

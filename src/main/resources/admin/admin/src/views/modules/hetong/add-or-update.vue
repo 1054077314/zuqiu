@@ -1,13 +1,14 @@
 ﻿<template>
   <div class="addEdit-block">
-    <div class="form-head">
+    <detail-showcase v-if="type === 'info'" module-name="hetong" :record="Object.assign({}, ruleForm, yonghuForm)" :base-url="$base.url" @back="back" />
+    <div v-if="type !== 'info'" class="form-head">
       <div>
         <h1>{{ type === 'info' ? '合同详情' : (id ? '编辑合同' : '新增合同') }}</h1>
         <p>维护合同归属用户、附件文件与合同备注信息</p>
       </div>
     </div>
 
-    <el-form
+    <el-form v-if="type !== 'info'"
       ref="ruleForm"
       :model="ruleForm"
       :rules="rules"
@@ -109,7 +110,8 @@
 </template>
 
 <script>
-export default {
+import DetailShowcase from '@/components/common/DetailShowcase.vue'
+export default { components: { DetailShowcase },
   props: ['parent'],
   data() {
     return {

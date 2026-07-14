@@ -664,7 +664,7 @@
                 <div class="match-grid" v-if="mergedMatchList.length">
                     <div class="match-card" v-for="(item,index) in mergedMatchList" :key="index" @click="openMatch(item)">
                         <div class="match-cover-wrap">
-                            <img class="match-cover" :src="safeImage(item.img || item.saishiPhoto, placeholderMatch)" alt="赛事图片">
+                            <img class="match-cover" :src="safeImage(item.img || item.saishiPhoto, placeholderMatch)" alt="赛事图片" @error="onImageError($event, placeholderMatch)">
                         </div>
                         <div class="match-info">
                             <div class="match-name">{{ item.saishiName }}</div>
@@ -732,6 +732,7 @@ var vue = new Vue({
             gonggaoList: [],
             saishiList: [],
             realmadridNews: [],
+            placeholderMatch: placeholderMatch,
             placeholderThumb: placeholderThumb,
             noticeTotal: 0,
             matchTotal: 0
@@ -841,7 +842,7 @@ var vue = new Vue({
     layui.use(['layer', 'http'], function() {
         var layer = layui.layer;
         var http = layui.http;
-        vue.baseUrl = (http && http.baseurl) ? http.baseUrl: http.baseurl;
+        vue.baseUrl = (http && http.baseurl) ? http.baseurl : vue.baseUrl;
         var loadingIndex = layer.load(2, { shade: [0.3, '#eef5ff'] });
         var p2 = new Promise(function(resolve) {
             http.request('gonggao/page', 'get', { page: 1, limit: 4, order: 'desc' }, function(res) {

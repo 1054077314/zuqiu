@@ -1,6 +1,7 @@
 ﻿<template>
   <div class="addEdit-block">
-    <el-form
+    <detail-showcase v-if="type === 'info'" module-name="yonghu" :record="ruleForm" :base-url="$base.url" @back="back" />
+    <el-form v-else
       ref="ruleForm"
       :model="ruleForm"
       :rules="rules"
@@ -123,7 +124,8 @@
 </template>
 
 <script>
-export default {
+import DetailShowcase from '@/components/common/DetailShowcase.vue'
+export default { components: { DetailShowcase },
   props: ['parent'],
   data() {
     return {

@@ -4,29 +4,49 @@
 
 ## 项目介绍
 
-面向足球俱乐部的信息化管理系统，覆盖俱乐部日常运营中的核心业务场景：赛事管理、公告发布、教练与球员管理、训练计划制定、球员数据统计、合同管理等。系统分为前台展示和后台管理两个子系统。
+面向足球俱乐部的信息化管理系统，覆盖俱乐部日常运营中的核心业务场景：赛事管理、公告发布、教练与球员管理、训练计划制定、球员数据统计、合同管理等。
 
-**项目定位**：单体 Spring Boot 应用，前后端半分离架构（后台 Vue SPA，前台静态 HTML + API），适合中小型俱乐部快速部署使用。
+**项目定位**：单体 Spring Boot 应用，前后端半分离架构，适合中小型俱乐部快速部署使用。
 
-## 在线演示
+**双前端架构**：
 
-> 部署环境：阿里云 ECS（Ubuntu 22.04 / 2核2G / MySQL + Redis）
+- **前台门户**（`front/front/`）：原生 HTML + Vue.js (CDN) + Layui，纯静态页面，Spring Boot 直接提供服务，无需构建
+- **后台管理**（`admin/admin/`）：Vue 2 + Element UI + Vue Router，Webpack 打包，开发时支持热更新（端口 8081，代理到后端 8080）
 
-- **前台门户**：http://120.26.174.97:8080/zuqiujulebguanli/front/index.html
-- **后台管理**：http://120.26.174.97:8080/zuqiujulebguanli/admin
-  - 管理员账号：`manager` / `manager`
-  - 教练账号：`coach_chen` / `123456`
-  - 球员账号：`zhangwei` / `123456`
+## 🌐 在线体验（公网可访问）
 
-## 系统截图
+> 部署环境：阿里云 ECS（Ubuntu 22.04 / 2核2G / MySQL 5.7 + Redis）
 
-**前台门户** — 公告信息、赛事信息、足球资讯展示
+| 系统 | 访问地址 | 说明 |
+|------|----------|------|
+| 🏠 **前台门户** | http://120.26.174.97:8080/zuqiujulebguanli/front/index.html | 公告、赛事、足球资讯，无需登录 |
+| 🔧 **后台管理** | http://120.26.174.97:8080/zuqiujulebguanli/admin | 完整管理后台，需登录 |
+
+**测试账号：**
+
+| 角色 | 账号 | 密码 | 权限范围 |
+|------|------|------|----------|
+| 管理员 | `manager` | `manager` | 全部模块 |
+| 教练 | `coach_chen` | `123456` | 训练计划、球员数据 |
+| 球员 | `zhangwei` | `123456` | 个人中心、合同查看 |
+
+## 📸 系统截图
+
+### 前台门户（Layui + Vue.js）
+
+面向普通用户和球迷的信息展示页面，包含公告列表、赛事卡片、足球资讯等模块。纯静态 HTML，无需登录即可浏览。
 
 ![前台门户](docs/screenshots/frontend-portal.png)
 
-**后台管理仪表盘** — 数据统计、最新公告、最新赛事一览
+### 后台管理（Vue 2 + Element UI）
 
-![后台管理仪表盘](docs/screenshots/admin-dashboard.png)
+**登录页** — 支持管理员 / 教练 / 球员三种角色登录，含验证码校验：
+
+![后台登录](docs/screenshots/admin-login.png)
+
+**管理仪表盘** — 数据统计卡片、最新公告、最新赛事一览：
+
+![后台仪表盘](docs/screenshots/admin-dashboard.png)
 
 ## 技术栈
 
@@ -203,9 +223,19 @@ npm run build
 - `devServer.port`: `8081`
 - `devServer.proxy`: `/zuqiujulebguanli` → `http://localhost:8080`
 
-### 前台展示页面
+### 前台展示页面（纯静态，无需构建）
 
-位于 `src/main/resources/front/front/`，纯静态 HTML，**无需构建**。Spring Boot 直接作为静态资源提供服务。
+位于 `src/main/resources/front/front/`，由 Spring Boot 直接提供静态资源服务。
+
+| 页面 | 路径 | 说明 |
+|------|------|------|
+| 首页 | `index.html` | 导航入口，公告/赛事/资讯三栏布局 |
+| 公告列表 | `pages/gonggao/list.html` | 公告卡片列表，支持类型筛选和搜索 |
+| 公告详情 | `pages/gonggao/detail.html` | 公告正文展示 |
+| 赛事列表 | `pages/saishi/list.html` | 赛事卡片列表，含封面图、类型筛选 |
+| 赛事详情 | `pages/saishi/detail.html` | 赛事介绍、比赛信息 |
+| 登录页 | `pages/login/login.html` | 前台用户登录 |
+| 个人中心 | `pages/yonghu/center.html` | 球员个人信息管理 |
 
 ## API 接口说明
 
@@ -326,7 +356,7 @@ Spring Boot (8080)
 └── 文件上传处理
 ```
 
-### 部署步骤
+### 首次部署
 
 ```bash
 # 1. 后端打包
@@ -335,21 +365,31 @@ mvn clean package -DskipTests
 # 2. 前端打包
 cd src/main/resources/admin/admin && npm run build
 
-# 3. 将 jar 和静态资源部署到服务器
-# - target/zuqiujulebguanli-0.0.1-SNAPSHOT.jar → /opt/app/
-# - admin/dist/ 和 front/front/ → Nginx 静态目录
+# 3. 上传 jar 到服务器
+scp target/zuqiujulebguanli-0.0.1-SNAPSHOT.jar root@<服务器IP>:/opt/zuqiu/target/
 
-# 4. Nginx 配置 (示例)
-# location /zuqiujulebguanli/ {
-#     proxy_pass http://127.0.0.1:8080/zuqiujulebguanli/;
-# }
-# location /upload/ {
-#     alias /opt/app/upload/;
-# }
-
-# 5. 启动后端
-nohup java -jar zuqiujulebguanli-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
+# 4. 启动
+ssh root@<服务器IP>
+cd /opt/zuqiu/target
+nohup java -jar zuqiujulebguanli-0.0.1-SNAPSHOT.jar > /opt/app.log 2>&1 &
 ```
+
+### 前端热更新（无需重新打包 jar）
+
+项目配置了 `spring.resources.static-locations: file:static/`，Spring Boot 会优先从 jar 同级目录的 `static/` 读取静态文件，覆盖 jar 内的同名文件。
+
+**更新前台页面：**
+```bash
+scp -r src/main/resources/front/front/* root@<服务器IP>:/opt/zuqiu/target/static/front/
+```
+
+**更新后台管理：**
+```bash
+cd src/main/resources/admin/admin && npm run build
+scp -r ../dist/* root@<服务器IP>:/opt/zuqiu/target/static/admin/dist/
+```
+
+上传后浏览器强制刷新（`Ctrl+Shift+R`）即可看到变化，**无需重启 Java 服务**。
 
 ## 项目规范
 

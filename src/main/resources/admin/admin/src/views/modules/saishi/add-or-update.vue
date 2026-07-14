@@ -1,6 +1,7 @@
 <template>
   <div class="addEdit-block">
-    <div v-if="type === 'info'" class="saishi-detail-page">
+    <detail-showcase v-if="type === 'info'" module-name="saishi" :record="ruleForm" :base-url="$base.url" @back="back" />
+    <div v-if="false" class="saishi-detail-page">
       <div class="saishi-detail-card">
         <div class="detail-header">
           <div>
@@ -43,7 +44,7 @@
     </div>
 
     <el-form
-      v-else
+      v-if="type !== 'info'"
       ref="ruleForm"
       :model="ruleForm"
       :rules="rules"
@@ -116,7 +117,8 @@
   </div>
 </template>
 <script>
-export default {
+import DetailShowcase from '@/components/common/DetailShowcase.vue'
+export default { components: { DetailShowcase },
   props: ['parent'],
   data() {
     return {
@@ -451,4 +453,3 @@ export default {
   }
 }
 </style>
-

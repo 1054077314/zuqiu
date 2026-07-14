@@ -1,6 +1,7 @@
 ﻿<template>
   <div class="addEdit-block">
-    <div v-if="type === 'info'" class="gonggao-detail-page">
+    <detail-showcase v-if="type === 'info'" module-name="gonggao" :record="ruleForm" :base-url="$base.url" @back="back" />
+    <div v-if="false" class="gonggao-detail-page">
       <div class="gonggao-detail-card">
         <div class="detail-header">
           <h1 class="detail-title">{{ ruleForm.gonggaoName || '未命名公告' }}</h1>
@@ -24,7 +25,7 @@
     </div>
 
     <el-form
-      v-else
+      v-if="type !== 'info'"
       ref="ruleForm"
       :model="ruleForm"
       :rules="rules"
@@ -75,7 +76,8 @@
 </template>
 
 <script>
-export default {
+import DetailShowcase from '@/components/common/DetailShowcase.vue'
+export default { components: { DetailShowcase },
   props: ['parent'],
   data() {
     return {
