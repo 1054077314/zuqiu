@@ -1,8 +1,8 @@
 <template>
-  <section class="admin-detail-showcase">
+  <section class="admin-detail-showcase" :class="{ 'is-text-only': !hasMedia }">
     <div class="admin-detail-showcase__overview" :class="{ 'is-text-only': !hasMedia }">
       <div v-if="hasMedia" class="admin-detail-showcase__media">
-        <img :src="coverUrl || placeholderUrl" :alt="title" @error="hideBrokenImage">
+        <img :src="coverUrl" :alt="title" @error="hideBrokenImage">
       </div>
       <div class="admin-detail-showcase__summary">
         <span class="admin-detail-showcase__eyebrow">{{ definition.label }}</span>
@@ -45,8 +45,7 @@ export default {
     title() { return this.record[this.definition.titleKey] || '暂无标题' },
     badge() { return this.definition.badgeText || this.record[this.definition.badgeKey] || '信息详情' },
     content() { return this.record[this.definition.contentKey] || '' },
-    hasMedia() { return Boolean(this.definition.coverKey) },
-    placeholderUrl() { return placeholder },
+    hasMedia() { return Boolean(this.coverUrl) },
     coverUrl() {
       const value = this.record[this.definition.coverKey]
       if (!this.definition.coverKey) return ''
@@ -61,9 +60,10 @@ export default {
 </script>
 
 <style scoped>
-.admin-detail-showcase { padding: 34px; background: #fff; border: 1px solid #d6def0; border-radius: 18px; }
+.admin-detail-showcase { width: 100%; max-width: 1120px; margin: 0 auto; padding: 34px; background: #fff; border: 1px solid #d6def0; border-radius: 18px; box-sizing: border-box; }
+.admin-detail-showcase.is-text-only { max-width: 900px; }
 .admin-detail-showcase__overview { display: grid; grid-template-columns: minmax(280px, .95fr) minmax(0, 1fr); gap: 46px; }
-.admin-detail-showcase__overview.is-text-only { grid-template-columns: 1fr; max-width: 760px; margin: 0 auto; }
+.admin-detail-showcase__overview.is-text-only { grid-template-columns: 1fr; }
 .admin-detail-showcase__media { min-height: 330px; overflow: hidden; border: 1px solid #d6def0; border-radius: 14px; background: #edf1fb; }
 .admin-detail-showcase__media img { display: block; width: 100%; height: 330px; object-fit: cover; }
 .admin-detail-showcase__eyebrow, .admin-detail-showcase__badge { display: inline-flex; min-height: 26px; align-items: center; padding: 4px 11px; border-radius: 6px; font-size: 12px; font-weight: 700; letter-spacing: .06em; }

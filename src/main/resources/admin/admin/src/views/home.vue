@@ -153,9 +153,13 @@ export default {
         this.go('/saishi')
         return
       }
-      this.$storage.set('pendingSaishiOpenId', item.id)
-      this.$storage.set('pendingSaishiOpenType', 'info')
-      this.$router.push({ path: '/saishi' })
+      this.$router.push({
+        path: '/saishi',
+        query: {
+          openId: String(item.id),
+          openType: 'info'
+        }
+      })
     },
     openNoticeDetail(item) {
       if (!item || !item.id) {

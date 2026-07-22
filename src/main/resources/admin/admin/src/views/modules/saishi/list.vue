@@ -89,7 +89,6 @@ export default {
       showFlag: true,
       addOrUpdateFlag: false,
       lastOpenedRouteKey: '',
-      lastOpenedStorageKey: '',
       searchForm: {
         saishiName: ''
       },
@@ -102,14 +101,13 @@ export default {
     }
   },
   created() {
-    this.getDataList()
-  },
-  mounted() {
-    this.tryOpenPendingDetail()
+    if (!this.tryOpenFromRoute()) {
+      this.getDataList()
+    }
   },
   watch: {
     '$route.fullPath'() {
-      this.tryOpenPendingDetail()
+      this.tryOpenFromRoute()
     }
   },
   methods: {
@@ -154,7 +152,6 @@ export default {
         }
       }).finally(() => {
         this.dataListLoading = false
-        this.tryOpenPendingDetail()
       })
     },
     sizeChangeHandle(val) {
@@ -182,31 +179,15 @@ export default {
       const parsedId = Number(openId)
       if (!parsedId) return
       const routeKey = String(parsedId) + ':' + String(openType || 'info')
-      if (this.lastOpenedRouteKey === routeKey && this.addOrUpdateFlag) return
+      if (this.lastOpenedRouteKey === routeKey) return true
       this.lastOpenedRouteKey = routeKey
+      this.showFlag = false
+      this.addOrUpdateFlag = true
       this.$nextTick(() => {
-        this.addOrUpdateHandler(parsedId, openType || 'info')
+        this.$refs.addOrUpdate.init(parsedId, openType || 'info')
         this.clearRouteOpenQuery()
       })
-    },
-    tryOpenFromStorage() {
-      const openId = this.$storage.get('pendingSaishiOpenId')
-      const openType = this.$storage.get('pendingSaishiOpenType') || 'info'
-      const parsedId = Number(openId)
-      if (!parsedId) return false
-      const storageKey = String(parsedId) + ':' + String(openType)
-      if (this.lastOpenedStorageKey === storageKey && this.addOrUpdateFlag) return true
-      this.lastOpenedStorageKey = storageKey
-      this.$nextTick(() => {
-        this.addOrUpdateHandler(parsedId, openType)
-        this.$storage.remove('pendingSaishiOpenId')
-        this.$storage.remove('pendingSaishiOpenType')
-      })
       return true
-    },
-    tryOpenPendingDetail() {
-      if (this.tryOpenFromStorage()) return
-      this.tryOpenFromRoute()
     },
     clearRouteOpenQuery() {
       if (!(this.$route && this.$route.query && this.$route.query.openId)) return

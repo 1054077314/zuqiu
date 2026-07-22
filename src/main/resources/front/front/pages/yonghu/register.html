@@ -94,7 +94,7 @@
             position: relative;
             z-index: 10;
             width: 100%;
-            max-width: 760px;
+            max-width: 440px;
         }
 
         .register-card {
@@ -182,7 +182,7 @@
 
         .form-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 14px;
         }
 
@@ -311,13 +311,9 @@
         <form id="registerForm" class="layui-form">
             <div class="form-grid">
                 <div class="layui-form-item"><input type="text" name="username" required lay-verify="required" placeholder="通行账号" autocomplete="off" class="layui-input"></div>
-                <div class="layui-form-item"><input type="text" name="yonghuName" required lay-verify="required" placeholder="用户姓名" autocomplete="off" class="layui-input"></div>
+                <div class="layui-form-item"><input type="text" name="yonghuPhone" required lay-verify="required" placeholder="手机号" autocomplete="off" class="layui-input"></div>
                 <div class="layui-form-item"><input type="password" name="password" id="password" required lay-verify="required" placeholder="安全密码" autocomplete="off" class="layui-input"></div>
                 <div class="layui-form-item"><input type="password" name="password2" id="password2" required lay-verify="required" placeholder="确认密码" autocomplete="off" class="layui-input"></div>
-                <div class="layui-form-item"><input type="text" name="yonghuPhone" required lay-verify="required" placeholder="手机号" autocomplete="off" class="layui-input"></div>
-                <div class="layui-form-item"><input type="text" name="yonghuIdNumber" required lay-verify="required" placeholder="身份证号" autocomplete="off" class="layui-input"></div>
-                <div class="layui-form-item"><select name="sexTypes" lay-verify="required"><option value="">请选择性别</option><option v-for="(item,index) in sexTypesList" :key="index" :value="item.codeIndex">{{ item.indexName }}</option></select></div>
-                <div class="layui-form-item"><input type="text" name="yonghuEmail" required lay-verify="required" placeholder="邮箱" autocomplete="off" class="layui-input"></div>
                 <div class="layui-form-item full"><button class="submit-btn" lay-submit lay-filter="register">申请加入</button></div>
             </div>
         </form>
@@ -336,25 +332,18 @@
 <script src="../../js/validate.js"></script>
 <script>
 var http = layui.http || { baseurl: (typeof resolveProjectBase === 'function' ? resolveProjectBase() : (window.location.protocol + '//' + window.location.host + '/')) };
-var vue = new Vue({ el:'#app', data: { baseUrl: http.baseurl, sexTypesList:[] } });
 layui.use(['layer', 'form', 'http'], function() {
     var layer = layui.layer;
     var form = layui.form;
     var http = layui.http;
     var tablename = http.getParam('tablename') || 'yonghu';
-    http.request('dictionary/page', 'get', { page:1, limit:100, dicCode:'sex_types' }, function(res) {
-        vue.sexTypesList = (res.data && res.data.list) || [];
-        vue.$nextTick(function() { form.render('select'); });
-    });
     form.on('submit(register)', function(data) {
         var formData = data.field;
         if (formData.password !== formData.password2) { layer.msg('两次输入的密码不一致', { time:2000, icon:5 }); return false; }
         if (!isMobile(formData.yonghuPhone)) { layer.msg('请输入正确的手机号', { time:2000, icon:5 }); return false; }
-        if (!isIdentity(formData.yonghuIdNumber)) { layer.msg('请输入正确的身份证号', { time:2000, icon:5 }); return false; }
-        if (!isEmail(formData.yonghuEmail)) { layer.msg('请输入正确的邮箱', { time:2000, icon:5 }); return false; }
         delete formData.password2;
         http.requestJson(tablename + '/register', 'post', formData, function() {
-            layer.msg('Aloha! 注册成功', { time:1500, icon:6 }, function() { window.location.href = '../login/login.html'; });
+            layer.msg('注册成功', { time:1500, icon:6 }, function() { window.location.href = '../login/login.html'; });
         });
         return false;
     });

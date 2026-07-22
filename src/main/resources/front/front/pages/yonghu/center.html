@@ -178,7 +178,6 @@
         <div class="topbar">
             <div class="brand">
                 <strong>足球俱乐部管理系统</strong>
-                <span>用户资料驾驶舱</span>
             </div>
             <div class="top-links">
                 <a href="../../index.html">返回首页</a>
@@ -202,7 +201,6 @@
                         <div class="shortcut-list">
                             <button type="button" :class="['tab-btn', activePane === 'profile' ? 'active' : '']" @click="activePane = 'profile'"><span>资料维护</span><em>></em></button>
                             <button type="button" :class="['tab-btn', activePane === 'password' ? 'active' : '']" @click="activePane = 'password'"><span>密码安全</span><em>></em></button>
-                            <a v-for="(item,index) in quickLinks" :key="index" :href="item.url"><span>{{ item.name }}</span><em>></em></a>
                             <button type="button" class="danger-btn" @click="logout"><span>退出登录</span><em>></em></button>
                         </div>
                     </div>

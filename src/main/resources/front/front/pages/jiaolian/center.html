@@ -178,7 +178,6 @@
         <div class="topbar">
             <div class="brand">
                 <strong>足球俱乐部管理系统</strong>
-                <span>教练资料驾驶舱</span>
             </div>
             <div class="top-links">
                 <a href="../../index.html">返回首页</a>
@@ -189,25 +188,12 @@
             </div>
         </div>
 
-        <div class="hero">
-            <div class="hero-layout">
-                <div>
-                    <div class="hero-tag">教练个人中心</div>
-                    <h1>教练资料驾驶舱</h1>
-                    <p>这里集中维护教练基本资料、头像与密码，页面重点保留资料维护和密码安全两个核心动作，避免信息重复堆叠。</p>
-                    <div class="hero-points">
-                        <div class="hero-point"><b>资</b><span>集中维护教练资料、头像与联系信息</span></div>
-                        <div class="hero-point"><b>安</b><span>支持独立修改登录密码，修改后需重新登录</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="workspace" v-if="ready">
             <div class="workspace-layout">
                 <div class="sidebar-stack">
                     <div class="card identity-card">
-                        <div class="avatar-wrap"><img class="avatar" :src="img(item.img)" alt="教练头像"></div>
+                        <div class="avatar-wrap"><img class="avatar" :src="img(detail.jiaolianPhoto)" alt="教练头像"></div>
                         <h2>{{ summaryName }}</h2>
                         <p>当前账号的关键身份信息保留在这里，右侧区域专注处理资料编辑和密码更新。</p>
                         <div class="identity-meta">
@@ -222,7 +208,6 @@
                         <div class="shortcut-list">
                             <button type="button" :class="['tab-btn', activePane === 'profile' ? 'active' : '']" @click="activePane = 'profile'"><span>资料维护</span><em>></em></button>
                             <button type="button" :class="['tab-btn', activePane === 'password' ? 'active' : '']" @click="activePane = 'password'"><span>密码安全</span><em>></em></button>
-                            <a v-for="(item,index) in quickLinks" :key="index" :href="item.url"><span>{{ item.name }}</span><em>></em></a>
                             <button type="button" class="danger-btn" @click="logout"><span>退出登录</span><em>></em></button>
                         </div>
                     </div>
@@ -258,7 +243,7 @@
                                 <div class="field full">
                                     <label>教练头像</label>
                                     <div class="upload-box">
-                                        <img class="upload-preview" :src="img(item.img)" alt="教练头像预览">
+                                        <img class="upload-preview" :src="img(detail.jiaolianPhoto)" alt="教练头像预览">
                                         <div class="upload-tools">
                                             <div><button type="button" class="ghost-btn" id="jiaolianPhotoUpload">上传教练头像</button></div>
                                             <div class="hint">建议上传清晰的正方形头像图片。上传成功后先在页面中预览，再点击保存资料完成更新。</div>
@@ -325,7 +310,9 @@ var vue = new Vue({
     },
     computed: {
         avatarUrl: function() {
-            return img(item.img);
+            if (!this.detail.jiaolianPhoto) return this.baseUrl + 'img/avator.png';
+            if (this.detail.jiaolianPhoto.indexOf('http') === 0) return this.detail.jiaolianPhoto;
+            return this.baseUrl + this.detail.jiaolianPhoto;
         },
         summaryName: function() {
             return this.detail.jiaolianName || '未设置姓名';
