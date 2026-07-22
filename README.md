@@ -4,13 +4,15 @@
 
 ## 当前状态
 
-后端已完成技术栈升级并在线上 ECS 验证通过：
+后端升级主线已完成并在线上 ECS 验证通过，前端 Vue3 迁移暂缓：
 
-- JDK 17 + Spring Boot 3.3.7 + MyBatis-Plus 3.5.7 + FastJSON2
-- 已完成 `javax.*` 到 `jakarta.*` 迁移，移除未使用的 Shiro / POI 依赖
-- 接入 OpenRouter / OpenAI 兼容大模型 API，基于 Function Calling 查询真实业务数据
-- AI 回复由后端格式化，降低模型编造系统字段的风险
-- 已上线验证：前台首页、赛事分页、公告分页、AI 聊天接口、jar 部署和日志排查
+| 范围 | 状态 |
+|------|------|
+| Phase 1-6 后端升级 | 已完成：JDK 17、Spring Boot 3.3.7、MyBatis-Plus 3.5.7、FastJSON2、`javax.*` 到 `jakarta.*`、Shiro/POI 清理 |
+| AI Function Calling | 已完成：接入 OpenRouter / OpenAI 兼容接口，支持 6 类业务查询，最终回复由后端格式化 |
+| 线上部署验证 | 已完成：ECS Java 17、jar 部署、前台首页、赛事分页、公告分页、AI 聊天接口 |
+| Phase 7 后台 Vue3 | 未做：后台仍为 Vue 2 + Element UI，作为后续独立任务 |
+| Phase 8 前台 Vue3 | 未做：前台仍为 Vue2 UMD + Layui，该项为可选优化 |
 
 当前限制：AI 工具链已覆盖球员、公告、赛事、训练计划、合同、球员数据 6 类查询，暂未接入教练表查询。
 

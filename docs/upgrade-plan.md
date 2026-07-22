@@ -7,21 +7,28 @@
 
 ## 当前执行状态（2026-07-22）
 
-后端升级主线已完成并在线上验证通过：
+后端升级主线（Phase 1-6）已完成并在线上验证通过；前端 Vue3（Phase 7）和可选前台升级（Phase 8）未执行。
+
+| Phase | 内容 | 状态 |
+|-------|------|------|
+| 0 | 建立基线：人工基线 + 独立分支 | 部分完成：后续在线上完成验证；实际分支为 `feature/interview-enhancements`，不是计划中的 `upgrade/backend-modernization` |
+| 1 | JDK 8 → 17 | 已完成：`pom.xml` 使用 `java.version=17`，本地和 ECS 均可运行 |
+| 2 | 删除 Shiro / POI 僵尸依赖 | 已完成：未使用依赖已清理 |
+| 3 | `javax.*` → `jakarta.*` | 已完成：代码已迁移到 Jakarta 命名空间 |
+| 4 | MyBatis-Plus 2.3 → 3.5.7 | 已完成：使用 `mybatis-plus-spring-boot3-starter`，并保留旧版 Service 方法兼容层 |
+| 5 | Spring Boot → 3.3.7 | 已完成：parent、MySQL 驱动、静态资源配置和异常处理已适配 |
+| 6 | FastJSON → fastjson2 | 已完成：依赖和代码均已切到 `com.alibaba.fastjson2` |
+| 7 | 后台 Vue2 → Vue3 | 未做：`package.json` 仍为 Vue 2.6 + Element UI，暂缓为独立任务 |
+| 8 | 前台门户 Vue3 | 未做：仍为本地 Vue2 UMD + Layui，可选优化 |
+
+其他已完成改动：
 
 | 项 | 当前状态 |
 |---|---|
-| JDK | 已升级到 17，本地和 ECS 均可运行 |
-| Spring Boot | 已升级到 3.3.7 |
-| MyBatis-Plus | 已升级到 3.5.7，新增旧版 Service 兼容层承接原有调用习惯 |
-| FastJSON | 已迁移到 fastjson2 |
-| Shiro / POI | 已移除未使用依赖 |
-| `javax.*` | 已迁移到 `jakarta.*` |
 | Redis 字典缓存 | 已保留，Redis 不可用时降级读取 |
 | AI Function Calling | 已接入 OpenRouter/OpenAI 兼容接口，支持 6 类业务查询 |
 | 前台首页路径问题 | 已修正基础 URL 重复斜杠问题 |
 | Spring Boot 3 静态资源异常 | 已将 `NoResourceFoundException` 按 404 处理，避免误报 500 |
-| 后台 Vue2 → Vue3 | 暂未执行，保留为后续独立任务 |
 
 线上验证结果：
 
