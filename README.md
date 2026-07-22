@@ -2,6 +2,18 @@
 
 基于 Spring Boot + MyBatis-Plus + Vue 的足球俱乐部综合管理平台。
 
+## 当前状态
+
+后端已完成技术栈升级并在线上 ECS 验证通过：
+
+- JDK 17 + Spring Boot 3.3.7 + MyBatis-Plus 3.5.7 + FastJSON2
+- 已完成 `javax.*` 到 `jakarta.*` 迁移，移除未使用的 Shiro / POI 依赖
+- 接入 OpenRouter / OpenAI 兼容大模型 API，基于 Function Calling 查询真实业务数据
+- AI 回复由后端格式化，降低模型编造系统字段的风险
+- 已上线验证：前台首页、赛事分页、公告分页、AI 聊天接口、jar 部署和日志排查
+
+当前限制：AI 工具链已覆盖球员、公告、赛事、训练计划、合同、球员数据 6 类查询，暂未接入教练表查询。
+
 ## 项目介绍
 
 面向足球俱乐部的信息化管理系统，覆盖俱乐部日常运营中的核心业务场景：赛事管理、公告发布、教练与球员管理、训练计划制定、球员数据统计、合同管理等。
@@ -61,7 +73,7 @@
 | 鉴权 | 自研 Token 拦截器 | AuthorizationInterceptor |
 | 模板引擎 | Thymeleaf | (Spring Boot 内置) |
 | JSON | FastJSON2 | 2.0.53 |
-| AI | DeepSeek / OpenAI 兼容 API + Function Calling | 6 类业务工具 |
+| AI | OpenRouter / DeepSeek / OpenAI 兼容 API + Function Calling | 6 类业务工具 |
 | 工具库 | Hutool | 5.8.25 |
 | 后台前端 | Vue 2 + Element UI + Vue Router | (CDN + Webpack 打包) |
 | 前台前端 | 原生 HTML + Vue.js (CDN) + Layui | — |
@@ -333,8 +345,21 @@ npm run build
 ### 安全与限流
 
 - API Key 通过环境变量 `DEEPSEEK_API_KEY` 注入，不写入仓库
+- OpenRouter 可通过 `AI_API_URL`、`AI_MODEL`、`AI_HTTP_REFERER` 环境变量切换模型和请求来源
 - `/ai/chat` 对公网开放但带 IP 频率限制（默认 20 次/60 秒）
 - 业务数据回复由 Java 后端格式化，避免模型编造系统数据
+
+OpenRouter 启动示例：
+
+```bash
+export DEEPSEEK_API_KEY='<your-openrouter-key>'
+export AI_API_URL='https://openrouter.ai/api/v1/chat/completions'
+export AI_MODEL='poolside/laguna-xs-2.1:free'
+export AI_HTTP_REFERER='http://<服务器IP>:8080'
+java -jar target/zuqiujulebguanli-0.0.1-SNAPSHOT.jar
+```
+
+说明：当前工具链暂未注册教练查询工具，因此类似“有几个教练”的问题不会直接查询 `jiaolian` 表，需要后续新增 `queryCoaches`。
 
 ### 测试与评测
 
@@ -395,6 +420,7 @@ mvn test
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)  // 业务异常 → 511
+    @ExceptionHandler(NoResourceFoundException.class) // 静态资源缺失 → 404
     @ExceptionHandler(Exception.class)          // 未知异常 → 500
 }
 ```
@@ -462,7 +488,37 @@ scp target/zuqiujulebguanli-0.0.1-SNAPSHOT.jar root@<服务器IP>:/opt/zuqiu/tar
 # 4. 启动
 ssh root@<服务器IP>
 cd /opt/zuqiu/target
-nohup java -jar zuqiujulebguanli-0.0.1-SNAPSHOT.jar > /opt/app.log 2>&1 &
+: > /opt/zuqiu/app.log
+nohup java -jar zuqiujulebguanli-0.0.1-SNAPSHOT.jar > /opt/zuqiu/app.log 2>&1 &
+tail -n 120 /opt/zuqiu/app.log
+```
+
+线上重启建议：
+
+```bash
+cd /opt/zuqiu/target
+pkill -f 'zuqiujulebguanli-0.0.1-SNAPSHOT.jar'
+: > /opt/zuqiu/app.log
+nohup java -jar zuqiujulebguanli-0.0.1-SNAPSHOT.jar > /opt/zuqiu/app.log 2>&1 &
+sleep 8
+tail -n 120 /opt/zuqiu/app.log
+```
+
+启动成功标志：
+
+```text
+Tomcat started on port 8080 (http) with context path '/zuqiujulebguanli'
+Started ZuqiujulebguanliApplication
+```
+
+接口验证：
+
+```bash
+curl -s "http://127.0.0.1:8080/zuqiujulebguanli/saishi/page?page=1&limit=1"
+curl -s "http://127.0.0.1:8080/zuqiujulebguanli/gonggao/page?page=1&limit=1"
+curl -s -H "Content-Type: application/json" \
+  -d '{"message":"查最新赛事"}' \
+  "http://127.0.0.1:8080/zuqiujulebguanli/ai/chat"
 ```
 
 ### 前端热更新（无需重新打包 jar）
@@ -513,3 +569,12 @@ A: 需要先 `npm run build` 构建 admin 项目到 `admin/dist/` 目录。
 
 ### Q: multi-catch 编译报错
 A: 项目已升级到 JDK 17 + Spring Boot 3.x，请确认 IDE 与 Maven 使用 JDK 17。
+
+### Q: Maven 报 `无效的目标发行版: 17`
+A: Maven 当前使用的是 JDK 8。需要在 IDEA 的 Project SDK 和 Maven Runner JRE 中切换到 JDK 17 或更高版本。
+
+### Q: `/ai/chat` 提示没有配置 API Key
+A: Java 进程启动时没有拿到 `DEEPSEEK_API_KEY`。在服务器上用 `export DEEPSEEK_API_KEY=...`、`AI_API_URL=...`、`AI_MODEL=...` 后重新启动 jar。
+
+### Q: 首页提示“服务器内部错误”
+A: 先看 `/opt/zuqiu/app.log`。Spring Boot 3 下静态资源缺失会抛 `NoResourceFoundException`，项目已按 404 处理；如果仍有 500，优先检查请求路径、jar 是否上传完整、数据库连接和最新异常栈。

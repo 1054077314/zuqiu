@@ -5,6 +5,38 @@
 >
 > 本计划基于对代码库的只读扫描结果制定，所有文件路径已核实存在。
 
+## 当前执行状态（2026-07-22）
+
+后端升级主线已完成并在线上验证通过：
+
+| 项 | 当前状态 |
+|---|---|
+| JDK | 已升级到 17，本地和 ECS 均可运行 |
+| Spring Boot | 已升级到 3.3.7 |
+| MyBatis-Plus | 已升级到 3.5.7，新增旧版 Service 兼容层承接原有调用习惯 |
+| FastJSON | 已迁移到 fastjson2 |
+| Shiro / POI | 已移除未使用依赖 |
+| `javax.*` | 已迁移到 `jakarta.*` |
+| Redis 字典缓存 | 已保留，Redis 不可用时降级读取 |
+| AI Function Calling | 已接入 OpenRouter/OpenAI 兼容接口，支持 6 类业务查询 |
+| 前台首页路径问题 | 已修正基础 URL 重复斜杠问题 |
+| Spring Boot 3 静态资源异常 | 已将 `NoResourceFoundException` 按 404 处理，避免误报 500 |
+| 后台 Vue2 → Vue3 | 暂未执行，保留为后续独立任务 |
+
+线上验证结果：
+
+- ECS Java 版本：OpenJDK 17.0.19
+- jar 上传后 hash 与本地一致
+- 应用启动成功：`Tomcat started on port 8080 (http) with context path '/zuqiujulebguanli'`
+- `/saishi/page`、`/gonggao/page` 接口返回 `code=0`
+- `/ai/chat` 在配置 API Key 后可访问 OpenRouter；未配置时返回明确提示
+
+当前遗留项：
+
+- AI 工具暂未包含教练表查询。用户问“有几个教练”时，模型无法调用真实 `jiaolian` 表，需要后续新增 `queryCoaches` 工具。
+- 后台管理前端仍为 Vue2 + Element UI，暂不建议立即升级到 Vue3，避免影响当前后端升级成果。
+- `commons-logging` 冲突、缺少 Bean Validation Provider、Thymeleaf templates 目录 warning 暂不影响启动，可后续清理。
+
 ## 0. 现状扫描结论
 
 | 项 | 现状版本 | 代码引用情况 | 结论 |

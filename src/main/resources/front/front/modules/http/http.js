@@ -40,7 +40,7 @@ layui.define(['jquery', 'layer'], function(exports) {
         return '??????';
     }
 
-    var baseurl = resolveProjectBase();
+    var baseurl = String(resolveProjectBase() || '').replace(/\/+$/, '');
 
     function resolveImageUrl(url, customBase) {
         var base = customBase || baseurl;

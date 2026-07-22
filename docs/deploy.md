@@ -6,7 +6,7 @@
 
 | 组件 | 版本要求 | 说明 |
 |------|----------|------|
-| JDK | 1.8+ | 编译和运行 Spring Boot |
+| JDK | 17+ | 编译和运行 Spring Boot 3 |
 | MySQL | 5.7+ | 数据库 |
 | Redis | 5.0+ | 字典数据缓存（可选，不可用时自动降级） |
 | Maven | 3.x | 编译打包 |
@@ -84,6 +84,16 @@ ls target/*.jar
 # 输出：zuqiujulebguanli-0.0.1-SNAPSHOT.jar
 ```
 
+如果 IDEA 运行 Maven，请确认 Maven Runner 的 JRE 使用 JDK 17 或更高版本。出现 `无效的目标发行版: 17` 时，说明当前 Maven 使用的是 JDK 8，需要切换 Project SDK / Maven Runner JRE。
+
+本地命令行如果没有配置 `mvn`，可以直接使用 IDEA 自带 Maven，例如：
+
+```powershell
+$env:JAVA_HOME='C:\Users\王\.jdks\ms-21.0.11'
+$env:Path="$env:JAVA_HOME\bin;$env:Path"
+& 'D:\java\idea\IntelliJ IDEA 2026.1.4\plugins\maven\lib\maven3\bin\mvn.cmd' -DskipTests clean package
+```
+
 ### 5. 启动应用
 
 ```bash
@@ -101,10 +111,77 @@ java -jar target/zuqiujulebguanli-0.0.1-SNAPSHOT.jar \
 nohup java -jar target/zuqiujulebguanli-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
 ```
 
+#### 5.1 阿里云 ECS 部署命令
+
+本项目当前线上路径为 `/opt/zuqiu/target/`，jar 名称为 `zuqiujulebguanli-0.0.1-SNAPSHOT.jar`。
+
+本地上传：
+
+```powershell
+scp "D:\bq\zuqiu\target\zuqiujulebguanli-0.0.1-SNAPSHOT.jar" root@<服务器IP>:/opt/zuqiu/target/
+```
+
+服务器校验：
+
+```bash
+cd /opt/zuqiu/target
+ls -lh zuqiujulebguanli-0.0.1-SNAPSHOT.jar
+sha256sum zuqiujulebguanli-0.0.1-SNAPSHOT.jar
+```
+
+启动前确认 JDK：
+
+```bash
+java -version
+# 需要看到 openjdk version "17.x"
+```
+
+后台重启：
+
+```bash
+cd /opt/zuqiu/target
+pkill -f 'zuqiujulebguanli-0.0.1-SNAPSHOT.jar'
+: > /opt/zuqiu/app.log
+nohup java -jar zuqiujulebguanli-0.0.1-SNAPSHOT.jar > /opt/zuqiu/app.log 2>&1 &
+sleep 8
+tail -n 120 /opt/zuqiu/app.log
+```
+
+出现以下日志表示启动成功：
+
+```text
+Tomcat started on port 8080 (http) with context path '/zuqiujulebguanli'
+Started ZuqiujulebguanliApplication
+```
+
+#### 5.2 AI 接口环境变量
+
+AI Key 不写入仓库和配置文件，通过环境变量注入。当前代码读取：
+
+| 环境变量 | 说明 |
+|----------|------|
+| `DEEPSEEK_API_KEY` | OpenRouter 或 DeepSeek API Key |
+| `AI_API_URL` | OpenAI 兼容接口地址 |
+| `AI_MODEL` | 模型 ID |
+| `AI_HTTP_REFERER` | OpenRouter 请求来源，可配置公网访问地址 |
+
+OpenRouter 示例：
+
+```bash
+export DEEPSEEK_API_KEY='<your-openrouter-key>'
+export AI_API_URL='https://openrouter.ai/api/v1/chat/completions'
+export AI_MODEL='poolside/laguna-xs-2.1:free'
+export AI_HTTP_REFERER='http://<服务器IP>:8080'
+
+nohup java -jar zuqiujulebguanli-0.0.1-SNAPSHOT.jar > /opt/zuqiu/app.log 2>&1 &
+```
+
+如果 `/ai/chat` 返回 `AI 功能还没有配置 API Key`，说明 Java 进程启动时没有拿到 `DEEPSEEK_API_KEY`，需要带上环境变量后重启服务。
+
 启动成功后控制台输出：
 
 ```
-Tomcat started on port(s): 8080 (http)
+Tomcat started on port 8080 (http) with context path '/zuqiujulebguanli'
 ----------字典表 ServletContext 初始化完成----------
 ----------字典表 Redis 缓存初始化完成----------
 ```
@@ -114,7 +191,7 @@ Tomcat started on port(s): 8080 (http)
 | 页面 | URL |
 |------|-----|
 | 前台门户 | `http://localhost:8080/zuqiujulebguanli/front/index.html` |
-| 后台管理 | `http://localhost:8080/zuqiujulebguanli/admin/dist/index.html` |
+| 后台管理 | `http://localhost:8080/zuqiujulebguanli/admin` |
 
 默认账号：
 
@@ -123,6 +200,16 @@ Tomcat started on port(s): 8080 (http)
 | 管理员 | manager | manager |
 | 球员 | zhangwei | 123456 |
 | 教练 | coach_chen | 123456 |
+
+接口验证：
+
+```bash
+curl -s "http://127.0.0.1:8080/zuqiujulebguanli/saishi/page?page=1&limit=1"
+curl -s "http://127.0.0.1:8080/zuqiujulebguanli/gonggao/page?page=1&limit=1"
+curl -s -H "Content-Type: application/json" \
+  -d '{"message":"查最新赛事"}' \
+  "http://127.0.0.1:8080/zuqiujulebguanli/ai/chat"
+```
 
 ### 7. Nginx 反向代理（可选）
 
@@ -181,3 +268,30 @@ HGETALL zuqiu:dict:saishi_types
 # 7) "4"
 # 8) "热身赛"
 ```
+
+### 9. 常见问题
+
+#### 9.1 `ClassNotFoundException: com.mysql.cj.protocol.ExportControlled`
+
+如果启动日志同时出现 MySQL 驱动类、Tomcat 类缺失，优先检查 jar 是否上传完整：
+
+```bash
+ls -lh /opt/zuqiu/target/zuqiujulebguanli-0.0.1-SNAPSHOT.jar
+sha256sum /opt/zuqiu/target/zuqiujulebguanli-0.0.1-SNAPSHOT.jar
+```
+
+本地与服务器 hash 不一致时，重新上传 jar。
+
+#### 9.2 首页提示“服务器内部错误”
+
+Spring Boot 3 对不存在的静态资源会抛出 `NoResourceFoundException`。项目已在 `GlobalExceptionHandler` 中将该异常按 404 处理，前端请求路径也统一去掉重复斜杠。如果仍出现错误，查看最新日志：
+
+```bash
+tail -n 200 /opt/zuqiu/app.log
+```
+
+重点检查是否存在 `No static resource ...`、接口 500 或数据库异常。
+
+#### 9.3 AI 能回答但没有查系统数据
+
+AI 系统数据查询依赖 Function Calling 工具链。当前已接入的工具包括球员档案、公告、赛事、训练计划、合同、球员数据。未接入的业务表不会被模型主动查询，例如教练表需要新增 `queryCoaches` 工具后才能通过自然语言查询。
