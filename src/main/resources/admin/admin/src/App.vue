@@ -11,7 +11,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "utils/theme.scss";/*引入全局颜色*/
+@use "utils/theme.scss";/*引入全局颜色*/
 *{
   padding: 0;
   margin:0;

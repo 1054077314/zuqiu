@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="main-content">
     <div v-if="showFlag">
       <el-form :inline="true" :model="searchForm" class="form-content">
@@ -42,7 +42,7 @@
           <el-table-column prop="yonghuPhone" label="手机号" min-width="130" />
           <el-table-column prop="yonghuIdNumber" label="身份证号" min-width="180" show-overflow-tooltip />
           <el-table-column prop="yonghuPhoto" label="头像" min-width="100">
-            <template slot-scope="scope">
+            <template #default="scope">
               <img
                 v-if="scope.row.yonghuPhoto"
                 :src="$base.url + scope.row.yonghuPhoto"
@@ -56,7 +56,7 @@
           <el-table-column prop="yonghuEmail" label="邮箱" min-width="180" show-overflow-tooltip />
           <el-table-column prop="createTime" label="创建时间" min-width="170" />
           <el-table-column label="操作" width="280" align="center" fixed="right">
-            <template slot-scope="scope">
+            <template #default="scope">
               <el-button type="text" @click="addOrUpdateHandler(scope.row.id, 'info')">详情</el-button>
               <el-button type="text" @click="addOrUpdateHandler(scope.row.id, 'edit')">编辑</el-button>
               <el-button type="text" @click="resetPassword(scope.row.id)">重置密码</el-button>

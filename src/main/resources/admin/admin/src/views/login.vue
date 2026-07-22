@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="modern-glass-wrapper">
     <div class="background-decoration">
       <div class="blob blob-1"></div>
@@ -39,7 +39,7 @@
               <label class="input-label">账号</label>
               <el-form-item prop="username">
                 <el-input v-model="rulesForm.username" placeholder="请输入账号">
-                  <i slot="suffix" class="el-icon-user"></i>
+                  <template #suffix><i class="el-icon-user"></i></template>
                 </el-input>
               </el-form-item>
             </div>
@@ -48,7 +48,7 @@
               <label class="input-label">密码</label>
               <el-form-item prop="password">
                 <el-input v-model="rulesForm.password" type="password" placeholder="请输入密码" show-password>
-                  <i slot="suffix" class="el-icon-lock"></i>
+                  <template #suffix><i class="el-icon-lock"></i></template>
                 </el-input>
               </el-form-item>
             </div>
@@ -230,11 +230,11 @@ export default {
   .input-group {
     margin-bottom: 20px;
     .input-label { display: block; font-size: 10px; font-weight: 800; color: #000; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; margin-left: 4px; }
-    ::v-deep .el-input__inner {
+    :deep(.el-input__inner){
       height: 50px; background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(0,0,0,0.05); border-radius: 10px;
       &:focus { border-color: #000; background: #fff; }
     }
-    ::v-deep .el-input__suffix { line-height: 50px; right: 12px; color: #000; }
+    :deep(.el-input__suffix){ line-height: 50px; right: 12px; color: #000; }
   }
 
   .captcha-container {
@@ -244,8 +244,8 @@ export default {
 
   .role-selector {
     margin: 20px 0;
-    ::v-deep .el-radio__label { font-weight: 600; font-size: 13px; }
-    ::v-deep .el-radio__input.is-checked .el-radio__inner { background: #000; border-color: #000; }
+    :deep(.el-radio__label){ font-weight: 600; font-size: 13px; }
+    :deep(.el-radio__input.is-checked .el-radio__inner){ background: #000; border-color: #000; }
   }
 
   .submit-btn {

@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="center-page">
     <el-form
       ref="ruleForm"

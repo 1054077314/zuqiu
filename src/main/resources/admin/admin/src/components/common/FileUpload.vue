@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="file-upload-wrap">
     <el-upload
       ref="upload"
@@ -17,11 +17,11 @@
       class="upload-card"
     >
       <i class="el-icon-plus"></i>
-      <div slot="tip" class="el-upload__tip upload-tip">{{ tip }}</div>
+      <template #tip><div class="el-upload__tip upload-tip">{{ tip }}</div></template>
     </el-upload>
 
     <el-dialog
-      :visible.sync="dialogVisible"
+      v-model="dialogVisible"
       width="640px"
       append-to-body
       custom-class="upload-preview-dialog"
@@ -139,14 +139,14 @@ export default {
     line-height: 1.6;
   }
 
-  ::v-deep .el-upload--picture-card,
-  ::v-deep .el-upload-list--picture-card .el-upload-list__item {
+  :deep(.el-upload--picture-card),
+  :deep(.el-upload-list--picture-card .el-upload-list__item){
     border-radius: 16px;
     border-color: #cfe0f1;
     background: linear-gradient(180deg, #fbfdff, #eef5ff);
   }
 
-  ::v-deep .el-upload--picture-card {
+  :deep(.el-upload--picture-card){
     width: 148px;
     height: 148px;
     display: inline-flex;
@@ -155,18 +155,18 @@ export default {
     transition: all 0.2s ease;
   }
 
-  ::v-deep .el-upload--picture-card:hover {
+  :deep(.el-upload--picture-card:hover){
     border-color: #0d8bf2;
     box-shadow: 0 0 0 3px rgba(13, 139, 242, 0.12);
   }
 
-  ::v-deep .el-upload-list--picture-card .el-upload-list__item {
+  :deep(.el-upload-list--picture-card .el-upload-list__item){
     width: 148px;
     height: 148px;
     overflow: hidden;
   }
 
-  ::v-deep .el-upload-list__item-actions {
+  :deep(.el-upload-list__item-actions){
     border-radius: 16px;
     background-color: rgba(7, 34, 65, 0.58);
   }

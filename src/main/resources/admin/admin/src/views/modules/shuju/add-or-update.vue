@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="addEdit-block">
     <detail-showcase v-if="type === 'info'" module-name="shuju" :record="Object.assign({}, ruleForm, yonghuForm)" :base-url="$base.url" @back="back" />
     <el-form v-else

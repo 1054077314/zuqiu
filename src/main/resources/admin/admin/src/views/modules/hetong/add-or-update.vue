@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="addEdit-block">
     <detail-showcase v-if="type === 'info'" module-name="hetong" :record="Object.assign({}, ruleForm, yonghuForm)" :base-url="$base.url" @back="back" />
     <div v-if="type !== 'info'" class="form-head">
@@ -299,35 +299,35 @@ export default { components: { DetailShowcase },
   box-sizing: border-box;
 }
 
-.detail-form-content ::v-deep .el-form-item__label {
+.detail-form-content :deep(.el-form-item__label){
   color: #344054;
   font-weight: 700;
 }
 
-.detail-form-content ::v-deep .el-input__inner,
-.detail-form-content ::v-deep .el-textarea__inner {
+.detail-form-content :deep(.el-input__inner),
+.detail-form-content :deep(.el-textarea__inner){
   border-color: #d8e1ee;
   border-radius: 7px;
 }
 
-.detail-form-content ::v-deep .el-input__inner {
+.detail-form-content :deep(.el-input__inner){
   height: 36px;
   line-height: 36px;
 }
 
-.detail-form-content ::v-deep .el-input__inner:focus,
-.detail-form-content ::v-deep .el-textarea__inner:focus {
+.detail-form-content :deep(.el-input__inner:focus),
+.detail-form-content :deep(.el-textarea__inner:focus){
   border-color: #2563eb;
 }
 
-.detail-form-content ::v-deep .el-input.is-disabled .el-input__inner,
-.detail-form-content ::v-deep .el-input__inner[readonly],
-.detail-form-content ::v-deep .el-textarea__inner[readonly] {
+.detail-form-content :deep(.el-input.is-disabled .el-input__inner),
+.detail-form-content :deep(.el-input__inner[readonly]),
+.detail-form-content :deep(.el-textarea__inner[readonly]){
   background: #f8fafc;
   color: #475467;
 }
 
-.detail-form-content ::v-deep .el-select {
+.detail-form-content :deep(.el-select){
   width: 100%;
 }
 
@@ -348,7 +348,7 @@ export default { components: { DetailShowcase },
   text-align: right;
 }
 
-.btn ::v-deep .el-button {
+.btn :deep(.el-button){
   height: 36px;
   padding: 0 18px;
   border-radius: 7px;

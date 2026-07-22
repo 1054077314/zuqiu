@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="main-content">
     <div v-if="showFlag">
       <el-form :inline="true" :model="searchForm" class="form-content">
@@ -35,7 +35,7 @@
           <el-table-column type="index" label="#" width="60" align="center" />
           <el-table-column prop="saishiName" label="赛事名称" min-width="150" />
           <el-table-column prop="saishiPhoto" label="赛事图片" min-width="110">
-            <template slot-scope="scope">
+            <template #default="scope">
               <img
                 v-if="scope.row.saishiPhoto"
                 :src="$base.url + scope.row.saishiPhoto"
@@ -49,12 +49,12 @@
           <el-table-column prop="saishiValue" label="赛事类型" min-width="110" />
           <el-table-column prop="insertTime" label="录入时间" min-width="170" />
           <el-table-column prop="saishiContent" label="赛事介绍" min-width="220" show-overflow-tooltip>
-            <template slot-scope="scope">
+            <template #default="scope">
               <span>{{ stripHtml(scope.row.saishiContent) }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="220" align="center" fixed="right">
-            <template slot-scope="scope">
+            <template #default="scope">
               <el-button type="text" @click="addOrUpdateHandler(scope.row.id, 'info')">详情</el-button>
               <el-button type="text" @click="addOrUpdateHandler(scope.row.id, 'edit')">编辑</el-button>
               <el-button type="text" class="danger-text" @click="deleteHandler(scope.row.id)">删除</el-button>
@@ -249,11 +249,11 @@ export default {
   overflow: hidden;
 }
 
-::v-deep .el-table {
+:deep(.el-table){
   border: none;
 }
 
-::v-deep .el-table th {
+:deep(.el-table th){
   background: #f8fafc;
   color: #334155;
   font-weight: 700;
@@ -261,7 +261,7 @@ export default {
   border-bottom: 2px solid #e2e8f0;
 }
 
-::v-deep .el-table--striped .el-table__body tr.el-table__row--striped td {
+:deep(.el-table--striped .el-table__body tr.el-table__row--striped td){
   background: #fafbfc;
 }
 

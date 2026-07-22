@@ -1,12 +1,4 @@
-﻿import Vue from 'vue'
-import VueRouter from 'vue-router'
-
-Vue.use(VueRouter)
-
-const VueRouterPush = VueRouter.prototype.push
-VueRouter.prototype.push = function push(to) {
-  return VueRouterPush.call(this, to).catch(err => err)
-}
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 import Index from '@/views/index'
 import Home from '@/views/home'
@@ -38,7 +30,7 @@ const routes = [
     children: [
       {
         path: '/',
-        name: '首页',
+        name: '首页内容',
         component: Home,
         meta: { icon: '', title: 'home' }
       },
@@ -139,13 +131,13 @@ const routes = [
     redirect: '/index'
   },
   {
-    path: '*',
+    path: '/:pathMatch(.*)*',
     component: NotFound
   }
 ]
 
-const router = new VueRouter({
-  mode: 'hash',
+const router = createRouter({
+  history: createWebHashHistory(),
   routes
 })
 

@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div>
     <el-form
       class="detail-form-content"

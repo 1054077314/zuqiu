@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="breadcrumb-wrap">
     <el-breadcrumb class="app-breadcrumb" separator="/">
       <el-breadcrumb-item>
@@ -54,17 +54,17 @@ export default {
   font-size: 14px;
 }
 
-.app-breadcrumb ::v-deep .el-breadcrumb__inner,
-.app-breadcrumb ::v-deep .el-breadcrumb__inner a {
+.app-breadcrumb :deep(.el-breadcrumb__inner),
+.app-breadcrumb :deep(.el-breadcrumb__inner a){
   color: #184d7a;
   font-weight: 600;
 }
 
-.app-breadcrumb ::v-deep .el-breadcrumb__separator {
+.app-breadcrumb :deep(.el-breadcrumb__separator){
   color: #7aa2c6;
 }
 
-.app-breadcrumb ::v-deep .el-breadcrumb__item:last-child .el-breadcrumb__inner {
+.app-breadcrumb :deep(.el-breadcrumb__item:last-child .el-breadcrumb__inner){
   color: #4f7090;
   font-weight: 500;
 }

@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="main-content">
     <div v-if="showFlag">
       <el-form :inline="true" :model="searchForm" class="form-content">
@@ -56,7 +56,7 @@
           <el-table-column prop="yonghuPhone" label="手机号" min-width="120" />
           <el-table-column prop="hetongName" label="合同标题" min-width="140" />
           <el-table-column prop="hetongFile" label="合同附件" min-width="120">
-            <template slot-scope="scope">
+            <template #default="scope">
               <a
                 v-if="scope.row.hetongFile"
                 class="link-btn"
@@ -69,7 +69,7 @@
           <el-table-column prop="hetongText" label="备注" min-width="180" show-overflow-tooltip />
           <el-table-column prop="createTime" label="创建时间" min-width="160" />
           <el-table-column label="操作" width="230" align="center" fixed="right">
-            <template slot-scope="scope">
+            <template #default="scope">
               <el-button type="text" @click="addOrUpdateHandler(scope.row.id, 'info')">详情</el-button>
               <el-button type="text" @click="addOrUpdateHandler(scope.row.id)">编辑</el-button>
               <el-button type="text" class="danger-text" @click="deleteHandler(scope.row.id)">删除</el-button>
@@ -272,30 +272,30 @@ export default {
   justify-content: flex-end;
 }
 
-.form-content ::v-deep .el-form-item,
-.toolbar-content ::v-deep .el-form-item {
+.form-content :deep(.el-form-item),
+.toolbar-content :deep(.el-form-item){
   margin-right: 14px;
   margin-bottom: 14px;
 }
 
-.form-content ::v-deep .el-form-item__label {
+.form-content :deep(.el-form-item__label){
   color: #344054;
   font-weight: 600;
 }
 
-.form-content ::v-deep .el-input__inner {
+.form-content :deep(.el-input__inner){
   height: 36px;
   line-height: 36px;
   border-color: #d8e1ee;
   border-radius: 7px;
 }
 
-.form-content ::v-deep .el-input__inner:focus {
+.form-content :deep(.el-input__inner:focus){
   border-color: #2563eb;
 }
 
-.form-content ::v-deep .el-button,
-.toolbar-content ::v-deep .el-button {
+.form-content :deep(.el-button),
+.toolbar-content :deep(.el-button){
   height: 36px;
   padding: 0 16px;
   border-radius: 7px;
@@ -336,17 +336,17 @@ export default {
   overflow: hidden;
 }
 
-.tables ::v-deep .el-table__header th {
+.tables :deep(.el-table__header th){
   background: #f6f8fb;
   color: #344054;
   font-weight: 700;
 }
 
-.tables ::v-deep .el-table__cell {
+.tables :deep(.el-table__cell){
   padding: 10px 0;
 }
 
-.tables ::v-deep .el-table__body tr:hover > td {
+.tables :deep(.el-table__body tr:hover > td){
   background: #f8fbff;
 }
 

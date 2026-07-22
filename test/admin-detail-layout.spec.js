@@ -1,0 +1,21 @@
+const assert = require('assert')
+const fs = require('fs')
+const path = require('path')
+
+const adminRoot = path.resolve(__dirname, '../src/main/resources/admin/admin')
+const detailShowcase = fs.readFileSync(path.join(adminRoot, 'src/components/common/DetailShowcase.vue'), 'utf8')
+const home = fs.readFileSync(path.join(adminRoot, 'src/views/home.vue'), 'utf8')
+const saishiList = fs.readFileSync(path.join(adminRoot, 'src/views/modules/saishi/list.vue'), 'utf8')
+const pom = fs.readFileSync(path.resolve(__dirname, '../pom.xml'), 'utf8')
+
+assert.match(detailShowcase, /class="admin-detail-showcase"\s*:class="\{ 'is-text-only': !hasMedia \}"/)
+assert.match(detailShowcase, /\.admin-detail-showcase \{ width: 100%; max-width: 1120px; margin: 0 auto;/)
+assert.match(detailShowcase, /\.admin-detail-showcase\.is-text-only \{ max-width: 900px; \}/)
+assert.match(detailShowcase, /hasMedia\(\) \{ return Boolean\(this\.coverUrl\) \}/)
+assert.match(home, /path: '\/saishi',[\s\S]*query: \{[\s\S]*openId: String\(item\.id\),[\s\S]*openType: 'info'/)
+assert.doesNotMatch(home, /pendingSaishiOpenId/)
+assert.doesNotMatch(saishiList, /pendingSaishiOpenId/)
+assert.match(saishiList, /created\(\) \{\s*if \(!this\.tryOpenFromRoute\(\)\) \{\s*this\.getDataList\(\)/)
+assert.match(pom, /<exclude>admin\/admin\/\*\*<\/exclude>/)
+
+console.log('admin detail layout and route-opening checks passed')

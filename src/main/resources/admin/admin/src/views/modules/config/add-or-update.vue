@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="addEdit-block banner-edit-page">
     <div class="form-intro" v-if="type !== 'info'">
       <div>

@@ -11,7 +11,7 @@
 
 | Phase | 内容 | 状态 |
 |-------|------|------|
-| 0 | 建立基线：人工基线 + 独立分支 | 部分完成：后续在线上完成验证；实际分支为 `feature/interview-enhancements`，不是计划中的 `upgrade/backend-modernization` |
+| 0 | 建立基线：人工基线 + 独立分支 | 部分完成：后续在线上完成验证；分支为 `feature/interview-enhancements` |
 | 1 | JDK 8 → 17 | 已完成：`pom.xml` 使用 `java.version=17`，本地和 ECS 均可运行 |
 | 2 | 删除 Shiro / POI 僵尸依赖 | 已完成：未使用依赖已清理 |
 | 3 | `javax.*` → `jakarta.*` | 已完成：代码已迁移到 Jakarta 命名空间 |
@@ -83,7 +83,7 @@ Phase 7: 前端 Vue3 迁移（完全独立于后端，可并行开线）
   - 公告、赛事的分页查询 + 详情 + 新增/编辑/删除（含逻辑删除的赛事模块）
   - 字典缓存降级逻辑（Redis 可用/不可用两种场景）
   - 后台管理 `npm run build` 产物能正常访问
-- [ ] `git` 新建分支 `upgrade/backend-modernization`，每个 Phase 独立 commit，方便出问题时 `git bisect` 定位
+- [ ] `git` 在分支 `feature/interview-enhancements` 上推进，每个 Phase 独立 commit，方便出问题时 `git bisect` 定位
 
 ---
 

@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="modern-register-wrapper">
     <div class="background-decoration">
       <div class="glow-top"></div>
@@ -42,7 +42,7 @@
             <p>请准确填写以下信息，访问指挥中心权限。</p>
           </header>
 
-          <el-form class="custom-form" ref="registerForm" @keyup.enter.native="submitRegister">
+          <el-form class="custom-form" ref="registerForm" @keyup.enter="submitRegister">
             
             <div class="form-grid">
               <div class="input-group">
@@ -261,7 +261,7 @@ export default {
     margin-bottom: 16px;
     .input-label { display: block; font-size: 10px; font-weight: 800; color: #00081f; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; margin-left: 4px; }
     
-    ::v-deep .el-input__inner {
+    :deep(.el-input__inner){
       height: 48px; background: #f3f3f3; border: 1px solid transparent; border-radius: 8px; padding: 0 16px;
       transition: all 0.3s;
       &:focus { border-color: #755a1f; background: #fff; box-shadow: 0 0 0 4px rgba(117, 90, 31, 0.1); }

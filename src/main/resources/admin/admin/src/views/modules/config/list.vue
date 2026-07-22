@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="main-content banner-manage-page">
     <div v-if="showFlag">
       <section class="page-hero">
@@ -123,7 +123,7 @@
 
     <el-dialog
       title="轮播图播放预览"
-      :visible.sync="previewVisible"
+      v-model="previewVisible"
       width="760px"
       destroy-on-close
       custom-class="banner-preview-dialog"
@@ -660,17 +660,17 @@ export default {
     padding-top: 4px;
   }
 
-  ::v-deep .el-carousel__arrow {
+  :deep(.el-carousel__arrow){
     width: 42px;
     height: 42px;
     background: rgba(7, 34, 65, 0.42);
   }
 
-  ::v-deep .el-carousel__indicator button {
+  :deep(.el-carousel__indicator button){
     background-color: #9fbfdf;
   }
 
-  ::v-deep .el-carousel__indicator.is-active button {
+  :deep(.el-carousel__indicator.is-active button){
     background-color: #0d8bf2;
   }
 }
@@ -715,8 +715,8 @@ export default {
     }
 
     .banner-item,
-    ::v-deep .el-carousel,
-    ::v-deep .el-carousel__container {
+    :deep(.el-carousel),
+    :deep(.el-carousel__container){
       height: 220px !important;
     }
 

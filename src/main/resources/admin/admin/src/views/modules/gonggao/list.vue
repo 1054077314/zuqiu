@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="main-content">
     <div v-if="showFlag">
       <el-form :inline="true" :model="searchForm" class="form-content">
@@ -47,12 +47,12 @@
           <el-table-column prop="gonggaoValue" label="公告类型" min-width="110" />
           <el-table-column prop="insertTime" label="发布时间" min-width="170" />
           <el-table-column prop="gonggaoContent" label="公告详情" min-width="220" show-overflow-tooltip>
-            <template slot-scope="scope">
+            <template #default="scope">
               <span>{{ stripHtml(scope.row.gonggaoContent) }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="210" align="center" fixed="right">
-            <template slot-scope="scope">
+            <template #default="scope">
               <el-button type="text" @click="addOrUpdateHandler(scope.row.id, 'info')">详情</el-button>
               <el-button type="text" @click="addOrUpdateHandler(scope.row.id, 'edit')">编辑</el-button>
               <el-button type="text" class="danger-text" @click="deleteHandler(scope.row.id)">删除</el-button>

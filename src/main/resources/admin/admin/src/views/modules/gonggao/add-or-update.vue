@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="addEdit-block">
     <detail-showcase v-if="type === 'info'" module-name="gonggao" :record="ruleForm" :base-url="$base.url" @back="back" />
     <div v-if="false" class="gonggao-detail-page">
@@ -303,22 +303,22 @@ export default { components: { DetailShowcase },
   padding: 24px 22px 18px;
 }
 
-.detail-form-content ::v-deep .el-form-item__label {
+.detail-form-content :deep(.el-form-item__label){
   color: #111827;
   font-weight: 700;
   letter-spacing: 0.01em;
 }
 
-.detail-form-content ::v-deep .el-input__inner,
-.detail-form-content ::v-deep .el-textarea__inner,
-.detail-form-content ::v-deep .el-select .el-input__inner {
+.detail-form-content :deep(.el-input__inner),
+.detail-form-content :deep(.el-textarea__inner),
+.detail-form-content :deep(.el-select .el-input__inner){
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 10px;
 }
 
-.detail-form-content ::v-deep .el-input__inner:focus,
-.detail-form-content ::v-deep .el-textarea__inner:focus {
+.detail-form-content :deep(.el-input__inner:focus),
+.detail-form-content :deep(.el-textarea__inner:focus){
   border-color: rgba(59, 130, 246, 0.5);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
 }
@@ -327,7 +327,7 @@ export default { components: { DetailShowcase },
   min-height: 300px;
 }
 
-.detail-form-content ::v-deep .btn .el-form-item__content {
+.detail-form-content :deep(.btn .el-form-item__content){
   border-top: none !important;
   margin-left: 0 !important;
   justify-content: flex-end;
@@ -335,7 +335,7 @@ export default { components: { DetailShowcase },
   position: relative;
 }
 
-.detail-form-content ::v-deep .btn .el-form-item__content::before {
+.detail-form-content :deep(.btn .el-form-item__content::before){
   content: '';
   position: absolute;
   left: 0;
@@ -372,7 +372,7 @@ export default { components: { DetailShowcase },
     padding: 18px 14px 14px;
   }
 
-  .detail-row-first ::v-deep .el-col {
+  .detail-row-first :deep(.el-col){
     width: 100% !important;
     max-width: 100% !important;
     flex: 0 0 100% !important;

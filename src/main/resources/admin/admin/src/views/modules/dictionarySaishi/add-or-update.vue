@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="addEdit-block">
     <el-form
       ref="ruleForm"

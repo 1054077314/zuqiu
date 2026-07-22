@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="main-content">
     <div v-if="showFlag">
       <el-form :inline="true" :model="searchForm" class="form-content">
@@ -51,7 +51,7 @@
           <el-table-column prop="shujuName" label="球员数据名称" min-width="150" />
           <el-table-column prop="shujuUuidNumber" label="数据编号" min-width="130" />
           <el-table-column prop="shujuPhoto" label="数据图片" min-width="100">
-            <template slot-scope="scope">
+            <template #default="scope">
               <img
                 v-if="scope.row.shujuPhoto"
                 :src="$base.url + scope.row.shujuPhoto"
@@ -66,7 +66,7 @@
           <el-table-column prop="insertTime" label="录入时间" min-width="170" />
           <el-table-column prop="shujuContent" label="数据介绍" min-width="200" show-overflow-tooltip />
           <el-table-column label="操作" width="220" align="center" fixed="right">
-            <template slot-scope="scope">
+            <template #default="scope">
               <el-button type="text" @click="addOrUpdateHandler(scope.row.id, 'info')">详情</el-button>
               <el-button type="text" @click="addOrUpdateHandler(scope.row.id, 'edit')">编辑</el-button>
               <el-button type="text" class="danger-text" @click="deleteHandler(scope.row.id)">删除</el-button>

@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="main-content">
     <div v-if="showFlag">
       <el-form :inline="true" :model="searchForm" class="form-content">
@@ -44,7 +44,7 @@
           <el-table-column prop="password" label="密码" min-width="160" />
           <el-table-column prop="role" label="角色" min-width="120" />
           <el-table-column label="操作" width="220" align="center" fixed="right">
-            <template slot-scope="scope">
+            <template #default="scope">
               <el-button type="text" @click="addOrUpdateHandler(scope.row.id, 'info')">详情</el-button>
               <el-button type="text" @click="addOrUpdateHandler(scope.row.id, 'edit')">编辑</el-button>
               <el-button type="text" class="danger-text" @click="deleteHandler(scope.row.id)">删除</el-button>
