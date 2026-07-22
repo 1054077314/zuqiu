@@ -42,6 +42,6 @@ export default {
   position: relative;
   z-index: 1;
   min-height: 100vh;
-  padding-top: 62px;
+  padding-top: 58px;
 }
 </style>

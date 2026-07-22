@@ -32,9 +32,12 @@ export default {
       navItems: [
         { label: '首页', path: '/index' },
         { label: '球队管理', path: '/yonghu' },
+        { label: '教练管理', path: '/jiaolian' },
         { label: '训练计划', path: '/xunlian' },
         { label: '合同管理', path: '/hetong' },
-        { label: '赛事管理', path: '/saishi' }
+        { label: '赛事管理', path: '/saishi' },
+        { label: '球员数据', path: '/shuju' },
+        { label: '公告管理', path: '/gonggao' }
       ]
     }
   },
@@ -86,13 +89,13 @@ export default {
 .navbar {
   position: sticky;
   top: 0;
-  height: 62px;
+  height: 58px;
   width: 100%;
-  padding: 0 32px;
+  padding: 0 28px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
   background: #ffffff;
   border-bottom: 1px solid #dfe3ea;
   box-shadow: 0 3px 14px rgba(15, 23, 42, 0.05);
@@ -100,9 +103,9 @@ export default {
 
 .brand {
   flex: 0 0 auto;
-  max-width: 240px;
+  max-width: 230px;
   color: #0f172a;
-  font-size: 19px;
+  font-size: 18px;
   line-height: 1.2;
   font-weight: 900;
   cursor: pointer;
@@ -111,7 +114,7 @@ export default {
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 6px;
   min-width: 0;
   flex: 1 1 auto;
   overflow-x: auto;
@@ -119,7 +122,9 @@ export default {
 
 .nav-menu button {
   position: relative;
-  height: 62px;
+  height: 34px;
+  padding: 0 11px;
+  border-radius: 6px;
   border: 0;
   background: transparent;
   color: #5b6b83;
@@ -132,15 +137,16 @@ export default {
 .nav-menu button:hover {
   color: #0b57d0;
   font-weight: 700;
+  background: #f3f7ff;
 }
 
 .nav-menu button.active::after {
   content: "";
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 3px;
+  left: 10px;
+  right: 10px;
+  bottom: -12px;
+  height: 2px;
   background: #2563eb;
 }
 

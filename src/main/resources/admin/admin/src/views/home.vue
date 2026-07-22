@@ -1,94 +1,124 @@
 <template>
   <div class="home-page">
-    <section class="page-title">
-      <h1>俱乐部运营中心</h1>
-      <p>系统实时数据概览</p>
-    </section>
-
-    <section class="summary-grid">
+    <section class="ops-strip">
       <article
         v-for="item in summaryCards"
         :key="item.key"
-        class="summary-card"
+        class="metric-tile"
         @click="go(item.route)"
       >
-        <div class="summary-icon">
-          <i :class="item.icon"></i>
-        </div>
-        <div class="summary-label">{{ item.label }}</div>
-        <strong class="summary-number">{{ item.total }}</strong>
+        <span>{{ item.label }}</span>
+        <strong>{{ item.total }}</strong>
+        <em>进入管理</em>
       </article>
     </section>
 
-    <section class="dashboard-panels">
-      <article class="panel-card">
+    <section class="workbench-grid">
+      <article class="work-panel main-panel">
         <div class="panel-head">
-          <h2>最新公告</h2>
-          <button type="button" @click="go('/gonggao')">查看全部</button>
+          <div>
+            <h2>运营工作流</h2>
+            <p>按最近更新汇总赛事、训练、合同和公告</p>
+          </div>
+          <button type="button" @click="refreshWorkbench">刷新</button>
         </div>
-        <ul v-if="latestNotices.length" class="notice-list">
-          <li
-            v-for="item in latestNotices.slice(0, 3)"
-            :key="item.id"
-            class="notice-item"
-            @click="openNoticeDetail(item)"
-          >
-            <div class="notice-meta">
-              <span>{{ item.gonggaoValue || '公告' }}</span>
-              <time>{{ formatDate(item.insertTime) }}</time>
+
+        <ul v-if="workItems.length" class="work-list">
+          <li v-for="item in workItems" :key="item.key" @click="openWorkItem(item)">
+            <span class="work-type">{{ item.type }}</span>
+            <div class="work-main">
+              <strong>{{ item.title }}</strong>
+              <p>{{ item.desc }}</p>
             </div>
-            <p>{{ noticeText(item) }}</p>
+            <time>{{ item.time }}</time>
+            <b :class="{ muted: item.muted }">{{ item.status }}</b>
           </li>
         </ul>
-        <div v-else class="empty-block">暂无公告数据</div>
+        <div v-else class="empty-block">暂无运营动态</div>
       </article>
 
-      <article class="panel-card">
-        <div class="panel-head">
-          <h2>最新赛事</h2>
+      <aside class="work-side">
+        <article class="work-panel">
+          <div class="panel-head compact">
+            <div>
+              <h2>快捷操作</h2>
+              <p>高频维护入口</p>
+            </div>
+          </div>
+          <div class="quick-grid">
+            <button v-for="item in quickActions" :key="item.path" type="button" @click="go(item.path)">
+              <strong>{{ item.label }}</strong>
+              <span>{{ item.desc }}</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="work-panel">
+          <div class="panel-head compact">
+            <div>
+              <h2>重点关注</h2>
+              <p>当前需要优先扫一眼的状态</p>
+            </div>
+          </div>
+          <ul class="focus-list">
+            <li v-for="item in focusItems" :key="item.label" @click="go(item.route)">
+              <span>{{ item.label }}</span>
+              <strong>{{ item.value }}</strong>
+              <em>{{ item.tip }}</em>
+            </li>
+          </ul>
+        </article>
+      </aside>
+    </section>
+
+    <section class="detail-grid">
+      <article class="work-panel">
+        <div class="panel-head compact">
+          <div>
+            <h2>最新赛事</h2>
+            <p>用于安排赛程和赛后维护</p>
+          </div>
           <button type="button" @click="go('/saishi')">赛程表</button>
         </div>
-        <ul v-if="latestMatches.length" class="match-list">
-          <li
-            v-for="item in latestMatches.slice(0, 3)"
-            :key="item.id"
-            class="match-item"
-            @click="openMatchDetail(item)"
-          >
-            <div class="match-main">
-              <div class="match-time">{{ matchTime(item) }} - {{ item.saishiValue || '赛事' }}</div>
-              <div class="match-teams">
-                <strong>{{ matchHome(item) }}</strong>
-                <span>{{ matchScore(item) }}</span>
-                <strong>{{ matchAway(item) }}</strong>
-              </div>
-            </div>
-            <span class="match-status" :class="{ ended: isEnded(item) }">
-              {{ isEnded(item) ? '已结束' : '未开始' }}
-            </span>
+        <ul v-if="latestMatches.length" class="compact-list">
+          <li v-for="item in latestMatches.slice(0, 4)" :key="item.id" @click="openMatchDetail(item)">
+            <strong>{{ matchHome(item) }} {{ matchScore(item) }} {{ matchAway(item) }}</strong>
+            <span>{{ matchTime(item) }} / {{ item.saishiValue || '赛事' }}</span>
           </li>
         </ul>
         <div v-else class="empty-block">暂无赛事数据</div>
       </article>
-    </section>
 
-    <footer class="home-footer">
-      <strong>足球俱乐部管理系统</strong>
-      <span>© 2026 足球俱乐部管理系统后台运营中心. All rights reserved.</span>
-    </footer>
+      <article class="work-panel">
+        <div class="panel-head compact">
+          <div>
+            <h2>最新公告</h2>
+            <p>面向俱乐部日常通知</p>
+          </div>
+          <button type="button" @click="go('/gonggao')">查看全部</button>
+        </div>
+        <ul v-if="latestNotices.length" class="compact-list">
+          <li v-for="item in latestNotices.slice(0, 4)" :key="item.id" @click="openNoticeDetail(item)">
+            <strong>{{ item.gonggaoName || noticeText(item) }}</strong>
+            <span>{{ formatDate(item.insertTime) }} / {{ item.gonggaoValue || '公告' }}</span>
+          </li>
+        </ul>
+        <div v-else class="empty-block">暂无公告数据</div>
+      </article>
+    </section>
   </div>
 </template>
 
 <script>
 const CARD_CONFIG = [
-  { key: 'users', label: '管理员账号', icon: 'el-icon-s-custom', route: '/users', url: 'users/page', extra: {} },
-  { key: 'jiaolian', label: '教练人数', icon: 'el-icon-user-solid', route: '/jiaolian', url: 'jiaolian/page', extra: {} },
-  { key: 'yonghu', label: '用户人数', icon: 'el-icon-user', route: '/yonghu', url: 'yonghu/page', extra: {} },
-  { key: 'saishi', label: '赛事数量', icon: 'el-icon-trophy', route: '/saishi', url: 'saishi/page', extra: { saishiDelete: 1 } },
-  { key: 'hetong', label: '合同数量', icon: 'el-icon-document', route: '/hetong', url: 'hetong/page', extra: { hetongDelete: 1 } },
-  { key: 'xunlian', label: '训练计划', icon: 'el-icon-date', route: '/xunlian', url: 'xunlian/page', extra: { xunlianDelete: 1 } },
-  { key: 'shuju', label: '球员数据', icon: 'el-icon-data-analysis', route: '/shuju', url: 'shuju/page', extra: { shujuDelete: 1 } },
-  { key: 'gonggao', label: '公告数量', icon: 'el-icon-bell', route: '/gonggao', url: 'gonggao/page', extra: {} }
+  { key: 'users', label: '管理员', route: '/users', url: 'users/page', extra: {} },
+  { key: 'jiaolian', label: '教练', route: '/jiaolian', url: 'jiaolian/page', extra: {} },
+  { key: 'yonghu', label: '球员', route: '/yonghu', url: 'yonghu/page', extra: {} },
+  { key: 'saishi', label: '赛事', route: '/saishi', url: 'saishi/page', extra: { saishiDelete: 1 } },
+  { key: 'hetong', label: '合同', route: '/hetong', url: 'hetong/page', extra: { hetongDelete: 1 } },
+  { key: 'xunlian', label: '训练', route: '/xunlian', url: 'xunlian/page', extra: { xunlianDelete: 1 } },
+  { key: 'shuju', label: '数据', route: '/shuju', url: 'shuju/page', extra: { shujuDelete: 1 } },
+  { key: 'gonggao', label: '公告', route: '/gonggao', url: 'gonggao/page', extra: {} }
 ]
 
 export default {
@@ -96,13 +126,79 @@ export default {
     return {
       summaryCards: CARD_CONFIG.map(item => Object.assign({}, item, { total: '-' })),
       latestNotices: [],
-      latestMatches: []
+      latestMatches: [],
+      latestTrainings: [],
+      latestContracts: [],
+      quickActions: [
+        { label: '新增赛事', desc: '维护赛程与赛况', path: '/saishi' },
+        { label: '新增训练', desc: '安排训练计划', path: '/xunlian' },
+        { label: '发布公告', desc: '同步俱乐部通知', path: '/gonggao' },
+        { label: '录入数据', desc: '维护球员指标', path: '/shuju' }
+      ]
+    }
+  },
+  computed: {
+    workItems() {
+      const matches = this.latestMatches.map(item => ({
+        key: `match-${item.id}`,
+        type: '赛事',
+        title: this.matchName(item),
+        desc: `${item.saishiAddress || '未填写地点'} / ${item.saishiValue || '赛事'}`,
+        time: this.matchTime(item),
+        status: this.isEnded(item) ? '已结束' : '待开赛',
+        muted: this.isEnded(item),
+        route: '/saishi',
+        row: item
+      }))
+
+      const trainings = this.latestTrainings.map(item => ({
+        key: `training-${item.id}`,
+        type: '训练',
+        title: item.xunlianName || '训练计划',
+        desc: `${item.yonghuName || '未指定球员'} / ${item.xunlianKemu || item.xunlianValue || '训练科目'}`,
+        time: this.formatDate(item.xunlianTime || item.insertTime),
+        status: item.xunlianValue || '计划',
+        route: '/xunlian',
+        row: item
+      }))
+
+      const contracts = this.latestContracts.map(item => ({
+        key: `contract-${item.id}`,
+        type: '合同',
+        title: item.hetongName || '合同记录',
+        desc: `${item.yonghuName || '未关联球员'} / ${item.yonghuPhone || '无手机号'}`,
+        time: this.formatDate(item.createTime),
+        status: item.hetongFile ? '有附件' : '待补充',
+        muted: !item.hetongFile,
+        route: '/hetong',
+        row: item
+      }))
+
+      const notices = this.latestNotices.map(item => ({
+        key: `notice-${item.id}`,
+        type: '公告',
+        title: item.gonggaoName || this.noticeText(item),
+        desc: this.noticeText(item),
+        time: this.formatDate(item.insertTime),
+        status: item.gonggaoValue || '通知',
+        route: '/gonggao',
+        row: item
+      }))
+
+      return matches.concat(trainings, contracts, notices).slice(0, 9)
+    },
+    focusItems() {
+      const pendingMatches = this.latestMatches.filter(item => !this.isEnded(item)).length
+      return [
+        { label: '待开赛赛事', value: pendingMatches, tip: '进入赛程维护', route: '/saishi' },
+        { label: '近期训练', value: this.latestTrainings.length, tip: '查看训练安排', route: '/xunlian' },
+        { label: '合同跟进', value: this.latestContracts.length, tip: '核对合同附件', route: '/hetong' },
+        { label: '公告更新', value: this.latestNotices.length, tip: '检查发布内容', route: '/gonggao' }
+      ]
     }
   },
   created() {
-    this.loadStats()
-    this.loadLatestNotices()
-    this.loadLatestMatches()
+    this.refreshWorkbench()
   },
   methods: {
     formatDate(value) {
@@ -123,9 +219,8 @@ export default {
       return String(item.saishiName || '俱乐部赛事')
     },
     matchParts(item) {
-      const name = this.matchName(item)
-      const cleanName = name.replace(/：/g, ':')
-      const main = cleanName.indexOf(':') > -1 ? cleanName.split(':').slice(1).join(':') : cleanName
+      const name = this.matchName(item).replace(/：/g, ':')
+      const main = name.indexOf(':') > -1 ? name.split(':').slice(1).join(':') : name
       const parts = main.split(/vs|VS|Vs|vS|对阵|-/)
       if (parts.length >= 2) {
         return [parts[0].trim() || '主队', parts.slice(1).join('vs').trim() || '客队']
@@ -147,6 +242,21 @@ export default {
     },
     go(path) {
       this.$router.push({ path })
+    },
+    openWorkItem(item) {
+      if (!item || !item.row) {
+        this.go(item.route || '/index')
+        return
+      }
+      if (item.route === '/saishi') {
+        this.openMatchDetail(item.row)
+        return
+      }
+      if (item.route === '/gonggao') {
+        this.openNoticeDetail(item.row)
+        return
+      }
+      this.go(item.route)
     },
     openMatchDetail(item) {
       if (!item || !item.id) {
@@ -176,6 +286,13 @@ export default {
         }
       })
     },
+    refreshWorkbench() {
+      this.loadStats()
+      this.loadLatestNotices()
+      this.loadLatestMatches()
+      this.loadLatestTrainings()
+      this.loadLatestContracts()
+    },
     loadStats() {
       const tasks = this.summaryCards.map(item => {
         return this.$http({
@@ -203,12 +320,7 @@ export default {
       this.$http({
         url: 'gonggao/page',
         method: 'get',
-        params: {
-          page: 1,
-          limit: 5,
-          sort: 'id',
-          order: 'desc'
-        }
+        params: { page: 1, limit: 5, sort: 'id', order: 'desc' }
       }).then(({ data }) => {
         this.latestNotices = data && data.code === 0 && data.data ? (data.data.list || []) : []
       }).catch(() => {
@@ -219,17 +331,33 @@ export default {
       this.$http({
         url: 'saishi/page',
         method: 'get',
-        params: {
-          page: 1,
-          limit: 4,
-          sort: 'id',
-          order: 'desc',
-          saishiDelete: 1
-        }
+        params: { page: 1, limit: 5, sort: 'id', order: 'desc', saishiDelete: 1 }
       }).then(({ data }) => {
         this.latestMatches = data && data.code === 0 && data.data ? (data.data.list || []) : []
       }).catch(() => {
         this.latestMatches = []
+      })
+    },
+    loadLatestTrainings() {
+      this.$http({
+        url: 'xunlian/page',
+        method: 'get',
+        params: { page: 1, limit: 5, sort: 'id', order: 'desc', xunlianDelete: 1 }
+      }).then(({ data }) => {
+        this.latestTrainings = data && data.code === 0 && data.data ? (data.data.list || []) : []
+      }).catch(() => {
+        this.latestTrainings = []
+      })
+    },
+    loadLatestContracts() {
+      this.$http({
+        url: 'hetong/page',
+        method: 'get',
+        params: { page: 1, limit: 5, sort: 'id', order: 'desc', hetongDelete: 1 }
+      }).then(({ data }) => {
+        this.latestContracts = data && data.code === 0 && data.data ? (data.data.list || []) : []
+      }).catch(() => {
+        this.latestContracts = []
       })
     }
   }
@@ -239,370 +367,338 @@ export default {
 <style lang="scss" scoped>
 .home-page {
   width: 100%;
-  max-width: 1440px;
+  max-width: 1480px;
   min-height: calc(100vh - 62px);
   margin: 0 auto;
-  padding: 28px 4px 0;
+  padding: 8px 0 0;
   background: #f3f4f7;
   color: #111827;
   box-sizing: border-box;
 }
 
-.page-title {
-  margin-bottom: 28px;
-  padding: 0 0 22px;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.page-title h1 {
-  margin: 0 0 6px;
-  color: #0f172a;
-  font-size: 28px;
-  line-height: 1.2;
-  font-weight: 800;
-}
-
-.page-title p {
-  margin: 0;
-  color: #64748b;
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.summary-grid {
+.ops-strip {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 24px;
-  margin-bottom: 32px;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
-.summary-card {
-  min-height: 142px;
-  padding: 24px 26px 22px;
+.metric-tile,
+.work-panel {
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 8px;
   background: #ffffff;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
   box-sizing: border-box;
+}
+
+.metric-tile {
+  min-height: 84px;
+  padding: 12px 13px;
   cursor: pointer;
-  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
-  position: relative;
-  overflow: hidden;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
-.summary-card::after {
-  content: '';
-  position: absolute;
-  top: 0; right: 0;
-  width: 80px; height: 80px;
-  border-radius: 0 12px 0 80px;
-  background: linear-gradient(135deg, transparent 50%, rgba(37, 99, 235, 0.04) 50%);
-}
-
-.summary-card:hover {
+.metric-tile:hover {
   border-color: rgba(37, 99, 235, 0.3);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.07);
 }
 
-.summary-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2px;
-  color: #0b57d0;
-  font-size: 21px;
-}
-
-.summary-label {
-  display: inline-block;
-  margin-left: 10px;
-  color: #111827;
-  font-size: 14px;
-  line-height: 22px;
-  font-weight: 700;
-  vertical-align: top;
-}
-
-.summary-number {
+.metric-tile span,
+.metric-tile em {
   display: block;
-  margin-top: 22px;
+  color: #64748b;
+  font-size: 12px;
+  font-style: normal;
+  line-height: 1.3;
+}
+
+.metric-tile strong {
+  display: block;
+  margin: 4px 0 5px;
   color: #111827;
-  font-size: 48px;
+  font-size: 28px;
   line-height: 1;
   font-weight: 800;
-  letter-spacing: 0;
 }
 
-.dashboard-panels {
+.metric-tile em {
+  color: #0b57d0;
+}
+
+.workbench-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 24px;
-  margin-bottom: 64px;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
-.panel-card {
-  min-height: 318px;
-  padding: 26px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  background: #ffffff;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
-  box-sizing: border-box;
+.work-side {
+  display: grid;
+  gap: 12px;
+}
+
+.work-panel {
+  padding: 16px;
+}
+
+.main-panel {
+  min-height: 470px;
 }
 
 .panel-head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 14px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #d8dde5;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.panel-head.compact {
+  padding-bottom: 10px;
 }
 
 .panel-head h2 {
-  margin: 0;
+  margin: 0 0 4px;
   color: #111827;
-  font-size: 23px;
+  font-size: 18px;
   line-height: 1.25;
   font-weight: 800;
 }
 
+.panel-head p {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
 .panel-head button {
-  border: 0;
-  background: transparent;
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid #d8dde5;
+  border-radius: 6px;
+  background: #ffffff;
   color: #0b57d0;
-  font-size: 14px;
-  line-height: 1;
+  font-size: 12px;
+  font-weight: 700;
   cursor: pointer;
 }
 
-.notice-list,
-.match-list {
-  margin: 18px 0 0;
+.work-list,
+.compact-list,
+.focus-list {
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.notice-item,
-.match-item {
+.work-list li {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) 116px 68px;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 10px 0;
+  border-bottom: 1px solid #edf0f4;
   cursor: pointer;
 }
 
-.notice-item {
-  padding: 0 0 15px;
-  border-bottom: 1px solid #d8dde5;
-}
-
-.notice-item + .notice-item {
-  padding-top: 14px;
-}
-
-.notice-item:last-child {
+.work-list li:last-child,
+.compact-list li:last-child,
+.focus-list li:last-child {
   border-bottom: 0;
-  padding-bottom: 0;
 }
 
-.notice-meta {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-  color: #1f2937;
-  font-size: 14px;
-  line-height: 1.4;
-  font-weight: 700;
-}
-
-.notice-meta span {
+.work-type {
   display: inline-flex;
   align-items: center;
-  min-height: 22px;
-  padding: 2px 9px;
-  border-radius: 4px;
+  justify-content: center;
+  height: 24px;
+  border-radius: 5px;
   background: #e8f0ff;
   color: #163f86;
   font-size: 12px;
+  font-weight: 800;
 }
 
-.notice-meta time {
-  color: #1f2937;
-  font-weight: 700;
-}
-
-.notice-item p {
-  margin: 0;
-  color: #111827;
-  font-size: 16px;
-  line-height: 1.5;
-  word-break: break-word;
-}
-
-.match-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 0 0 15px;
-  border-bottom: 1px solid #d8dde5;
-}
-
-.match-item + .match-item {
-  padding-top: 14px;
-}
-
-.match-item:last-child {
-  border-bottom: 0;
-  padding-bottom: 0;
-}
-
-.match-main {
+.work-main {
   min-width: 0;
 }
 
-.match-time {
-  margin-bottom: 6px;
-  color: #374151;
+.work-main strong,
+.compact-list strong {
+  display: block;
+  overflow: hidden;
+  color: #111827;
   font-size: 14px;
   line-height: 1.35;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.work-main p,
+.compact-list span {
+  display: block;
+  overflow: hidden;
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.work-list time {
+  color: #475569;
+  font-size: 12px;
   font-weight: 700;
 }
 
-.match-teams {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
+.work-list b {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #e8f0ff;
+  color: #163f86;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.work-list b.muted {
+  background: #edf0f4;
+  color: #475569;
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding-top: 12px;
+}
+
+.quick-grid button {
+  min-height: 70px;
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 7px;
+  background: #ffffff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.quick-grid button:hover {
+  border-color: rgba(37, 99, 235, 0.35);
+}
+
+.quick-grid strong,
+.quick-grid span {
+  display: block;
+}
+
+.quick-grid strong {
   color: #111827;
-  font-size: 17px;
+  font-size: 14px;
   line-height: 1.35;
 }
 
-.match-teams strong {
-  max-width: 190px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: 800;
+.quick-grid span {
+  margin-top: 5px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.35;
 }
 
-.match-teams span {
-  color: #0b57d0;
-  font-weight: 800;
+.focus-list {
+  padding-top: 8px;
 }
 
-.match-status {
-  flex: 0 0 auto;
-  min-width: 62px;
-  padding: 5px 10px;
-  border-radius: 999px;
-  background: #edf0f4;
-  color: #374151;
-  text-align: center;
+.focus-list li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 46px;
+  gap: 4px 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #edf0f4;
+  cursor: pointer;
+}
+
+.focus-list span {
+  color: #111827;
   font-size: 13px;
-  line-height: 1;
   font-weight: 700;
 }
 
-.match-status.ended {
-  background: #536179;
-  color: #ffffff;
+.focus-list strong {
+  grid-row: span 2;
+  color: #111827;
+  text-align: right;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.focus-list em {
+  color: #64748b;
+  font-size: 12px;
+  font-style: normal;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding-bottom: 20px;
+}
+
+.compact-list {
+  padding-top: 8px;
+}
+
+.compact-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #edf0f4;
+  cursor: pointer;
 }
 
 .empty-block {
-  margin-top: 24px;
-  padding: 30px 18px;
+  margin-top: 14px;
+  padding: 24px 14px;
   border: 1px dashed #cfd5df;
-  border-radius: 10px;
-  color: #6b7280;
-  text-align: center;
-  font-size: 15px;
-}
-
-.home-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  margin: 0 -4px;
-  padding: 28px;
-  border-top: 1px solid #e5e7eb;
-  background: #fff;
-  border-radius: 0 0 12px 12px;
+  border-radius: 8px;
   color: #64748b;
+  text-align: center;
   font-size: 13px;
 }
 
-.home-footer strong {
-  color: #334155;
-  font-size: 15px;
-}
+@media (max-width: 1280px) {
+  .ops-strip {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 
-.home-footer span {
-  color: #94a3b8;
-}
+  .workbench-grid {
+    grid-template-columns: 1fr;
+  }
 
-@media (max-width: 1200px) {
-  .summary-grid {
+  .work-side {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .dashboard-panels {
-    grid-template-columns: 1fr;
-  }
 }
 
-@media (max-width: 720px) {
-  .home-page {
-    padding: 20px 2px 0;
-  }
-
-  .page-title {
-    margin-bottom: 28px;
-  }
-
-  .page-title h1 {
-    font-size: 28px;
-  }
-
-  .summary-grid {
+@media (max-width: 760px) {
+  .ops-strip,
+  .detail-grid,
+  .work-side {
     grid-template-columns: 1fr;
-    gap: 14px;
-    margin-bottom: 24px;
   }
 
-  .summary-card {
-    min-height: 132px;
-    padding: 22px;
+  .work-list li {
+    grid-template-columns: 46px minmax(0, 1fr);
   }
 
-  .summary-number {
-    font-size: 44px;
-  }
-
-  .dashboard-panels {
-    gap: 14px;
-    margin-bottom: 42px;
-  }
-
-  .panel-card {
-    padding: 22px;
-  }
-
-  .match-item {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .match-teams strong {
-    max-width: 100%;
-  }
-
-  .home-footer {
-    align-items: flex-start;
-    flex-direction: column;
-    margin: 0 -2px;
-    padding: 24px 14px;
+  .work-list time,
+  .work-list b {
+    grid-column: 2;
   }
 }
 </style>

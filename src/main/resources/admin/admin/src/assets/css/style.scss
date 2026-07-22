@@ -43,6 +43,8 @@ body::after {
 
 .main-content {
   position: relative;
+  max-width: 1480px;
+  margin: 0 auto;
 }
 
 .main-content > div {
@@ -70,22 +72,25 @@ body::after {
 }
 
 .form-content {
-  padding: 20px 24px 4px;
-  margin-bottom: 16px;
+  padding: 11px 16px 0 !important;
+  margin-bottom: 8px !important;
 }
 
 .toolbar-content {
-  padding: 14px 24px 2px;
-  margin-bottom: 16px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 9px 16px 0 !important;
+  margin-bottom: 8px !important;
 }
 
 .table-content {
-  padding: 20px 24px 24px;
+  padding: 0 0 12px !important;
+  overflow: hidden;
 }
 
 .pagination-content {
-  margin-top: 20px;
-  padding-bottom: 0;
+  margin-top: 0 !important;
+  padding: 12px 16px 0 !important;
   text-align: right;
 }
 
@@ -118,7 +123,7 @@ body::after {
 .form-content .el-form-item,
 .toolbar-content .el-form-item,
 .detail-form-content .el-form-item {
-  margin-bottom: 16px;
+  margin-bottom: 10px !important;
 }
 
 .detail-form-content .el-form-item {
@@ -130,7 +135,7 @@ body::after {
 .detail-form-content .el-form-item__label {
   color: var(--text-primary);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .detail-form-content .el-form-item__label {
@@ -156,7 +161,21 @@ body::after {
 .form-content .el-input__inner,
 .toolbar-content .el-input__inner,
 .detail-form-content .el-input__inner {
-  height: 40px;
+  height: 34px;
+}
+
+.form-content .el-input,
+.form-content .el-select,
+.toolbar-content .el-input,
+.toolbar-content .el-select {
+  width: 190px;
+}
+
+.form-content .el-button,
+.toolbar-content .el-button {
+  height: 34px;
+  padding: 0 14px;
+  font-weight: 600;
 }
 
 .detail-form-content .el-input__inner,
@@ -270,7 +289,7 @@ body::after {
 
 /* ===== Borderless table ===== */
 .table-content .el-table {
-  border-radius: 8px;
+  border-radius: 0;
   overflow: hidden;
   border: none;
 }
@@ -293,14 +312,14 @@ body::after {
   background: #f9fafb;
   color: var(--text-secondary);
   font-weight: 600;
-  font-size: 13px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
 
 .table-content .el-table td {
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .table-content .el-table--striped .el-table__body tr.el-table__row--striped td {
@@ -312,12 +331,17 @@ body::after {
 }
 
 .table-content .el-table .cell {
-  padding: 10px 12px;
+  padding: 7px 10px;
+}
+
+.table-content .el-table__cell {
+  padding: 7px 0 !important;
 }
 
 .table-content .el-button--text {
   font-weight: 600;
-  font-size: 13px;
+  font-size: 12px;
+  padding: 0 3px;
 }
 
 .table-content .el-button--text.danger-text {

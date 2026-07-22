@@ -29,8 +29,14 @@ const routes = [
     component: Index,
     children: [
       {
-        path: '/',
+        path: '',
         name: '首页内容',
+        component: Home,
+        meta: { icon: '', title: 'home' }
+      },
+      {
+        path: '/home',
+        name: '首页内容兼容',
         component: Home,
         meta: { icon: '', title: 'home' }
       },
