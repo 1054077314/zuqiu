@@ -22,13 +22,13 @@
 | 🏠 **前台门户** | http://120.26.174.97:8080/zuqiujulebguanli/front/index.html | 公告、赛事、足球资讯，无需登录 |
 | 🔧 **后台管理** | http://120.26.174.97:8080/zuqiujulebguanli/admin | 完整管理后台，需登录 |
 
-**测试账号：**
+**测试账号（演示环境）：**
 
 | 角色 | 账号 | 密码 | 权限范围 |
 |------|------|------|----------|
-| 管理员 | `manager` | `manager` | 全部模块 |
-| 教练 | `coach_chen` | `123456` | 训练计划、球员数据 |
-| 球员 | `zhangwei` | `123456` | 个人中心、合同查看 |
+| 演示访客 | `demo_viewer` | `demo123` | 只读浏览（公告、赛事、门户页面） |
+
+> 生产/公网环境请勿暴露管理员全权限账号。本地开发可使用 `application-dev.yml` 配置完整测试数据。
 
 ## 📸 系统截图
 
@@ -52,18 +52,21 @@
 
 | 层次 | 技术 | 版本 |
 |------|------|------|
-| 框架 | Spring Boot | 2.2.2.RELEASE |
-| ORM | MyBatis-Plus | 2.3 |
+| 框架 | Spring Boot | 3.3.7 |
+| JDK | Java | 17 |
+| ORM | MyBatis-Plus | 3.5.7 |
 | 数据库 | MySQL | 5.7+ |
 | 缓存 | Redis | 5.0+（字典数据缓存，不可用时自动降级） |
 | 连接池 | HikariCP | (Spring Boot 内置) |
-| 权限 | Apache Shiro | 1.3.2 |
+| 鉴权 | 自研 Token 拦截器 | AuthorizationInterceptor |
 | 模板引擎 | Thymeleaf | (Spring Boot 内置) |
-| JSON | FastJSON | 1.2.8 |
+| JSON | FastJSON2 | 2.0.53 |
+| AI | DeepSeek / OpenAI 兼容 API + Function Calling | 6 类业务工具 |
 | 工具库 | Hutool | 5.8.25 |
 | 后台前端 | Vue 2 + Element UI + Vue Router | (CDN + Webpack 打包) |
 | 前台前端 | 原生 HTML + Vue.js (CDN) + Layui | — |
 | 构建工具 | Maven (后端) / Webpack (前端) | — |
+| 工程化 | Docker Compose + GitHub Actions CI | — |
 
 ## 目录结构
 
@@ -149,10 +152,17 @@ zuqiu/
 ## 后端启动步骤
 
 ### 环境要求
-- JDK 8
+- JDK 17
 - Maven 3.6+
 - MySQL 5.7+（已安装并运行）
 - Redis 5.0+（可选，字典缓存；不可用时自动降级到内存缓存）
+
+复制环境变量模板：
+
+```bash
+cp .env.example .env
+# 编辑 .env，至少设置 DB_PASSWORD 和 DEEPSEEK_API_KEY
+```
 
 ### 1. 创建数据库并导入数据
 
@@ -170,14 +180,14 @@ mysql -u root -p zuqiujulebguanli < db.sql
 
 ### 2. 修改数据库连接
 
-编辑 `src/main/resources/application.yml`：
+编辑 `src/main/resources/application.yml` 或使用环境变量：
 
 ```yaml
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/zuqiujulebguanli?...参数省略...
-    username: root        # 改为你的 MySQL 用户名
-    password: 123456      # 改为你的 MySQL 密码
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 ```
 
 ### 3. 编译运行
@@ -281,6 +291,67 @@ npm run build
 - `order`: 排序方向（asc / desc，默认 desc）
 - 其他字段：作为过滤条件，空值和 "null" 字符串自动忽略
 
+## AI 智能助手
+
+### 架构
+
+```text
+用户 -> /ai/chat -> AiChatService
+                      ├─ AiProviderClient         (模型请求)
+                      ├─ AiToolDefinitionService  (6 类工具定义)
+                      ├─ AiToolExecutor           (真实数据库查询)
+                      ├─ AiFallbackRouter         (模型漏调工具时兜底)
+                      ├─ AiReplyFormatter         (后端确定性纯文本回复)
+                      └─ AiExecutionRecorder      (工具/参数/耗时/结果记录)
+```
+
+### 6 类 Function Calling 工具
+
+| 工具名 | 用途 |
+|--------|------|
+| `queryPlayers` | 球员档案查询 |
+| `queryAnnouncements` | 公告查询 |
+| `queryMatches` | 赛事查询 |
+| `queryTrainingPlans` | 训练计划查询 |
+| `queryContracts` | 合同查询（含同名球员消歧） |
+| `queryPlayerData` | 球员数据记录查询 |
+
+### 接口
+
+`POST /zuqiujulebguanli/ai/chat`
+
+```json
+{ "message": "查最新赛事" }
+```
+
+返回：
+
+```json
+{ "code": 0, "data": { "reply": "最新赛事信息：..." } }
+```
+
+### 安全与限流
+
+- API Key 通过环境变量 `DEEPSEEK_API_KEY` 注入，不写入仓库
+- `/ai/chat` 对公网开放但带 IP 频率限制（默认 20 次/60 秒）
+- 业务数据回复由 Java 后端格式化，避免模型编造系统数据
+
+### 测试与评测
+
+| 类型 | 位置 | 说明 |
+|------|------|------|
+| 单元测试 | `src/test/java/com/service/` | 回复格式化、关键词提取 |
+| 离线评测 | `src/test/resources/ai/eval-dataset.json` | 固定问题集，不调真实模型 |
+| 在线评测 | `AiOnlineEvaluator` | 需配置 API Key，每题重复 3 次观察稳定性 |
+
+运行测试：
+
+```bash
+mvn test
+```
+
+当前自动化测试覆盖：回复格式化（5）、关键词提取（2）、离线评测集（15+）、Controller 接口（2）。
+
 ## 面试可讲模块
 
 ### 1. BaseService 模板方法设计模式
@@ -340,7 +411,27 @@ public class GlobalExceptionHandler {
 
 详见 `docs/deploy.md` 中的 Redis 降级与恢复说明。
 
+### 7. AI 可靠性与评测工程化
+
+- 拆分模型调用、工具执行、兜底路由、确定性回复模块
+- 建立固定评测集，覆盖精确查询、模糊姓名、多人同名、数据不存在、字段缺失、提示词攻击
+- 分离离线后端测试与在线模型评测
+- 记录工具选择、参数提取、事实一致性、兜底触发率与响应耗时
+
 ## 部署方式
+
+### Docker Compose 一键启动
+
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+服务启动后访问：`http://localhost:8080/zuqiujulebguanli/front/index.html`
+
+### CI
+
+GitHub Actions 在 push/PR 时自动执行 `mvn test`（见 `.github/workflows/ci.yml`）。
 
 ### 生产部署架构
 
@@ -421,4 +512,4 @@ A: 正确路径是 `/front/index.html`，不是 `/front/front/index.html`。`app
 A: 需要先 `npm run build` 构建 admin 项目到 `admin/dist/` 目录。
 
 ### Q: multi-catch 编译报错
-A: `pom.xml` 中未显式配置 `maven-compiler-plugin`，已修复 source/target 为 1.8。
+A: 项目已升级到 JDK 17 + Spring Boot 3.x，请确认 IDE 与 Maven 使用 JDK 17。

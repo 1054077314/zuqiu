@@ -5,22 +5,24 @@
 # ============================================
 
 set -e
-echo "========== [1/6] 安装 JDK 8 =========="
+
+DB_PASSWORD="${DB_PASSWORD:-zuqiu_dev_pass}"
+DEEPSEEK_API_KEY="${DEEPSEEK_API_KEY:-}"
+
+echo "========== [1/6] 安装 JDK 17 =========="
 apt-get update -qq
-apt-get install -y openjdk-8-jdk
+apt-get install -y openjdk-17-jdk
 java -version
 
-echo "========== [2/6] 安装 MySQL 5.7 (使用 MySQL 8.0 替代) =========="
+echo "========== [2/6] 安装 MySQL =========="
 apt-get install -y mysql-server
 systemctl start mysql
 systemctl enable mysql
 
-# 设置 root 密码（默认 123456，后续可改）
-mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '123456'; FLUSH PRIVILEGES;" 2>/dev/null || true
+mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${DB_PASSWORD}'; FLUSH PRIVILEGES;" 2>/dev/null || true
 
 echo "========== [3/6] 安装 Redis =========="
 apt-get install -y redis-server
-sed -i 's/^bind 127.0.0.1/bind 127.0.0.1/' /etc/redis/redis.conf
 systemctl start redis-server
 systemctl enable redis-server
 redis-cli ping
@@ -40,41 +42,38 @@ else
     cd zuqiu
 fi
 
-# 创建数据库并导入
-mysql -u root -p123456 -e "CREATE DATABASE IF NOT EXISTS zuqiujulebguanli DEFAULT CHARACTER SET utf8mb4;" 2>/dev/null
-mysql -u root -p123456 zuqiujulebguanli < db.sql 2>/dev/null || echo "数据库已导入或已存在"
+mysql -u root -p"${DB_PASSWORD}" -e "CREATE DATABASE IF NOT EXISTS zuqiujulebguanli DEFAULT CHARACTER SET utf8mb4;" 2>/dev/null
+mysql -u root -p"${DB_PASSWORD}" zuqiujulebguanli < db.sql 2>/dev/null || echo "数据库已导入或已存在"
 
-# 编译打包
 mvn clean package -DskipTests -q
 
 echo "========== [6/6] 启动应用 =========="
-# 先杀掉旧进程
 pkill -f 'zuqiujulebguanli-0.0.1-SNAPSHOT.jar' 2>/dev/null || true
 sleep 2
 
-# 后台启动
-nohup java -jar target/zuqiujulebguanli-0.0.1-SNAPSHOT.jar \
-  --spring.datasource.url="jdbc:mysql://127.0.0.1:3306/zuqiujulebguanli?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false" \
-  --spring.datasource.username=root \
-  --spring.datasource.password=123456 \
-  --spring.redis.host=127.0.0.1 \
-  --spring.redis.port=6379 \
-  > /opt/app.log 2>&1 &
+export SPRING_PROFILES_ACTIVE=prod
+export DB_URL="jdbc:mysql://127.0.0.1:3306/zuqiujulebguanli?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false"
+export DB_USERNAME=root
+export DB_PASSWORD="${DB_PASSWORD}"
+export REDIS_HOST=127.0.0.1
+export REDIS_PORT=6379
+
+nohup java -jar target/zuqiujulebguanli-0.0.1-SNAPSHOT.jar > /opt/app.log 2>&1 &
 
 echo "等待应用启动..."
 sleep 10
 
-# 检查是否启动成功
 if curl -s http://localhost:8080/zuqiujulebguanli/front/index.html | grep -q "html"; then
     echo ""
     echo "=========================================="
     echo "  部署成功！"
     echo "=========================================="
     echo ""
-    echo "  前台门户: http://120.26.174.97:8080/zuqiujulebguanli/front/index.html"
-    echo "  后台管理: http://120.26.174.97:8080/zuqiujulebguanli/admin/dist/index.html"
+    echo "  前台门户: http://<服务器IP>:8080/zuqiujulebguanli/front/index.html"
+    echo "  后台管理: http://<服务器IP>:8080/zuqiujulebguanli/admin"
+    echo "  AI 问答:  http://<服务器IP>:8080/zuqiujulebguanli/front/pages/chat/chat.html"
     echo ""
-    echo "  管理员账号: manager / manager"
+    echo "  请通过环境变量配置 DB_PASSWORD / DEEPSEEK_API_KEY"
     echo "  日志文件: tail -f /opt/app.log"
     echo "=========================================="
 else

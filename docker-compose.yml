@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: zuqiu-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-zuqiu_dev_pass}
+      MYSQL_DATABASE: zuqiujulebguanli
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - zuqiu-mysql-data:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+
+  redis:
+    image: redis:7-alpine
+    container_name: zuqiu-redis
+    ports:
+      - "6379:6379"
+
+  app:
+    build: .
+    container_name: zuqiu-app
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/zuqiujulebguanli?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false
+      DB_USERNAME: root
+      DB_PASSWORD: ${DB_PASSWORD:-zuqiu_dev_pass}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+    ports:
+      - "8080:8080"
+
+volumes:
+  zuqiu-mysql-data:
