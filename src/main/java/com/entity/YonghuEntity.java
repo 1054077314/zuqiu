@@ -29,7 +29,7 @@ public class YonghuEntity<T> implements Serializable {
 
 	public YonghuEntity(T t) {
 		try {
-			BeanUtils.copyProperties(this, t);
+            BeanUtils.copyProperties(this, t);
 		} catch (IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 		}

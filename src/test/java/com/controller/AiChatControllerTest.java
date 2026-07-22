@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.service.AiChatService;
+import com.service.TokenService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -22,6 +23,9 @@ class AiChatControllerTest {
 
     @MockBean
     private AiChatService aiChatService;
+
+    @MockBean
+    private TokenService tokenService;
 
     @Test
     void blankMessageReturns400() throws Exception {
