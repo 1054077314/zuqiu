@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,7 +34,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.annotation.IgnoreAuth;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.entity.ConfigEntity;
 import com.common.BusinessException;
 import com.service.ConfigService;
@@ -47,6 +48,10 @@ import com.utils.R;
 @SuppressWarnings({"unchecked","rawtypes"})
 public class FileController{
 	private static final Logger log = LoggerFactory.getLogger(FileController.class);
+
+	@Value("${upload.allowed-extensions:jpg,jpeg,png,gif,webp,pdf,doc,docx,xls,xlsx}")
+	private String allowedExtensions;
+
 	@Autowired
     private ConfigService configService;
 	/**
@@ -57,7 +62,14 @@ public class FileController{
 		if (file.isEmpty()) {
 			throw new BusinessException("上传文件不能为空");
 		}
-		String fileExt = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+		String originalFilename = file.getOriginalFilename();
+		if (StringUtils.isBlank(originalFilename) || !originalFilename.contains(".")) {
+			throw new BusinessException("文件名无效");
+		}
+		String fileExt = originalFilename.substring(originalFilename.lastIndexOf('.') + 1).toLowerCase();
+		if (!isAllowedExtension(fileExt)) {
+			throw new BusinessException("不支持的文件类型: " + fileExt);
+		}
 		File path = new File(ResourceUtils.getURL("classpath:static").getPath());
 		if(!path.exists()) {
 		    path = new File("");
@@ -70,7 +82,7 @@ public class FileController{
 		File dest = new File(upload.getAbsolutePath()+"/"+fileName);
 		file.transferTo(dest);
 		if(StringUtils.isNotBlank(type) && type.equals("1")) {
-			ConfigEntity configEntity = configService.selectOne(new EntityWrapper<ConfigEntity>().eq("name", "faceFile"));
+			ConfigEntity configEntity = configService.selectOne(new QueryWrapper<ConfigEntity>().eq("name", "faceFile"));
 			if(configEntity==null) {
 				configEntity = new ConfigEntity();
 				configEntity.setName("faceFile");
@@ -120,6 +132,11 @@ public class FileController{
 			log.error("文件下载失败", e);
 		}
 		return new ResponseEntity<byte[]>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	private boolean isAllowedExtension(String extension) {
+		List<String> allowed = Arrays.asList(allowedExtensions.toLowerCase().split(","));
+		return allowed.contains(extension.trim());
 	}
 	
 }

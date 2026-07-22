@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+logging:
+  level:
+    root: warn
+    com.service.ai: info
+
+ai:
+  rate-limit:
+    max-requests: 10
+    window-seconds: 60
