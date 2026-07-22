@@ -3,7 +3,7 @@ package com.controller;
 import java.util.Arrays;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.entity.XunlianEntity;
 import com.entity.view.XunlianView;
 import com.service.XunlianService;
@@ -39,7 +40,7 @@ public class XunlianController {
 
     @GetMapping("/page")
     public R page(@RequestParam Map<String, Object> params, HttpServletRequest request) {
-        logger.debug("page方法:,,Controller:{},,params:{}", this.getClass().getName(), JSONObject.toJSONString(params));
+        logger.debug("page方法:,,Controller:{},,params:{}", this.getClass().getName(), JSON.toJSONString(params));
         PageUtils page = xunlianService.queryPage(params, request);
         return R.ok().put("data", page);
     }

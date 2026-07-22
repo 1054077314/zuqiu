@@ -1,6 +1,6 @@
 package com.listener;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.entity.DictionaryEntity;
 import com.service.DictionaryCacheService;
 import com.service.DictionaryService;
@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.annotation.WebListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class DictionaryServletContextListener implements ServletContextListener 
 
         logger.info("----------字典表初始化开始----------");
         DictionaryService dictionaryService = (DictionaryService) appContext.getBean("dictionaryService");
-        List<DictionaryEntity> dictionaryEntities = dictionaryService.selectList(new EntityWrapper<DictionaryEntity>());
+        List<DictionaryEntity> dictionaryEntities = dictionaryService.selectList(new QueryWrapper<DictionaryEntity>());
         Map<String, Map<Integer, String>> map = new HashMap<>();
         for (DictionaryEntity d : dictionaryEntities) {
             Map<Integer, String> m = map.get(d.getDicCode());

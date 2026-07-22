@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
  * 鍒嗛〉宸ュ叿绫?
@@ -22,7 +22,7 @@ public class PageUtils implements Serializable {
 	private int currPage;
 	//鍒楄〃鏁版嵁
 	private List<?> list;
-	
+
 	/**
 	 * 鍒嗛〉
 	 * @param list        鍒楄〃鏁版嵁
@@ -44,10 +44,10 @@ public class PageUtils implements Serializable {
 	public PageUtils(Page<?> page) {
 		this.list = page.getRecords();
 		this.total = page.getTotal();
-		this.pageSize = page.getSize();
-		this.currPage = page.getCurrent();
+		this.pageSize = Math.toIntExact(page.getSize());
+		this.currPage = Math.toIntExact(page.getCurrent());
 		this.totalPage = page.getPages();
-	}
+	}
 	public int getPageSize() {
 		return pageSize;
 	}
@@ -87,6 +87,6 @@ public class PageUtils implements Serializable {
 	public void setTotal(long total) {
 		this.total = total;
 	}
-	
+
 }
 

@@ -1,5 +1,6 @@
 package com.config;
 
+import com.interceptor.AiRateLimitInterceptor;
 import com.interceptor.AuthorizationInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -17,8 +18,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Autowired
     private AuthorizationInterceptor authorizationInterceptor;
 
+    @Autowired
+    private AiRateLimitInterceptor aiRateLimitInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(aiRateLimitInterceptor)
+                .addPathPatterns("/ai/chat");
         registry.addInterceptor(authorizationInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/file/upload", "/file/download");

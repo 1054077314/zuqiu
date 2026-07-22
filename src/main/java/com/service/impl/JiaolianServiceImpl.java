@@ -1,8 +1,7 @@
 package com.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.common.BusinessException;
 import com.dao.JiaolianDao;
 import com.entity.JiaolianEntity;
@@ -17,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +45,7 @@ public class JiaolianServiceImpl extends BaseService<JiaolianDao, JiaolianEntity
 
     @Override
     protected JiaolianEntity checkUniqueness(JiaolianEntity entity) {
-        Wrapper<JiaolianEntity> queryWrapper = new EntityWrapper<JiaolianEntity>()
+        QueryWrapper<JiaolianEntity> queryWrapper = new QueryWrapper<JiaolianEntity>()
                 .eq("username", entity.getUsername())
                 .or()
                 .eq("jiaolian_phone", entity.getJiaolianPhone())
@@ -73,7 +72,7 @@ public class JiaolianServiceImpl extends BaseService<JiaolianDao, JiaolianEntity
 
     @Override
     public R login(String username, String password) {
-        JiaolianEntity jiaolian = selectOne(new EntityWrapper<JiaolianEntity>().eq("username", username));
+        JiaolianEntity jiaolian = selectOne(new QueryWrapper<JiaolianEntity>().eq("username", username));
         if (jiaolian == null || !jiaolian.getPassword().equals(password)) {
             return R.error("账号或密码不正确");
         }
@@ -133,7 +132,7 @@ public class JiaolianServiceImpl extends BaseService<JiaolianDao, JiaolianEntity
             }
         }
         if (tokenEntity != null && StringUtils.isNotBlank(tokenEntity.getUsername())) {
-            return selectOne(new EntityWrapper<JiaolianEntity>().eq("username", tokenEntity.getUsername()));
+            return selectOne(new QueryWrapper<JiaolianEntity>().eq("username", tokenEntity.getUsername()));
         }
         return null;
     }

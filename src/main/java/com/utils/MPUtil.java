@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import cn.hutool.core.bean.BeanUtil;
 
-import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 /**
  * Mybatis-Plus宸ュ叿绫?
@@ -17,7 +17,7 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 public class MPUtil {
 	public static final char UNDERLINE = '_';
 
-	
+
 	//mybatis plus allEQ 琛ㄨ揪寮忚浆鎹?
 		public static Map allEQMapPre(Object bean,String pre) {
 		   Map<String, Object> map =BeanUtil.beanToMap(bean);
@@ -30,43 +30,38 @@ public class MPUtil {
 		   return camelToUnderlineMap(map,"");
 	   }
 
-		public static Wrapper allLikePre(Wrapper wrapper,Object bean,String pre) {
+		public static QueryWrapper allLikePre(QueryWrapper wrapper,Object bean,String pre) {
 			   Map<String, Object> map =BeanUtil.beanToMap(bean);
 			   Map result = camelToUnderlineMap(map,pre);
-			 
+
 			return genLike(wrapper,result);
 		}
-	
-		public static Wrapper allLike(Wrapper wrapper,Object bean) {
-			  Map result = BeanUtil.beanToMap(bean, true, true);			 
+
+		public static QueryWrapper allLike(QueryWrapper wrapper,Object bean) {
+			  Map result = BeanUtil.beanToMap(bean, true, true);
 			return genLike(wrapper,result);
 		}
-	
-	
-		public static Wrapper genLike( Wrapper wrapper,Map param) {
+
+
+		public static QueryWrapper genLike(QueryWrapper wrapper,Map param) {
 			Iterator<Map.Entry<String, Object>> it = param.entrySet().iterator();
-			int i=0;
 			while (it.hasNext()) {
-				if(i>0) wrapper.and();
 				Map.Entry<String, Object> entry = it.next();
 				String key = entry.getKey();
 				String value = (String) entry.getValue();
 				wrapper.like(key, value);
-				i++;
 			}
 			return wrapper;
 		}
-		
-		public static Wrapper likeOrEq(Wrapper wrapper,Object bean) {
-			  Map result = BeanUtil.beanToMap(bean, true, true);			 
+
+		public static QueryWrapper likeOrEq(QueryWrapper wrapper,Object bean) {
+			  Map result = BeanUtil.beanToMap(bean, true, true);
 			return genLikeOrEq(wrapper,result);
 		}
-		
-		public static Wrapper genLikeOrEq( Wrapper wrapper,Map param) {
+
+		public static QueryWrapper genLikeOrEq(QueryWrapper wrapper,Map param) {
 			Iterator<Map.Entry<String, Object>> it = param.entrySet().iterator();
-			int i=0;
 			while (it.hasNext()) {
-				if(i>0) wrapper.and();
 				Map.Entry<String, Object> entry = it.next();
 				String key = entry.getKey();
 				if(entry.getValue().toString().contains("%")) {
@@ -74,32 +69,28 @@ public class MPUtil {
 				} else {
 					wrapper.eq(key, entry.getValue());
 				}
-				i++;
 			}
 			return wrapper;
 		}
-		
-		public static Wrapper allEq(Wrapper wrapper,Object bean) {
-			  Map result = BeanUtil.beanToMap(bean, true, true);			 
+
+		public static QueryWrapper allEq(QueryWrapper wrapper,Object bean) {
+			  Map result = BeanUtil.beanToMap(bean, true, true);
 			return genEq(wrapper,result);
 		}
-	
-	
-		public static Wrapper genEq( Wrapper wrapper,Map param) {
+
+
+		public static QueryWrapper genEq(QueryWrapper wrapper,Map param) {
 			Iterator<Map.Entry<String, Object>> it = param.entrySet().iterator();
-			int i=0;
 			while (it.hasNext()) {
-				if(i>0) wrapper.and();
 				Map.Entry<String, Object> entry = it.next();
 				String key = entry.getKey();
 				wrapper.eq(key, entry.getValue());
-				i++;
 			}
 			return wrapper;
 		}
-	
-	
-		public static Wrapper between(Wrapper wrapper,Map<String, Object> params) {
+
+
+		public static QueryWrapper between(QueryWrapper wrapper,Map<String, Object> params) {
 			for(String key : params.keySet()) {
 				String columnName = "";
 				if(key.endsWith("_start")) {
@@ -117,26 +108,26 @@ public class MPUtil {
 			}
 			return wrapper;
 		}
-	
-		public static Wrapper sort(Wrapper wrapper,Map<String, Object> params) {
+
+		public static QueryWrapper sort(QueryWrapper wrapper,Map<String, Object> params) {
 			String order = "";
 			if(params.get("order") != null && StringUtils.isNotBlank(params.get("order").toString())) {
 				order = params.get("order").toString();
 			}
 			if(params.get("sort") != null && StringUtils.isNotBlank(params.get("sort").toString())) {
 				if(order.equalsIgnoreCase("desc")) {
-					wrapper.orderDesc(Arrays.asList(params.get("sort")));
+					wrapper.orderByDesc(Arrays.asList(params.get("sort")));
 				} else {
-					wrapper.orderAsc(Arrays.asList(params.get("sort")));
+					wrapper.orderByAsc(Arrays.asList(params.get("sort")));
 				}
 			}
 			return wrapper;
 		}
-	
-	
+
+
 	/**
 	 * 椹煎嘲鏍煎紡瀛楃涓茶浆鎹负涓嬪垝绾挎牸寮忓瓧绗︿覆
-	 * 
+	 *
 	 * @param param
 	 * @return
 	 */
@@ -156,7 +147,8 @@ public class MPUtil {
 			}
 		}
 		return sb.toString();
-	}
+	}
+
 	public static Map camelToUnderlineMap(Map param, String pre) {
 
 		Map<String, Object> newMap = new HashMap<String, Object>();

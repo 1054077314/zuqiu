@@ -1,8 +1,7 @@
 package com.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.common.BusinessException;
 import com.dao.YonghuDao;
 import com.entity.TokenEntity;
@@ -18,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +46,7 @@ public class YonghuServiceImpl extends BaseService<YonghuDao, YonghuEntity, Yong
 
     @Override
     protected YonghuEntity checkUniqueness(YonghuEntity entity) {
-        Wrapper<YonghuEntity> queryWrapper = new EntityWrapper<YonghuEntity>()
+        QueryWrapper<YonghuEntity> queryWrapper = new QueryWrapper<YonghuEntity>()
                 .eq("username", entity.getUsername())
                 .or()
                 .eq("yonghu_phone", entity.getYonghuPhone())
@@ -74,7 +73,7 @@ public class YonghuServiceImpl extends BaseService<YonghuDao, YonghuEntity, Yong
 
     @Override
     public R login(String username, String password) {
-        YonghuEntity yonghu = selectOne(new EntityWrapper<YonghuEntity>().eq("username", username));
+        YonghuEntity yonghu = selectOne(new QueryWrapper<YonghuEntity>().eq("username", username));
         if (yonghu == null || !yonghu.getPassword().equals(password)) {
             return R.error("账号或密码不正确");
         }
@@ -134,7 +133,7 @@ public class YonghuServiceImpl extends BaseService<YonghuDao, YonghuEntity, Yong
             }
         }
         if (tokenEntity != null && StringUtils.isNotBlank(tokenEntity.getUsername())) {
-            return selectOne(new EntityWrapper<YonghuEntity>().eq("username", tokenEntity.getUsername()));
+            return selectOne(new QueryWrapper<YonghuEntity>().eq("username", tokenEntity.getUsername()));
         }
         return null;
     }

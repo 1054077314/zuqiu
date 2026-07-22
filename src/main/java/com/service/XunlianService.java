@@ -1,17 +1,16 @@
 package com.service;
 
-import com.baomidou.mybatisplus.service.IService;
 import com.utils.PageUtils;
 import com.entity.XunlianEntity;
 import com.entity.view.XunlianView;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
  * 训练计划 服务类
  */
-public interface XunlianService extends IService<XunlianEntity> {
+public interface XunlianService extends LegacyIService<XunlianEntity> {
 
     /**
      * 分页查询（原有方法，保留兼容）

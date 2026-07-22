@@ -1,18 +1,17 @@
 package com.service;
 
-import com.baomidou.mybatisplus.service.IService;
 import com.utils.PageUtils;
 import com.utils.R;
 import com.entity.JiaolianEntity;
 import com.entity.view.JiaolianView;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
  * 教练 服务类
  */
-public interface JiaolianService extends IService<JiaolianEntity> {
+public interface JiaolianService extends LegacyIService<JiaolianEntity> {
 
     PageUtils queryPage(Map<String, Object> params, HttpServletRequest request);
 

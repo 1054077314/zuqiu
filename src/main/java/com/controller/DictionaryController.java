@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.annotation.IgnoreAuth;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.entity.DictionaryEntity;
 import com.entity.view.DictionaryView;
 import com.service.DictionaryCacheService;
@@ -53,7 +53,7 @@ public class DictionaryController {
     @GetMapping("/page")
     @IgnoreAuth
     public R page(@RequestParam Map<String, Object> params, HttpServletRequest request) {
-        logger.debug("page方法:,,Controller:{},,params:{}", this.getClass().getName(), JSONObject.toJSONString(params));
+        logger.debug("page方法:,,Controller:{},,params:{}", this.getClass().getName(), JSON.toJSONString(params));
         CommonUtil.checkMap(params);
         PageUtils page = dictionaryService.queryPage(params);
         List<DictionaryView> list = (List<DictionaryView>) page.getList();
@@ -80,7 +80,7 @@ public class DictionaryController {
     public R save(@RequestBody DictionaryEntity dictionary, HttpServletRequest request) {
         logger.debug("save方法:,,Controller:{},,dictionary:{}", this.getClass().getName(), dictionary.toString());
 
-        Wrapper<DictionaryEntity> queryWrapper = new EntityWrapper<DictionaryEntity>()
+        QueryWrapper<DictionaryEntity> queryWrapper = new QueryWrapper<DictionaryEntity>()
             .eq("dic_code", dictionary.getDicCode())
             .eq("index_name", dictionary.getIndexName());
         if (dictionary.getDicCode().contains("_erji_types")) {
@@ -120,9 +120,9 @@ public class DictionaryController {
         logger.debug("maxCodeIndex方法:,,Controller:{},,dictionary:{}", this.getClass().getName(), dictionary.toString());
         List<String> descs = new ArrayList<>();
         descs.add("code_index");
-        Wrapper<DictionaryEntity> queryWrapper = new EntityWrapper<DictionaryEntity>()
+        QueryWrapper<DictionaryEntity> queryWrapper = new QueryWrapper<DictionaryEntity>()
             .eq("dic_code", dictionary.getDicCode())
-            .orderDesc(descs);
+            .orderByDesc(descs);
         logger.info("sql语句:{}", queryWrapper.getSqlSegment());
         List<DictionaryEntity> dictionaryEntityList = dictionaryService.selectList(queryWrapper);
         if (dictionaryEntityList.size() > 0) {
@@ -132,7 +132,7 @@ public class DictionaryController {
     }
 
     private void refreshDictionaryMap(HttpServletRequest request) {
-        List<DictionaryEntity> dictionaryEntities = dictionaryService.selectList(new EntityWrapper<DictionaryEntity>());
+        List<DictionaryEntity> dictionaryEntities = dictionaryService.selectList(new QueryWrapper<DictionaryEntity>());
         ServletContext servletContext = request.getServletContext();
         Map<String, Map<Integer, String>> map = new HashMap<>();
         for (DictionaryEntity item : dictionaryEntities) {

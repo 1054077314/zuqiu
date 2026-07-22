@@ -1,8 +1,7 @@
 package com.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dao.SaishiDao;
 import com.entity.SaishiEntity;
 import com.entity.view.SaishiView;
@@ -37,7 +36,7 @@ public class SaishiServiceImpl extends BaseService<SaishiDao, SaishiEntity, Sais
 
     @Override
     protected SaishiEntity checkUniqueness(SaishiEntity entity) {
-        Wrapper<SaishiEntity> queryWrapper = new EntityWrapper<SaishiEntity>()
+        QueryWrapper<SaishiEntity> queryWrapper = new QueryWrapper<SaishiEntity>()
                 .eq("saishi_name", entity.getSaishiName())
                 .eq("saishi_address", entity.getSaishiAddress())
                 .eq("saishi_types", entity.getSaishiTypes())

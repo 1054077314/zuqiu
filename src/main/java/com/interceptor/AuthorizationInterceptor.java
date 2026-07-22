@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.annotation.IgnoreAuth;
 import com.entity.TokenEntity;
 import com.service.TokenService;
@@ -88,7 +89,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         PrintWriter writer = null;
         try {
             writer = response.getWriter();
-            writer.print(JSONObject.toJSONString(R.error(401, "请先登录")));
+            writer.print(JSON.toJSONString(R.error(401, "请先登录")));
         } finally {
             if (writer != null) {
                 writer.close();

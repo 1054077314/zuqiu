@@ -1,18 +1,17 @@
 package com.service;
 
-import com.baomidou.mybatisplus.service.IService;
 import com.utils.PageUtils;
 import com.utils.R;
 import com.entity.YonghuEntity;
 import com.entity.view.YonghuView;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
  * 用户 服务类
  */
-public interface YonghuService extends IService<YonghuEntity> {
+public interface YonghuService extends LegacyIService<YonghuEntity> {
 
     PageUtils queryPage(Map<String, Object> params, HttpServletRequest request);
 

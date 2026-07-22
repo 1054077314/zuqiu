@@ -1,8 +1,7 @@
 package com.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dao.ShujuDao;
 import com.entity.ShujuEntity;
 import com.entity.YonghuEntity;
@@ -14,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,7 +50,7 @@ public class ShujuServiceImpl extends BaseService<ShujuDao, ShujuEntity, ShujuVi
 
     @Override
     protected ShujuEntity checkUniqueness(ShujuEntity entity) {
-        Wrapper<ShujuEntity> queryWrapper = new EntityWrapper<ShujuEntity>()
+        QueryWrapper<ShujuEntity> queryWrapper = new QueryWrapper<ShujuEntity>()
                 .eq("yonghu_id", entity.getYonghuId())
                 .eq("shuju_name", entity.getShujuName())
                 .eq("shuju_uuid_number", entity.getShujuUuidNumber())

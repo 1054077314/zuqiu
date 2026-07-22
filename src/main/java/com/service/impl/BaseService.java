@@ -1,8 +1,7 @@
 package com.service.impl;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.common.BusinessException;
 import com.service.DictionaryService;
 import com.utils.CommonUtil;
@@ -12,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +30,7 @@ import java.util.Map;
  * @param <E> Entity 类型
  * @param <V> View 类型
  */
-public abstract class BaseService<M extends BaseMapper<E>, E, V> extends ServiceImpl<M, E> {
+public abstract class BaseService<M extends BaseMapper<E>, E, V> extends LegacyServiceImpl<M, E> {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseService.class);
 

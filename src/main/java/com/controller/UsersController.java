@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.annotation.IgnoreAuth;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.entity.UsersEntity;
 import com.service.TokenService;
 import com.service.UsersService;
@@ -43,7 +43,7 @@ public class UsersController {
     @IgnoreAuth
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
     public R login(String username, String password, String captcha, HttpServletRequest request) {
-        UsersEntity user = usersService.selectOne(new EntityWrapper<UsersEntity>().eq("username", username));
+        UsersEntity user = usersService.selectOne(new QueryWrapper<UsersEntity>().eq("username", username));
         if (user == null || !user.getPassword().equals(password)) {
             return R.error("账号或密码不正确");
         }
@@ -57,7 +57,7 @@ public class UsersController {
 
     @GetMapping("/page")
     public R page(@RequestParam Map<String, Object> params, UsersEntity user) {
-        EntityWrapper<UsersEntity> ew = new EntityWrapper<UsersEntity>();
+        QueryWrapper<UsersEntity> ew = new QueryWrapper<UsersEntity>();
         PageUtils page = usersService.queryPage(params, MPUtil.sort(MPUtil.between(MPUtil.allLike(ew, user), params), params));
         return R.ok().put("data", page);
     }
@@ -77,7 +77,7 @@ public class UsersController {
 
     @PostMapping("/save")
     public R save(@RequestBody UsersEntity user) {
-        if (usersService.selectOne(new EntityWrapper<UsersEntity>().eq("username", user.getUsername())) != null) {
+        if (usersService.selectOne(new QueryWrapper<UsersEntity>().eq("username", user.getUsername())) != null) {
             return R.error("账号已存在");
         }
         usersService.insert(user);
@@ -92,7 +92,7 @@ public class UsersController {
 
     @PostMapping("/delete")
     public R delete(@RequestBody Long[] ids) {
-        EntityWrapper<UsersEntity> wrapper = new EntityWrapper<>();
+        QueryWrapper<UsersEntity> wrapper = new QueryWrapper<>();
         wrapper.eq("role", "管理员");
         List<UsersEntity> admins = usersService.selectList(wrapper);
         if (admins.size() > 1) {

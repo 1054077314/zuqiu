@@ -1,8 +1,7 @@
 package com.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dao.GonggaoDao;
 import com.entity.GonggaoEntity;
 import com.entity.view.GonggaoView;
@@ -36,7 +35,7 @@ public class GonggaoServiceImpl extends BaseService<GonggaoDao, GonggaoEntity, G
 
     @Override
     protected GonggaoEntity checkUniqueness(GonggaoEntity entity) {
-        Wrapper<GonggaoEntity> queryWrapper = new EntityWrapper<GonggaoEntity>()
+        QueryWrapper<GonggaoEntity> queryWrapper = new QueryWrapper<GonggaoEntity>()
                 .eq("gonggao_name", entity.getGonggaoName())
                 .eq("gonggao_types", entity.getGonggaoTypes());
         return selectOne(queryWrapper);

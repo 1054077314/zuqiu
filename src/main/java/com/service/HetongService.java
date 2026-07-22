@@ -1,17 +1,16 @@
 package com.service;
 
-import com.baomidou.mybatisplus.service.IService;
 import com.utils.PageUtils;
 import com.entity.HetongEntity;
 import com.entity.view.HetongView;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
  * 合同 服务类
  */
-public interface HetongService extends IService<HetongEntity> {
+public interface HetongService extends LegacyIService<HetongEntity> {
 
 
     PageUtils queryPage(Map<String, Object> params, HttpServletRequest request);

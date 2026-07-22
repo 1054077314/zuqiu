@@ -6,16 +6,15 @@ import com.entity.DictionaryEntity;
 import com.entity.view.DictionaryView;
 import com.service.DictionaryCacheService;
 import com.service.DictionaryService;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.utils.PageUtils;
 import com.utils.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.Map;
  */
 @Service("dictionaryService")
 @Transactional
-public class DictionaryServiceImpl extends ServiceImpl<DictionaryDao, DictionaryEntity> implements DictionaryService {
+public class DictionaryServiceImpl extends LegacyServiceImpl<DictionaryDao, DictionaryEntity> implements DictionaryService {
 
     @Autowired
     private DictionaryCacheService dictionaryCacheService;

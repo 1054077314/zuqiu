@@ -1,8 +1,7 @@
 package com.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dao.HetongDao;
 import com.entity.HetongEntity;
 import com.entity.YonghuEntity;
@@ -14,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,7 +50,7 @@ public class HetongServiceImpl extends BaseService<HetongDao, HetongEntity, Heto
 
     @Override
     protected HetongEntity checkUniqueness(HetongEntity entity) {
-        Wrapper<HetongEntity> queryWrapper = new EntityWrapper<HetongEntity>()
+        QueryWrapper<HetongEntity> queryWrapper = new QueryWrapper<HetongEntity>()
                 .eq("yonghu_id", entity.getYonghuId())
                 .eq("hetong_name", entity.getHetongName())
                 .eq("hetong_delete", 1);
